@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HaloBug - Innovation Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#7E22CE', // 深紫色作为主色调
+                        secondary: '#0EA5E9', // 亮蓝色作为辅助色
+                        accent: '#F97316', // 橙色作为强调色
+                        dark: '#0F172A', // 深色背景
+                        light: '#F8FAFC', // 浅色文本
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 0 10px rgba(126, 34, 206, 0.7);
+            }
+            .neon-glow {
+                box-shadow: 0 0 15px rgba(14, 165, 233, 0.5);
+            }
+            .bg-grid {
+                background-image: linear-gradient(rgba(126, 34, 206, 0.1) 1px, transparent 1px),
+                                linear-gradient(90deg, rgba(126, 34, 206, 0.1) 1px, transparent 1px);
+                background-size: 30px 30px;
+            }
+            .animate-float {
+                animation: float 6s ease-in-out infinite;
+            }
+            .animate-pulse-slow {
+                animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="font-inter bg-dark text-light min-h-screen overflow-x-hidden">
+    <!-- 导航栏 -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-500 py-4">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <a href="#" class="flex items-center space-x-2">
+                <div class="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/50">
+                    <span class="text-primary text-xl font-bold">HB</span>
+                </div>
+                <span class="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">halobug</span>
+            </a>
+            
+            <!-- 桌面导航 -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#features" class="text-gray-300 hover:text-white transition-colors duration-300">Features</a>
+                <a href="#about" class="text-gray-300 hover:text-white transition-colors duration-300">About</a>
+                <a href="#contact" class="text-gray-300 hover:text-white transition-colors duration-300">Contact</a>
+                <button class="bg-primary hover:bg-primary/80 text-white px-6 py-2 rounded-full transition-all duration-300 transform hover:scale-105 neon-glow">
+                    Get Started
+                </button>
+            </div>
+            
+            <!-- 移动端菜单按钮 -->
+            <button id="menu-toggle" class="md:hidden text-white text-2xl">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+        
+        <!-- 移动端导航菜单 -->
+        <div id="mobile-menu" class="hidden md:hidden bg-dark/95 backdrop-blur-md absolute w-full">
+            <div class="container mx-auto px-6 py-4 flex flex-col space-y-4">
+                <a href="#features" class="text-gray-300 hover:text-white py-2 transition-colors duration-300">Features</a>
+                <a href="#about" class="text-gray-300 hover:text-white py-2 transition-colors duration-300">About</a>
+                <a href="#contact" class="text-gray-300 hover:text-white py-2 transition-colors duration-300">Contact</a>
+                <button class="bg-primary hover:bg-primary/80 text-white px-6 py-3 rounded-full transition-all duration-300">
+                    Get Started
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄区 -->
+    <section class="relative min-h-screen flex items-center justify-center bg-grid overflow-hidden">
+        <!-- 背景装饰 -->
+        <div class="absolute inset-0">
+            <div class="absolute top-20 left-10 w-64 h-64 bg-primary/20 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-20 right-10 w-80 h-80 bg-secondary/20 rounded-full blur-3xl"></div>
+            <div class="absolute top-1/3 right-1/4 w-32 h-32 bg-accent/10 rounded-full blur-2xl animate-pulse-slow"></div>
+        </div>
+        
+        <div class="container mx-auto px-6 z-10 text-center">
+            <div class="inline-block mb-6 px-4 py-1 rounded-full bg-primary/10 border border-primary/30">
+                <span class="text-primary text-sm font-medium">INNOVATION HUB</span>
+            </div>
+            
+            <h1 class="text-[clamp(2.5rem,8vw,5rem)] font-extrabold leading-tight mb-6">
+                <span class="block bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent text-shadow">halobug</span>
+                <span class="text-[clamp(1.5rem,5vw,3rem)] font-light text-gray-300 mt-2">Redefining Digital Experience</span>
+            </h1>
+            
+            <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10">
+                We blend creativity with technology to deliver exceptional digital solutions that drive growth and transform businesses.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button class="bg-primary hover:bg-primary/80 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105 neon-glow">
+                    Explore Projects
+                </button>
+                <button class="bg-transparent hover:bg-white/10 text-white border border-white/20 px-8 py-4 rounded-full text-lg font-medium transition-all duration-300">
+                    <i class="fa fa-play-circle mr-2"></i> Watch Demo
+                </button>
+            </div>
+            
+            <!-- 装饰元素 -->
+            <div class="mt-20 relative">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-72 h-72 border-2 border-primary/20 rounded-full animate-pulse-slow"></div>
+                </div>
+                <div class="relative w-64 h-64 mx-auto rounded-full bg-primary/10 flex items-center justify-center overflow-hidden animate-float">
+                    <span class="text-6xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">HB</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 滚动指示器 -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <a href="#features" class="text-white/50 hover:text-white transition-colors duration-300">
+                <i class="fa fa-angle-down text-2xl"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- 特性部分 -->
+    <section id="features" class="py-24 relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4">Our <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Features</span></h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">We provide cutting-edge solutions that empower your digital presence and drive business growth.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 特性卡片 1 -->
+                <div class="bg-dark/50 backdrop-blur-sm border border-white/10 rounded-2xl p-8 transition-all duration-500 hover:border-primary/30 hover:-translate-y-2 group">
+                    <div class="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors duration-300">
+                        <i class="fa fa-rocket text-2xl text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Web Development</h3>
+                    <p class="text-gray-400 mb-6">Crafting responsive, high-performance websites that captivate your audience and drive conversions.</p>
+                    <a href="#" class="text-primary group-hover:text-secondary transition-colors duration-300 inline-flex items-center">
+                        Learn more <i class="fa fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <!-- 特性卡片 2 -->
+                <div class="bg-dark/50 backdrop-blur-sm border border-white/10 rounded-2xl p-8 transition-all duration-500 hover:border-primary/30 hover:-translate-y-2 group">
+                    <div class="w-14 h-14 rounded-xl bg-secondary/10 flex items-center justify-center mb-6 group-hover:bg-secondary/20 transition-colors duration-300">
+                        <i class="fa fa-mobile text-2xl text-secondary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Mobile Apps</h3>
+                    <p class="text-gray-400 mb-6">Building intuitive and feature-rich mobile applications for iOS and Android platforms.</p>
+                    <a href="#" class="text-secondary group-hover:text-primary transition-colors duration-300 inline-flex items-center">
+                        Learn more <i class="fa fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <!-- 特性卡片 3 -->
+                <div class="bg-dark/50 backdrop-blur-sm border border-white/10 rounded-2xl p-8 transition-all duration-500 hover:border-primary/30 hover:-translate-y-2 group">
+                    <div class="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors duration-300">
+                        <i class="fa fa-line-chart text-2xl text-accent"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Digital Marketing</h3>
+                    <p class="text-gray-400 mb-6">Strategic digital marketing solutions that increase your online visibility and attract customers.</p>
+                    <a href="#" class="text-accent group-hover:text-primary transition-colors duration-300 inline-flex items-center">
+                        Learn more <i class="fa fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <!-- 特性卡片 4 -->
+                <div class="bg-dark/50 backdrop-blur-sm border border-white/10 rounded-2xl p-8 transition-all duration-500 hover:border-primary/30 hover:-translate-y-2 group">
+                    <div class="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors duration-300">
+                        <i class="fa fa-shield text-2xl text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Security Solutions</h3>
+                    <p class="text-gray-400 mb-6">Advanced security measures to protect your digital assets and ensure data integrity.</p>
+                    <a href="#" class="text-primary group-hover:text-secondary transition-colors duration-300 inline-flex items-center">
+                        Learn more <i class="fa fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <!-- 特性卡片 5 -->
+                <div class="bg-dark/50 backdrop-blur-sm border border-white/10 rounded-2xl p-8 transition-all duration-500 hover:border-primary/30 hover:-translate-y-2 group">
+                    <div class="w-14 h-14 rounded-xl bg-secondary/10 flex items-center justify-center mb-6 group-hover:bg-secondary/20 transition-colors duration-300">
+                        <i class="fa fa-cogs text-2xl text-secondary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Custom Solutions</h3>
+                    <p class="text-gray-400 mb-6">Tailored software solutions designed to address your specific business challenges and requirements.</p>
+                    <a href="#" class="text-secondary group-hover:text-primary transition-colors duration-300 inline-flex items-center">
+                        Learn more <i class="fa fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <!-- 特性卡片 6 -->
+                <div class="bg-dark/50 backdrop-blur-sm border border-white/10 rounded-2xl p-8 transition-all duration-500 hover:border-primary/30 hover:-translate-y-2 group">
+                    <div class="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors duration-300">
+                        <i class="fa fa-life-ring text-2xl text-accent"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">24/7 Support</h3>
+                    <p class="text-gray-400 mb-6">Round-the-clock support to ensure your systems are always running smoothly and efficiently.</p>
+                    <a href="#" class="text-accent group-hover:text-primary transition-colors duration-300 inline-flex items-center">
+                        Learn more <i class="fa fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于部分 -->
+    <section id="about" class="py-24 bg-gradient-to-b from-dark to-dark/90 relative">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="order-2 lg:order-1">
+                    <div class="inline-block mb-6 px-4 py-1 rounded-full bg-primary/10 border border-primary/30">
+                        <span class="text-primary text-sm font-medium">ABOUT US</span>
+                    </div>
+                    <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-6">We're <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">halobug</span></h2>
+                    <p class="text-gray-300 mb-6 text-lg">
+                        A team of passionate designers, developers, and strategists dedicated to creating exceptional digital experiences. We combine creativity, technology, and business acumen to help brands thrive in the digital landscape.
+                    </p>
+                    <p class="text-gray-300 mb-8">
+                        Founded in 2020, we've grown from a small startup to a team of 50+ professionals working with clients worldwide. Our mission is to deliver innovative solutions that not only meet but exceed our clients' expectations.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-6 mb-8">
+                        <div class="flex items-center">
+                            <div class="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mr-4">50+</div>
+                            <div>
+                                <div class="text-gray-300">Team Members</div>
+                                <div class="text-gray-500 text-sm">Dedicated Professionals</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mr-4">150+</div>
+                            <div>
+                                <div class="text-gray-300">Projects</div>
+                                <div class="text-gray-500 text-sm">Successfully Delivered</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mr-4">30+</div>
+                            <div>
+                                <div class="text-gray-300">Countries</div>
+                                <div class="text-gray-500 text-sm">Served Globally</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mr-4">98%</div>
+                            <div>
+                                <div class="text-gray-300">Satisfaction</div>
+                                <div class="text-gray-500 text-sm">Client Retention</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="bg-primary hover:bg-primary/80 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105 neon-glow">
+                        Learn More About Us
+                    </button>
+                </div>
+                
+                <div class="order-1 lg:order-2 relative">
+                    <div class="relative z-10 rounded-2xl overflow-hidden">
+                        <img src="https://picsum.photos/id/1/600/700" alt="halobug team working" class="w-full h-auto">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark to-transparent opacity-70"></div>
+                        <div class="absolute bottom-0 left-0 p-8">
+                            <h3 class="text-2xl font-bold mb-2">Our Creative Team</h3>
+                            <p class="text-gray-300">Collaborating to build the future</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 装饰元素 -->
+                    <div class="absolute -top-6 -right-6 w-40 h-40 bg-primary/20 rounded-full blur-3xl z-0"></div>
+                    <div class="absolute -bottom-8 -left-8 w-60 h-60 bg-secondary/10 rounded-full blur-3xl z-0"></div>
+                    <div class="absolute top-1/4 -left-10 w-20 h-20 border border-primary/30 rounded-full z-20"></div>
+                    <div class="absolute bottom-1/3 -right-5 w-16 h-16 border border-secondary/30 rounded-full z-20"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系部分 -->
+    <section id="contact" class="py-24 relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <div class="inline-block mb-6 px-4 py-1 rounded-full bg-primary/10 border border-primary/30">
+                    <span class="text-primary text-sm font-medium">GET IN TOUCH</span>
+                </div>
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4">Ready to <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Transform</span> Your Digital Presence?</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Let's discuss how we can help you achieve your business goals with our innovative digital solutions.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                <div class="lg:col-span-2 bg-dark/50 backdrop-blur-sm border border-white/10 rounded-2xl p-8">
+                    <h3 class="text-2xl font-bold mb-6">Contact Information</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mr-4 flex-shrink-0">
+                                <i class="fa fa-map-marker text-primary"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-medium mb-1">Location</h4>
+                                <p class="text-gray-400">123 Innovation Street, Tech District, Digital City, 10001</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mr-4 flex-shrink-0">
+                                <i class="fa fa-envelope text-primary"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-medium mb-1">Email</h4>
+                                <p class="text-gray-400">hello@halobug.com</p>
+                                <p class="text-gray-400">info@halobug.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mr-4 flex-shrink-0">
+                                <i class="fa fa-phone text-primary"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-medium mb-1">Phone</h4>
+                                <p class="text-gray-400">+1 (555) 123-4567</p>
+                                <p class="text-gray-400">+1 (555) 987-6543</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-10">
+                        <h4 class="text-lg font-medium mb-4">Follow Us</h4>
+                        <div class="flex space-x-4">
+                            <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary/20 transition-colors duration-300">
+                                <i class="fa fa-facebook text-gray-300 hover:text-primary transition-colors duration-300"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary/20 transition-colors duration-300">
+                                <i class="fa fa-twitter text-gray-300 hover:text-primary transition-colors duration-300"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary/20 transition-colors duration-300">
+                                <i class="fa fa-instagram text-gray-300 hover:text-primary transition-colors duration-300"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary/20 transition-colors duration-300">
+                                <i class="fa fa-linkedin text-gray-300 hover:text-primary transition-colors duration-300"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lg:col-span-3 bg-dark/50 backdrop-blur-sm border border-white/10 rounded-2xl p-8">
+                    <h3 class="text-2xl font-bold mb-6">Send Us a Message</h3>
+                    
+                    <form>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label for="name" class="block text-gray-300 mb-2">Your Name</label>
+                                <input type="text" id="name" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-300">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-gray-300 mb-2">Your Email</label>
+                                <input type="email" id="email" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-300">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="subject" class="block text-gray-300 mb-2">Subject</label>
+                            <input type="text" id="subject" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-300">
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="message" class="block text-gray-300 mb-2">Your Message</label>
+                            <textarea id="message" rows="5" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-300 resize-none"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="bg-primary hover:bg-primary/80 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105 neon-glow w-full md:w-auto">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark border-t border-white/10 py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <a href="#" class="flex items-center space-x-2 mb-6">
+                        <div class="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/50">
+                            <span class="text-primary text-xl font-bold">HB</span>
+                        </div>
+                        <span class="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">halobug</span>
+                    </a>
+                    <p class="text-gray-400 mb-6">
+                        Empowering businesses with innovative digital solutions that drive growth and transformation.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-primary transition-colors duration-300">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition-colors duration-300">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition-colors duration-300">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition-colors duration-300">
+                            <i class="fa fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">Home</a></li>
+                        <li><a href="#features" class="text-gray-400 hover:text-white transition-colors duration-300">Features</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition-colors duration-300">About</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white transition-colors duration-300">Contact</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">Services</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">Portfolio</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Services</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">Web Development</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">Mobile App Development</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">Digital Marketing</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">UI/UX Design</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">E-commerce Solutions</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">Custom Software</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Newsletter</h4>
+                    <p class="text-gray-400 mb-4">Subscribe to our newsletter to receive updates and insights.</p>
+                    <form class="mb-4">
+                        <div class="flex">
+                            <input type="email" placeholder="Your email" class="flex-1 bg-white/5 border border-white/10 rounded-l-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-300">
+                            <button type="submit" class="bg-primary hover:bg-primary/80 text-white px-4 py-3 rounded-r-lg transition-all duration-300">
+                                <i class="fa fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <p class="text-gray-500 text-sm">We respect your privacy. Unsubscribe at any time.</p>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-500 text-sm mb-4 md:mb-0">© 2025 halobug. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-500 hover:text-white text-sm transition-colors duration-300">Privacy Policy</a>
+                    <a href="#" class="text-gray-500 hover:text-white text-sm transition-colors duration-300">Terms of Service</a>
+                    <a href="#" class="text-gray-500 hover:text-white text-sm transition-colors duration-300">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 导航栏滚动效果
+        const navbar = document.getElementById('navbar');
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-dark/95', 'backdrop-blur-md', 'py-2', 'shadow-lg');
+                navbar.classList.remove('py-4');
+            } else {
+                navbar.classList.remove('bg-dark/95', 'backdrop-blur-md', 'py-2', 'shadow-lg');
+                navbar.classList.add('py-4');
+            }
+        });
+        
+        // 移动端菜单切换
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            if (mobileMenu.classList.contains('hidden')) {
+                menuToggle.innerHTML = '<i class="fa fa-bars"></i>';
+            } else {
+                menuToggle.innerHTML = '<i class="fa fa-times"></i>';
+            }
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // 关闭移动端菜单
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                        menuToggle.innerHTML = '<i class="fa fa-bars"></i>';
+                    }
+                }
+            });
+        });
+        
+        // 为所有图片添加加载效果
+        document.addEventListener('DOMContentLoaded', () => {
+            const images = document.querySelectorAll('img');
+            
+            images.forEach(img => {
+                // 添加加载状态
+                img.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                
+                // 图片加载完成后显示
+                img.onload = () => {
+                    img.classList.remove('opacity-0');
+                    img.classList.add('opacity-100');
+                };
+                
+                // 如果图片已经加载完成
+                if (img.complete) {
+                    img.onload();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+    
