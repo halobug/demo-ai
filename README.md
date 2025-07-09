@@ -7,6 +7,14 @@
 
 ## 📁 模板列表
 
+### 20250709:  探索无限 | 技术与创意的交汇点
+
+- **描述**：生成个性酷炫的博客网站，要包含精选文章，个人项目和作者信息的展示
+- **技术**：HTML
+- **Prompt**：`生成个性酷炫的博客网站，要包含精选文章，个人项目和作者信息的展示`
+- 🔗 **预览地址**：[点击预览](https://github.halobug.cn/demo-ai/Template/tech-blog-20250709/index.html)
+![预览](https://github.halobug.cn/demo-ai/Template/tech-blog-20250709/previewimage.png "预览")
+
 ### 20250709:  简洁美观的主题介绍 | HaloBug
 
 - **描述**：使用 HTML 编写一个简洁美观的 Halobug 主页面，重点突出品牌名称，无需过多介绍内容。
@@ -14,6 +22,7 @@
 - **Prompt**：`使用 HTML 编写一个简洁美观的 Halobug 主页面，重点突出品牌名称，无需过多介绍内容。`
 - 🔗 **预览地址**：[点击预览](https://github.halobug.cn/demo-ai/Template/HaloBug_20250709/index.html)
 ![预览](https://github.halobug.cn/demo-ai/Template/HaloBug_20250709/previewimage.png "预览")
+
 ### 20250709:  数据可视化小工具 | DataVizTool
 
 - **描述**：数据可视化小工具，支持上传表格文件并生成图表。
