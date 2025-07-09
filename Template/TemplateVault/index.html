@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TemplateVault - 高端前端模板市场</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#7B61FF',
+                        accent: '#FF7D00',
+                        dark: '#1D2939',
+                        'dark-light': '#344054',
+                        light: '#F9FAFB'
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .hover-scale {
+                transition: transform 0.3s ease;
+            }
+            .hover-scale:hover {
+                transform: scale(1.03);
+            }
+            .card-shadow {
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="font-inter bg-light text-dark antialiased">
+    <!-- 导航栏 -->
+    <header id="navbar" class="fixed w-full z-50 transition-all duration-300">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between bg-white/90 backdrop-blur-md rounded-b-xl shadow-sm">
+            <a href="#" class="flex items-center space-x-2">
+                <span class="text-primary text-3xl"><i class="fa fa-cubes"></i></span>
+                <span class="font-bold text-xl text-dark">Template<span class="text-primary">Vault</span></span>
+            </a>
+
+            <!-- 桌面导航 -->
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#" class="font-medium text-dark hover:text-primary transition-colors">首页</a>
+                <a href="#templates" class="font-medium text-dark hover:text-primary transition-colors">模板</a>
+                <a href="#featured" class="font-medium text-dark hover:text-primary transition-colors">精选</a>
+                <a href="#about" class="font-medium text-dark hover:text-primary transition-colors">关于</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索模板..." class="pl-10 pr-4 py-2 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all w-64">
+                    <i class="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
+                <button id="cart-btn" class="relative p-2 rounded-full hover:bg-gray-100 transition-colors">
+                    <i class="fa fa-shopping-cart text-dark-light"></i>
+                    <span class="absolute -top-1 -right-1 bg-accent text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                </button>
+                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                    <i class="fa fa-bars text-dark-light"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="md:hidden bg-white shadow-lg rounded-b-xl absolute w-full left-0 top-full transform -translate-y-full opacity-0 transition-all duration-300 invisible">
+            <div class="container mx-auto px-4 py-3">
+                <div class="relative mb-4">
+                    <input type="text" placeholder="搜索模板..." class="pl-10 pr-4 py-2 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all w-full">
+                    <i class="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
+                <nav class="flex flex-col space-y-3 pb-3">
+                    <a href="#" class="font-medium text-dark hover:text-primary transition-colors py-2">首页</a>
+                    <a href="#templates" class="font-medium text-dark hover:text-primary transition-colors py-2">模板</a>
+                    <a href="#featured" class="font-medium text-dark hover:text-primary transition-colors py-2">精选</a>
+                    <a href="#about" class="font-medium text-dark hover:text-primary transition-colors py-2">关于</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- 英雄区 -->
+    <section class="pt-32 pb-16 md:pt-40 md:pb-24 bg-gradient-to-br from-primary/5 to-secondary/5">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-[clamp(2.5rem,5vw,4rem)] font-bold text-dark leading-tight text-shadow mb-6">
+                    发现精美<span class="text-primary">前端模板</span>，加速你的开发
+                </h1>
+                <p class="text-[clamp(1rem,2vw,1.25rem)] text-dark-light mb-8 max-w-3xl mx-auto">
+                    从数千个精心设计的模板中选择，无论是个人项目还是商业应用，我们都能满足你的需求。
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#templates" class="px-8 py-3 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg shadow-lg shadow-primary/20 transition-all hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-1">
+                        浏览模板库
+                    </a>
+                    <a href="#featured" class="px-8 py-3 bg-white hover:bg-gray-50 text-dark border border-gray-200 font-medium rounded-lg shadow-md transition-all hover:shadow-lg hover:-translate-y-1">
+                        查看精选
+                    </a>
+                </div>
+                <div class="mt-12 flex flex-wrap justify-center gap-6 text-dark-light">
+                    <div class="flex items-center">
+                        <i class="fa fa-check-circle text-primary mr-2"></i>
+                        <span>1000+ 高质量模板</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fa fa-check-circle text-primary mr-2"></i>
+                        <span>定期更新</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fa fa-check-circle text-primary mr-2"></i>
+                        <span>响应式设计</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fa fa-check-circle text-primary mr-2"></i>
+                        <span>免费与付费选项</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 模板分类 -->
+    <section id="categories" class="py-16 md:py-24">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-dark mb-4">模板分类</h2>
+                <p class="text-dark-light max-w-2xl mx-auto">按类别浏览我们的模板集合，找到适合你项目的完美解决方案</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                <!-- 分类项 -->
+                <div class="category-item hover-scale cursor-pointer bg-white rounded-xl p-6 text-center card-shadow">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center">
+                        <i class="fa fa-desktop text-2xl text-primary"></i>
+                    </div>
+                    <h3 class="font-semibold text-dark mb-1">网站模板</h3>
+                    <p class="text-sm text-dark-light">42 个模板</p>
+                </div>
+
+                <div class="category-item hover-scale cursor-pointer bg-white rounded-xl p-6 text-center card-shadow">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-secondary/10 rounded-full flex items-center justify-center">
+                        <i class="fa fa-mobile text-2xl text-secondary"></i>
+                    </div>
+                    <h3 class="font-semibold text-dark mb-1">移动应用</h3>
+                    <p class="text-sm text-dark-light">28 个模板</p>
+                </div>
+
+                <div class="category-item hover-scale cursor-pointer bg-white rounded-xl p-6 text-center card-shadow">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-accent/10 rounded-full flex items-center justify-center">
+                        <i class="fa fa-shopping-bag text-2xl text-accent"></i>
+                    </div>
+                    <h3 class="font-semibold text-dark mb-1">电商模板</h3>
+                    <p class="text-sm text-dark-light">35 个模板</p>
+                </div>
+
+                <div class="category-item hover-scale cursor-pointer bg-white rounded-xl p-6 text-center card-shadow">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-green-500/10 rounded-full flex items-center justify-center">
+                        <i class="fa fa-line-chart text-2xl text-green-500"></i>
+                    </div>
+                    <h3 class="font-semibold text-dark mb-1">管理后台</h3>
+                    <p class="text-sm text-dark-light">22 个模板</p>
+                </div>
+
+                <div class="category-item hover-scale cursor-pointer bg-white rounded-xl p-6 text-center card-shadow">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-purple-500/10 rounded-full flex items-center justify-center">
+                        <i class="fa fa-picture-o text-2xl text-purple-500"></i>
+                    </div>
+                    <h3 class="font-semibold text-dark mb-1">作品集</h3>
+                    <p class="text-sm text-dark-light">19 个模板</p>
+                </div>
+
+                <div class="category-item hover-scale cursor-pointer bg-white rounded-xl p-6 text-center card-shadow">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-red-500/10 rounded-full flex items-center justify-center">
+                        <i class="fa fa-plus text-2xl text-red-500"></i>
+                    </div>
+                    <h3 class="font-semibold text-dark mb-1">更多分类</h3>
+                    <p class="text-sm text-dark-light">查看全部</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 模板列表 -->
+    <section id="templates" class="py-16 md:py-24 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-12">
+                <div>
+                    <h2 class="text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-dark mb-4">精选模板</h2>
+                    <p class="text-dark-light max-w-2xl">浏览我们精心挑选的高质量前端模板，为你的项目找到完美解决方案</p>
+                </div>
+                <div class="mt-4 md:mt-0 flex space-x-2">
+                    <button class="category-filter-btn px-4 py-2 bg-primary text-white rounded-lg">全部</button>
+                    <button class="category-filter-btn px-4 py-2 bg-white hover:bg-gray-100 text-dark rounded-lg">热门</button>
+                    <button class="category-filter-btn px-4 py-2 bg-white hover:bg-gray-100 text-dark rounded-lg">最新</button>
+                    <button class="category-filter-btn px-4 py-2 bg-white hover:bg-gray-100 text-dark rounded-lg">免费</button>
+                </div>
+            </div>
+
+            <!-- 模板网格 -->
+            <div id="templates-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 模板项 - 这些将通过JavaScript动态加载 -->
+            </div>
+
+            <!-- 加载更多按钮 -->
+            <div class="text-center mt-12">
+                <button id="load-more-btn" class="px-8 py-3 bg-white hover:bg-gray-50 text-dark border border-gray-200 font-medium rounded-lg shadow-md transition-all hover:shadow-lg hover:-translate-y-1">
+                    加载更多 <i class="fa fa-angle-down ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 精选模板 -->
+    <section id="featured" class="py-16 md:py-24">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-dark mb-4">本月精选</h2>
+                <p class="text-dark-light max-w-2xl mx-auto">我们每月精心挑选的顶级模板，专为满足高端项目需求</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- 精选模板1 -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-xl">
+                    <div class="relative">
+                        <img src="https://picsum.photos/seed/featured1/800/500" alt="电子商务模板预览" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 right-4 bg-accent text-white px-3 py-1 rounded-full text-sm font-medium">
+                            本月精选
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded mr-2">电商</span>
+                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">响应式</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-dark mb-2">现代电商平台模板</h3>
+                        <p class="text-dark-light mb-4">精心设计的电子商务平台，具有流畅的用户体验和视觉吸引力，适合各种规模的在线商店。</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <img src="https://picsum.photos/seed/author1/40/40" alt="设计师头像" class="w-10 h-10 rounded-full mr-3">
+                                <div>
+                                    <p class="text-sm font-medium text-dark">张设计师</p>
+                                    <p class="text-xs text-dark-light">UI/UX 专家</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="text-amber-400 flex mr-4">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star-half-o"></i>
+                                    <span class="ml-1 text-dark-light text-sm">4.8</span>
+                                </div>
+                                <span class="text-lg font-bold text-dark">¥299</span>
+                            </div>
+                        </div>
+                        <div class="mt-6 flex space-x-3">
+                            <button class="template-preview-btn flex-1 px-6 py-3 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg transition-all">
+                                预览模板
+                            </button>
+                            <button class="template-download-btn flex-1 px-6 py-3 bg-white hover:bg-gray-50 text-dark border border-gray-200 font-medium rounded-lg transition-all">
+                                下载 <i class="fa fa-download ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 精选模板2 -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-xl">
+                    <div class="relative">
+                        <img src="https://picsum.photos/seed/featured2/800/500" alt="管理后台模板预览" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 right-4 bg-secondary text-white px-3 py-1 rounded-full text-sm font-medium">
+                            热门推荐
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded mr-2">管理后台</span>
+                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">组件丰富</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-dark mb-2">企业管理系统模板</h3>
+                        <p class="text-dark-light mb-4">功能全面的企业管理后台，包含数据可视化、用户管理、订单处理等核心功能模块。</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <img src="https://picsum.photos/seed/author2/40/40" alt="设计师头像" class="w-10 h-10 rounded-full mr-3">
+                                <div>
+                                    <p class="text-sm font-medium text-dark">李开发</p>
+                                    <p class="text-xs text-dark-light">全栈工程师</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="text-amber-400 flex mr-4">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <span class="ml-1 text-dark-light text-sm">5.0</span>
+                                </div>
+                                <span class="text-lg font-bold text-dark">¥399</span>
+                            </div>
+                        </div>
+                        <div class="mt-6 flex space-x-3">
+                            <button class="template-preview-btn flex-1 px-6 py-3 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg transition-all">
+                                预览模板
+                            </button>
+                            <button class="template-download-btn flex-1 px-6 py-3 bg-white hover:bg-gray-50 text-dark border border-gray-200 font-medium rounded-lg transition-all">
+                                下载 <i class="fa fa-download ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我们 -->
+    <section id="about" class="py-16 md:py-24 bg-gradient-to-br from-primary/5 to-secondary/5">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-dark mb-4">关于 TemplateVault</h2>
+                    <p class="text-dark-light mb-6">
+                        TemplateVault 是一个致力于提供高质量前端模板的平台，我们的使命是帮助开发者和设计师节省时间，专注于核心业务逻辑，而不是重复造轮子。
+                    </p>
+                    <p class="text-dark-light mb-6">
+                        我们的模板由经验丰富的设计师和开发者精心打造，确保视觉吸引力和代码质量。每个模板都经过严格的测试，确保兼容性和响应式设计。
+                    </p>
+                    <div class="grid grid-cols-2 gap-6 mb-8">
+                        <div class="bg-white p-5 rounded-xl shadow-sm">
+                            <h3 class="text-3xl font-bold text-primary mb-2">1000+</h3>
+                            <p class="text-dark-light">高质量模板</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm">
+                            <h3 class="text-3xl font-bold text-primary mb-2">500+</h3>
+                            <p class="text-dark-light">活跃设计师</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm">
+                            <h3 class="text-3xl font-bold text-primary mb-2">10k+</h3>
+                            <p class="text-dark-light">满意客户</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm">
+                            <h3 class="text-3xl font-bold text-primary mb-2">24/7</h3>
+                            <p class="text-dark-light">技术支持</p>
+                        </div>
+                    </div>
+                    <a href="#" class="inline-flex items-center px-6 py-3 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg transition-all">
+                        了解更多 <i class="fa fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                <div class="relative">
+                    <img src="https://picsum.photos/seed/about/600/700" alt="关于我们" class="w-full h-auto rounded-2xl shadow-xl">
+                    <div class="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-lg max-w-xs">
+                        <div class="flex items-center mb-4">
+                            <div class="text-amber-400 flex">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                        </div>
+                        <p class="text-dark-light italic mb-4">
+                            "使用 TemplateVault 的模板节省了我大量时间，代码质量非常高，设计也很精美。强烈推荐给所有开发者！"
+                        </p>
+                        <div class="flex items-center">
+                            <img src="https://picsum.photos/seed/customer1/40/40" alt="客户头像" class="w-10 h-10 rounded-full mr-3">
+                            <div>
+                                <p class="text-sm font-medium text-dark">王小明</p>
+                                <p class="text-xs text-dark-light">资深前端工程师</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 通讯订阅 -->
+    <section class="py-16 md:py-24">
+        <div class="container mx-auto px-4">
+            <div class="bg-gradient-to-r from-primary to-secondary rounded-3xl p-8 md:p-12 shadow-xl">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-white mb-4">订阅获取最新模板更新</h2>
+                        <p class="text-white/80 mb-6">
+                            加入我们的邮件列表，第一时间获取最新模板和独家优惠信息。
+                        </p>
+                        <form class="flex flex-col sm:flex-row gap-3">
+                            <input type="email" placeholder="输入你的邮箱地址" class="flex-1 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/30">
+                            <button type="submit" class="px-6 py-3 bg-white text-primary font-medium rounded-lg hover:bg-gray-100 transition-all">
+                                订阅
+                            </button>
+                        </form>
+                        <p class="text-white/60 text-sm mt-3">
+                            我们尊重你的隐私，不会向第三方分享你的信息。
+                        </p>
+                    </div>
+                    <div class="hidden md:block">
+                        <img src="https://picsum.photos/seed/newsletter/500/300" alt="订阅通讯" class="w-full h-auto rounded-xl shadow-lg">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                <div>
+                    <div class="flex items-center space-x-2 mb-6">
+                        <span class="text-primary text-3xl"><i class="fa fa-cubes"></i></span>
+                        <span class="font-bold text-xl">Template<span class="text-primary">Vault</span></span>
+                    </div>
+                    <p class="text-gray-400 mb-6">
+                        提供高质量前端模板，帮助开发者和设计师节省时间，专注于核心业务。
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-dark-light flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-dark-light flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-dark-light flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-dark-light flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">快速链接</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">首页</a></li>
+                        <li><a href="#templates" class="text-gray-400 hover:text-primary transition-colors">模板库</a></li>
+                        <li><a href="#featured" class="text-gray-400 hover:text-primary transition-colors">精选模板</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-primary transition-colors">关于我们</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">博客</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">联系我们</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">模板分类</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">网站模板</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">移动应用</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">电商模板</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">管理后台</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">作品集</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">更多分类</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">联系我们</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fa fa-map-marker text-primary mt-1 mr-3"></i>
+                            <span class="text-gray-400">北京市海淀区中关村科技园区</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-phone text-primary mr-3"></i>
+                            <span class="text-gray-400">+86 10 8888 8888</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-envelope text-primary mr-3"></i>
+                            <span class="text-gray-400">contact@templatevault.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-500 text-sm mb-4 md:mb-0">
+                        &copy; 2025 TemplateVault. 保留所有权利。
+                    </p>
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-gray-500 hover:text-primary text-sm transition-colors">隐私政策</a>
+                        <a href="#" class="text-gray-500 hover:text-primary text-sm transition-colors">服务条款</a>
+                        <a href="#" class="text-gray-500 hover:text-primary text-sm transition-colors">Cookie 政策</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 模板预览模态框 -->
+    <div id="template-preview-modal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center opacity-0 invisible transition-all duration-300">
+        <div class="bg-white rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col transform scale-95 transition-all duration-300">
+            <div class="flex justify-between items-center p-6 border-b">
+                <h3 class="text-xl font-bold text-dark" id="modal-title">模板预览</h3>
+                <button id="close-modal-btn" class="text-dark-light hover:text-dark transition-colors">
+                    <i class="fa fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="flex-1 overflow-auto p-6">
+                <div id="modal-content">
+                    <!-- 预览内容将通过JavaScript动态加载 -->
+                </div>
+            </div>
+            <div class="p-6 border-t flex space-x-3">
+                <button id="modal-download-btn" class="flex-1 px-6 py-3 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg transition-all">
+                    下载模板 <i class="fa fa-download ml-1"></i>
+                </button>
+                <button id="modal-close-btn" class="px-6 py-3 bg-white hover:bg-gray-50 text-dark border border-gray-200 font-medium rounded-lg transition-all">
+                    关闭
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 示例模板数据
+        const templates = [
+            {
+                id: 1,
+                name: "现代企业网站模板",
+                image: "https://picsum.photos/seed/template1/600/400",
+                category: "网站模板",
+                tags: ["响应式", "企业", "简约"],
+                author: "陈设计师",
+                authorAvatar: "https://picsum.photos/seed/author3/40/40",
+                rating: 4.9,
+                reviews: 120,
+                price: 199,
+                isFeatured: true,
+                isNew: true,
+                previewUrl: "https://picsum.photos/seed/preview1/1200/800",
+                description: "一款现代简约的企业网站模板，具有响应式设计和精美动画效果，适合各类企业展示产品和服务。"
+            },
+            {
+                id: 2,
+                name: "移动应用UI设计模板",
+                image: "https://picsum.photos/seed/template2/600/400",
+                category: "移动应用",
+                tags: ["iOS", "Android", "UI设计"],
+                author: "赵设计师",
+                authorAvatar: "https://picsum.photos/seed/author4/40/40",
+                rating: 4.7,
+                reviews: 85,
+                price: 249,
+                isFeatured: false,
+                isNew: false,
+                previewUrl: "https://picsum.photos/seed/preview2/1200/800",
+                description: "一套完整的移动应用UI设计模板，包含所有常见界面元素和交互模式，适合快速原型开发。"
+            },
+            {
+                id: 3,
+                name: "电子商务平台模板",
+                image: "https://picsum.photos/seed/template3/600/400",
+                category: "电商模板",
+                tags: ["购物", "响应式", "支付"],
+                author: "王开发",
+                authorAvatar: "https://picsum.photos/seed/author5/40/40",
+                rating: 4.8,
+                reviews: 156,
+                price: 299,
+                isFeatured: true,
+                isNew: false,
+                previewUrl: "https://picsum.photos/seed/preview3/1200/800",
+                description: "功能齐全的电子商务平台模板，包含产品展示、购物车、结账流程和支付集成等完整功能。"
+            },
+            {
+                id: 4,
+                name: "数据可视化管理后台",
+                image: "https://picsum.photos/seed/template4/600/400",
+                category: "管理后台",
+                tags: ["仪表盘", "数据分析", "响应式"],
+                author: "刘开发",
+                authorAvatar: "https://picsum.photos/seed/author6/40/40",
+                rating: 4.9,
+                reviews: 92,
+                price: 349,
+                isFeatured: false,
+                isNew: true,
+                previewUrl: "https://picsum.photos/seed/preview4/1200/800",
+                description: "专业级数据可视化管理后台，包含多种图表和数据展示组件，适合企业级应用。"
+            },
+            {
+                id: 5,
+                name: "创意作品集模板",
+                image: "https://picsum.photos/seed/template5/600/400",
+                category: "作品集",
+                tags: ["设计师", "摄影师", "展示"],
+                author: "孙设计师",
+                authorAvatar: "https://picsum.photos/seed/author7/40/40",
+                rating: 4.6,
+                reviews: 78,
+                price: 179,
+                isFeatured: false,
+                isNew: false,
+                previewUrl: "https://picsum.photos/seed/preview5/1200/800",
+                description: "为创意专业人士打造的作品集展示模板，具有精美图片展示和流畅的浏览体验。"
+            },
+            {
+                id: 6,
+                name: "社交媒体应用UI",
+                image: "https://picsum.photos/seed/template6/600/400",
+                category: "移动应用",
+                tags: ["社交", "聊天", "分享"],
+                author: "周设计师",
+                authorAvatar: "https://picsum.photos/seed/author8/40/40",
+                rating: 4.8,
+                reviews: 110,
+                price: 259,
+                isFeatured: true,
+                isNew: false,
+                previewUrl: "https://picsum.photos/seed/preview6/1200/800",
+                description: "社交媒体应用的完整UI设计，包含聊天、动态、个人资料和通知等核心功能模块。"
+            }
+        ];
+
+        // 导航栏滚动效果
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('py-2', 'shadow-md');
+                navbar.classList.remove('py-3');
+            } else {
+                navbar.classList.add('py-3');
+                navbar.classList.remove('py-2', 'shadow-md');
+            }
+        });
+
+        // 移动菜单切换
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            if (mobileMenu.classList.contains('invisible')) {
+                mobileMenu.classList.remove('invisible', 'opacity-0', '-translate-y-full');
+                mobileMenu.classList.add('opacity-100', 'translate-y-0');
+                mobileMenuBtn.innerHTML = '<i class="fa fa-times text-dark-light"></i>';
+            } else {
+                mobileMenu.classList.add('opacity-0', '-translate-y-full');
+                mobileMenu.classList.remove('opacity-100', 'translate-y-0');
+                setTimeout(() => {
+                    mobileMenu.classList.add('invisible');
+                }, 300);
+                mobileMenuBtn.innerHTML = '<i class="fa fa-bars text-dark-light"></i>';
+            }
+        });
+
+        // 渲染模板列表
+        const templatesGrid = document.getElementById('templates-grid');
+
+        function renderTemplates(templatesList) {
+            templatesGrid.innerHTML = '';
+
+            templatesList.forEach(template => {
+                const templateCard = document.createElement('div');
+                templateCard.className = 'bg-white rounded-xl overflow-hidden shadow-lg hover-scale';
+                templateCard.innerHTML = `
+                    <div class="relative">
+                        <img src="${template.image}" alt="${template.name}" class="w-full h-48 object-cover">
+                        ${template.isNew ? '<div class="absolute top-3 left-3 bg-green-500 text-white px-2 py-1 rounded text-xs font-medium">最新</div>' : ''}
+                        ${template.isFeatured ? '<div class="absolute top-3 right-3 bg-accent text-white px-2 py-1 rounded text-xs font-medium">精选</div>' : ''}
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center mb-3">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">${template.category}</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-dark mb-2">${template.name}</h3>
+                        <p class="text-dark-light text-sm mb-4 line-clamp-2">${template.description}</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <img src="${template.authorAvatar}" alt="${template.author}" class="w-8 h-8 rounded-full mr-2">
+                                <span class="text-sm text-dark-light">${template.author}</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="text-amber-400 flex text-xs mr-2">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star-half-o"></i>
+                                    <span class="ml-1 text-dark-light">${template.rating}</span>
+                                </div>
+                                <span class="font-bold text-dark">¥${template.price}</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex space-x-2">
+                            <button class="template-preview-btn flex-1 px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary font-medium rounded-lg transition-all text-sm" data-id="${template.id}">
+                                预览
+                            </button>
+                            <button class="template-download-btn flex-1 px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg transition-all text-sm" data-id="${template.id}">
+                                下载
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                templatesGrid.appendChild(templateCard);
+            });
+
+            // 添加预览按钮事件监听
+            document.querySelectorAll('.template-preview-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const templateId = parseInt(btn.getAttribute('data-id'));
+                    openTemplatePreview(templateId);
+                });
+            });
+
+            // 添加下载按钮事件监听
+            document.querySelectorAll('.template-download-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const templateId = parseInt(btn.getAttribute('data-id'));
+                    downloadTemplate(templateId);
+                });
+            });
+        }
+
+        // 初始渲染模板
+        renderTemplates(templates);
+
+        // 打开模板预览
+        const previewModal = document.getElementById('template-preview-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalContent = document.getElementById('modal-content');
+
+        function openTemplatePreview(templateId) {
+            const template = templates.find(t => t.id === templateId);
+
+            if (template) {
+                modalTitle.textContent = template.name;
+                modalContent.innerHTML = `
+                    <div class="mb-6">
+                        <img src="${template.previewUrl}" alt="${template.name} 预览" class="w-full h-auto rounded-xl shadow-lg">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h4 class="text-lg font-semibold mb-3">模板详情</h4>
+                            <p class="text-dark-light mb-4">${template.description}</p>
+
+                            <div class="space-y-3">
+                                <div class="flex items-center">
+                                    <span class="w-24 text-dark-light">分类:</span>
+                                    <span class="font-medium">${template.category}</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-24 text-dark-light">标签:</span>
+                                    <div class="flex flex-wrap gap-2">
+                                        ${template.tags.map(tag => `<span class="bg-gray-100 text-dark-light text-xs px-2 py-1 rounded">${tag}</span>`).join('')}
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-24 text-dark-light">作者:</span>
+                                    <div class="flex items-center">
+                                        <img src="${template.authorAvatar}" alt="${template.author}" class="w-8 h-8 rounded-full mr-2">
+                                        <span>${template.author}</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-24 text-dark-light">评分:</span>
+                                    <div class="flex items-center">
+                                        <div class="text-amber-400 flex mr-2">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star-half-o"></i>
+                                        </div>
+                                        <span>${template.rating} (${template.reviews} 评价)</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-24 text-dark-light">价格:</span>
+                                    <span class="text-xl font-bold text-primary">¥${template.price}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold mb-3">模板特性</h4>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                    <span>响应式设计，适配所有设备</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                    <span>精心设计的UI组件</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                    <span>详细的使用文档</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                    <span>6个月免费技术支持</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                    <span>定期更新和改进</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                    <span>所有源代码文件</span>
+                                </li>
+                            </ul>
+
+                            <h4 class="text-lg font-semibold mt-6 mb-3">下载信息</h4>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <i class="fa fa-file-zip-o text-primary mt-1 mr-2"></i>
+                                    <span>ZIP 格式文件</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-code text-primary mt-1 mr-2"></i>
+                                    <span>HTML, CSS, JavaScript</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-arrows-alt text-primary mt-1 mr-2"></i>
+                                    <span>1920x1080 分辨率</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                `;
+
+                // 显示模态框
+                previewModal.classList.remove('opacity-0', 'invisible');
+                previewModal.querySelector('div').classList.remove('scale-95');
+                previewModal.querySelector('div').classList.add('scale-100');
+
+                // 阻止页面滚动
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        // 关闭模板预览
+        function closeTemplatePreview() {
+            previewModal.classList.add('opacity-0');
+            previewModal.querySelector('div').classList.remove('scale-100');
+            previewModal.querySelector('div').classList.add('scale-95');
+
+            setTimeout(() => {
+                previewModal.classList.add('invisible');
+            }, 300);
+
+            // 恢复页面滚动
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('close-modal-btn').addEventListener('click', closeTemplatePreview);
+        document.getElementById('modal-close-btn').addEventListener('click', closeTemplatePreview);
+
+        // 点击模态框外部关闭
+        previewModal.addEventListener('click', (e) => {
+            if (e.target === previewModal) {
+                closeTemplatePreview();
+            }
+        });
+
+        // 下载模板
+        function downloadTemplate(templateId) {
+            const template = templates.find(t => t.id === templateId);
+
+            if (template) {
+                // 实际项目中，这里会连接到后端API处理下载逻辑
+                alert(`准备下载模板: ${template.name}`);
+
+                // 创建一个临时的a标签用于下载
+                const link = document.createElement('a');
+                link.href = '#'; // 实际项目中这里应该是模板文件的URL
+                link.download = `${template.name.replace(/\s+/g, '-')}.zip`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                // 如果是免费模板，可以直接触发下载
+                // 如果是付费模板，应该跳转到支付页面
+            }
+        }
+
+        // 加载更多模板
+        document.getElementById('load-more-btn').addEventListener('click', () => {
+            // 实际项目中，这里会从后端加载更多模板数据
+            alert('加载更多模板...');
+
+            // 模拟加载更多模板
+            const newTemplates = [
+                {
+                    id: 7,
+                    name: "医疗健康网站模板",
+                    image: "https://picsum.photos/seed/template7/600/400",
+                    category: "网站模板",
+                    tags: ["医疗", "健康", "响应式"],
+                    author: "吴设计师",
+                    authorAvatar: "https://picsum.photos/seed/author9/40/40",
+                    rating: 4.7,
+                    reviews: 65,
+                    price: 219,
+                    isFeatured: false,
+                    isNew: true,
+                    previewUrl: "https://picsum.photos/seed/preview7/1200/800",
+                    description: "专为医疗健康行业设计的网站模板，包含预约系统、医生介绍和健康资讯等功能。"
+                },
+                {
+                    id: 8,
+                    name: "教育平台UI模板",
+                    image: "https://picsum.photos/seed/template8/600/400",
+                    category: "网站模板",
+                    tags: ["教育", "学习", "响应式"],
+                    author: "郑设计师",
+                    authorAvatar: "https://picsum.photos/seed/author10/40/40",
+                    rating: 4.8,
+                    reviews: 92,
+                    price: 239,
+                    isFeatured: true,
+                    isNew: false,
+                    previewUrl: "https://picsum.photos/seed/preview8/1200/800",
+                    description: "功能完整的教育平台UI模板，包含课程展示、学生管理、学习进度跟踪等核心功能。"
+                }
+            ];
+
+            // 添加新模板并重新渲染
+            templates.push(...newTemplates);
+            renderTemplates(templates);
+        });
+
+        // 分类筛选按钮
+        document.querySelectorAll('.category-filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // 移除所有按钮的活动状态
+                document.querySelectorAll('.category-filter-btn').forEach(b => {
+                    b.classList.remove('bg-primary', 'text-white');
+                    b.classList.add('bg-white', 'hover:bg-gray-100', 'text-dark');
+                });
+
+                // 设置当前按钮为活动状态
+                btn.classList.remove('bg-white', 'hover:bg-gray-100', 'text-dark');
+                btn.classList.add('bg-primary', 'text-white');
+
+                const category = btn.textContent.trim();
+
+                // 筛选模板
+                let filteredTemplates;
+
+                if (category === '全部') {
+                    filteredTemplates = templates;
+                } else if (category === '热门') {
+                    filteredTemplates = templates.filter(t => t.rating >= 4.8);
+                } else if (category === '最新') {
+                    filteredTemplates = templates.filter(t => t.isNew);
+                } else if (category === '免费') {
+                    // 示例中没有免费模板，实际项目中会有价格为0的模板
+                    filteredTemplates = templates.filter(t => t.price === 0);
+                } else {
+                    filteredTemplates = templates.filter(t => t.category === category);
+                }
+
+                // 渲染筛选后的模板
+                renderTemplates(filteredTemplates);
+            });
+        });
+
+        // 搜索功能
+        const searchInput = document.getElementById('search-input');
+
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase().trim();
+
+            if (searchTerm === '') {
+                // 如果搜索框为空，显示所有模板
+                renderTemplates(templates);
+                return;
+            }
+
+            // 搜索模板
+            const searchResults = templates.filter(template =>
+                template.name.toLowerCase().includes(searchTerm) ||
+                template.category.toLowerCase().includes(searchTerm) ||
+                template.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
+                template.description.toLowerCase().includes(searchTerm)
+            );
+
+            // 渲染搜索结果
+            renderTemplates(searchResults);
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // 关闭移动菜单（如果打开）
+                    if (!mobileMenu.classList.contains('invisible')) {
+                        mobileMenu.classList.add('opacity-0', '-translate-y-full');
+                        mobileMenu.classList.remove('opacity-100', 'translate-y-0');
+                        setTimeout(() => {
+                            mobileMenu.classList.add('invisible');
+                        }, 300);
+                        mobileMenuBtn.innerHTML = '<i class="fa fa-bars text-dark-light"></i>';
+                    }
+
+                    // 滚动到目标位置
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
