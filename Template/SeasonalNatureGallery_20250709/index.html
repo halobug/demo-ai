@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>四季自然之旅 | 探索自然之美</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- Tailwind配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            spring: '#4ade80',
+            summer: '#fbbf24',
+            autumn: '#f97316',
+            winter: '#38bdf8',
+            nature: {
+              100: '#f0fdf4',
+              200: '#dcfce7',
+              300: '#bbf7d0',
+              400: '#86efac',
+              500: '#4ade80',
+              600: '#22c55e',
+              700: '#16a34a',
+              800: '#15803d',
+              900: '#166534',
+              950: '#052e16',
+            }
+          },
+          fontFamily: {
+            inter: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <!-- 自定义工具类 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .season-transition {
+        transition: all 0.5s ease-in-out;
+      }
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .text-shadow-lg {
+        text-shadow: 0 4px 8px rgba(0,0,0,0.25);
+      }
+      .bg-blur {
+        backdrop-filter: blur(8px);
+      }
+    }
+  </style>
+  
+  <!-- 预加载字体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="font-inter bg-gray-50 text-gray-800 overflow-x-hidden">
+  <!-- 导航栏 -->
+  <header id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300">
+    <nav class="bg-transparent py-4 px-6 md:px-12 flex justify-between items-center">
+      <a href="#" class="text-2xl font-bold text-white text-shadow-lg flex items-center">
+        <i class="fa fa-leaf mr-2 text-nature-400"></i>
+        <span>四季自然之旅</span>
+      </a>
+      
+      <!-- 桌面导航 -->
+      <div class="hidden md:flex space-x-8">
+        <a href="#spring" class="text-white hover:text-nature-300 transition-colors font-medium">春</a>
+        <a href="#summer" class="text-white hover:text-nature-300 transition-colors font-medium">夏</a>
+        <a href="#autumn" class="text-white hover:text-nature-300 transition-colors font-medium">秋</a>
+        <a href="#winter" class="text-white hover:text-nature-300 transition-colors font-medium">冬</a>
+        <a href="#gallery" class="text-white hover:text-nature-300 transition-colors font-medium">画廊</a>
+        <a href="#contact" class="text-white hover:text-nature-300 transition-colors font-medium">联系我们</a>
+      </div>
+      
+      <!-- 移动端菜单按钮 -->
+      <button id="menuBtn" class="md:hidden text-white text-2xl focus:outline-none">
+        <i class="fa fa-bars"></i>
+      </button>
+    </nav>
+    
+    <!-- 移动端导航菜单 -->
+    <div id="mobileMenu" class="hidden md:hidden bg-white/90 bg-blur w-full">
+      <div class="px-6 py-4 space-y-4">
+        <a href="#spring" class="block text-gray-800 hover:text-nature-600 transition-colors font-medium py-2">春</a>
+        <a href="#summer" class="block text-gray-800 hover:text-nature-600 transition-colors font-medium py-2">夏</a>
+        <a href="#autumn" class="block text-gray-800 hover:text-nature-600 transition-colors font-medium py-2">秋</a>
+        <a href="#winter" class="block text-gray-800 hover:text-nature-600 transition-colors font-medium py-2">冬</a>
+        <a href="#gallery" class="block text-gray-800 hover:text-nature-600 transition-colors font-medium py-2">画廊</a>
+        <a href="#contact" class="block text-gray-800 hover:text-nature-600 transition-colors font-medium py-2">联系我们</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 英雄区域 -->
+  <section class="relative h-screen flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <div class="absolute inset-0 bg-gradient-to-b from-black/60 to-black/30 z-10"></div>
+      <img src="https://picsum.photos/id/15/1920/1080" alt="四季风景全景图" class="w-full h-full object-cover">
+    </div>
+    
+    <div class="container mx-auto px-6 z-20 text-center">
+      <h1 class="text-[clamp(2.5rem,8vw,5rem)] font-bold text-white text-shadow-lg mb-6 leading-tight">
+        探索<span class="text-nature-400">自然</span>之美
+      </h1>
+      <p class="text-[clamp(1rem,3vw,1.5rem)] text-white/90 text-shadow max-w-3xl mx-auto mb-10">
+        感受四季变换，领略大自然的神奇与魅力
+      </p>
+      <a href="#spring" class="inline-block bg-nature-600 hover:bg-nature-700 text-white font-semibold py-3 px-8 rounded-full transition-all transform hover:scale-105 shadow-lg hover:shadow-xl">
+        开始旅程 <i class="fa fa-arrow-down ml-2"></i>
+      </a>
+    </div>
+    
+    <div class="absolute bottom-10 left-0 right-0 flex justify-center animate-bounce">
+      <a href="#spring" class="text-white text-4xl opacity-80 hover:opacity-100 transition-opacity">
+        <i class="fa fa-angle-down"></i>
+      </a>
+    </div>
+  </section>
+
+  <!-- 春之章 -->
+  <section id="spring" class="py-24 bg-gradient-to-b from-nature-100 to-white">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col md:flex-row items-center gap-12">
+        <div class="md:w-1/2">
+          <span class="inline-block text-nature-600 font-semibold mb-2">SPRING</span>
+          <h2 class="text-[clamp(1.8rem,5vw,3rem)] font-bold text-gray-900 mb-6">
+            春暖花开<br>万物复苏
+          </h2>
+          <p class="text-gray-700 mb-8 text-lg leading-relaxed">
+            春天是大自然苏醒的季节，万物开始生长，花朵绽放，树木披上绿装。在这个季节里，大地充满了生机与活力，每一处都洋溢着生命的气息。
+          </p>
+          <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="flex items-center">
+              <i class="fa fa-leaf text-nature-500 text-xl mr-3"></i>
+              <span>嫩绿新芽</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fa fa-pagelines text-nature-500 text-xl mr-3"></i>
+              <span>缤纷花海</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fa fa-tree text-nature-500 text-xl mr-3"></i>
+              <span>绿意盎然</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fa fa-sun-o text-nature-500 text-xl mr-3"></i>
+              <span>温暖阳光</span>
+            </div>
+          </div>
+          <a href="#gallery" class="inline-block text-nature-600 font-semibold border-b-2 border-nature-600 hover:text-nature-800 hover:border-nature-800 transition-colors">
+            查看春天画廊 <i class="fa fa-long-arrow-right ml-1"></i>
+          </a>
+        </div>
+        
+        <div class="md:w-1/2 relative">
+          <div class="absolute -top-6 -left-6 w-24 h-24 bg-nature-200 rounded-full opacity-70"></div>
+          <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-nature-300 rounded-full opacity-50"></div>
+          
+          <div class="relative grid grid-cols-2 gap-4 z-10">
+            <div class="space-y-4">
+              <img src="https://picsum.photos/id/237/500/600" alt="春天的花朵" class="w-full h-64 object-cover rounded-lg shadow-lg transform hover:scale-105 transition-transform">
+              <img src="https://picsum.photos/id/145/500/400" alt="春天的树木" class="w-full h-48 object-cover rounded-lg shadow-lg transform hover:scale-105 transition-transform">
+            </div>
+            <div class="space-y-4 pt-8">
+              <img src="https://picsum.photos/id/133/500/400" alt="春天的风景" class="w-full h-48 object-cover rounded-lg shadow-lg transform hover:scale-105 transition-transform">
+              <img src="https://picsum.photos/id/152/500/600" alt="春天的草地" class="w-full h-64 object-cover rounded-lg shadow-lg transform hover:scale-105 transition-transform">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 夏之章 -->
+  <section id="summer" class="py-24 bg-gradient-to-b from-blue-50 to-blue-100">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col md:flex-row-reverse items-center gap-12">
+        <div class="md:w-1/2">
+          <span class="inline-block text-blue-600 font-semibold mb-2">SUMMER</span>
+          <h2 class="text-[clamp(1.8rem,5vw,3rem)] font-bold text-gray-900 mb-6">
+            夏日炎炎<br>生机盎然
+          </h2>
+          <p class="text-gray-700 mb-8 text-lg leading-relaxed">
+            夏天是充满活力的季节，阳光明媚，绿树成荫，大自然呈现出一片繁荣景象。在这个季节里，我们可以尽情享受阳光、沙滩和清凉的水。
+          </p>
+          <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="flex items-center">
+              <i class="fa fa-sun-o text-blue-500 text-xl mr-3"></i>
+              <span>灿烂阳光</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fa fa-umbrella text-blue-500 text-xl mr-3"></i>
+              <span>海滩度假</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fa fa-tint text-blue-500 text-xl mr-3"></i>
+              <span>清凉水域</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fa fa-leaf text-blue-500 text-xl mr-3"></i>
+              <span>茂盛植物</span>
+            </div>
+          </div>
+          <a href="#gallery" class="inline-block text-blue-600 font-semibold border-b-2 border-blue-600 hover:text-blue-800 hover:border-blue-800 transition-colors">
+            查看夏天画廊 <i class="fa fa-long-arrow-right ml-1"></i>
+          </a>
+        </div>
+        
+        <div class="md:w-1/2 relative">
+          <div class="absolute -top-6 -right-6 w-24 h-24 bg-blue-200 rounded-full opacity-70"></div>
+          <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-blue-300 rounded-full opacity-50"></div>
+          
+          <div class="relative grid grid-cols-2 gap-4 z-10">
+            <div class="space-y-4">
+              <img src="https://picsum.photos/id/10/500/600" alt="夏天的海滩" class="w-full h-64 object-cover rounded-lg shadow-lg transform hover:scale-105 transition-transform">
+              <img src="https://picsum.photos/id/110/500/400" alt="夏天的湖泊" class="w-full h-48 object-cover rounded-lg shadow-lg transform hover:scale-105 transition-transform">
+            </div>
+            <div class="space-y-4 pt-8">
+              <img src="https://picsum.photos/id/167/500/400" alt="夏天的森林" class="w-full h-48 object-cover rounded-lg shadow-lg transform hover:scale-105 transition-transform">
+              <img src="https://picsum.photos/id/177/500/600" alt="夏天的阳光" class="w-full h-64 object-cover rounded-lg shadow-lg transform hover:scale-105 transition-transform">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 秋之章 -->
+  <section id="autumn" class="py-24 bg-gradient-to-b from-amber-50 to-amber-100">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col md:flex-row items-center gap-12">
+        <div class="md:w-1/2">
+          <span class="inline-block text-amber-600 font-semibold mb-2">AUTUMN</span>
+          <h2 class="text-[clamp(1.8rem,5vw,3rem)] font-bold text-gray-900 mb-6">
+            金秋时节<br>丰收之季
+          </h2>
+          <p class="text-gray-700 mb-8 text-lg leading-relaxed">
+            秋天是收获的季节，大自然换上了金黄色的盛装，树叶变成了红色、橙色和黄色，宛如一幅美丽的画卷。在这个季节里，我们可以感受到大自然的慷慨和生命的轮回。
+          </p>
+          <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="flex items-center">
+              <i class="fa fa-tree text-amber-500 text-xl mr-3"></i>
+              <span>红叶飘落</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fa fa-leaf text-amber-500 text-xl mr-3"></i>
+              <span>金色田野</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fa fa-pagelines text-amber-500 text-xl mr-3"></i>
+              <span>丰收景象</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fa fa-sun-o text-amber-500 text-xl mr-3"></i>
+              <span>秋日暖阳</span>
+            </div>
+          </div>
+          <a href="#gallery" class="inline-block text-amber-600 font-semibold border-b-2 border-amber-600 hover:text-amber-800 hover:border-amber-800 transition-colors">
+            查看秋天画廊 <i class="fa fa-long-arrow-right ml-1"></i>
+          </a>
+        </div>
+        
+        <div class="md:w-1/2 relative">
+          <div class="absolute -top-6 -left-6 w-24 h-24 bg-amber-200 rounded-full opacity-70"></div>
+          <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-amber-300 rounded-full opacity-50"></div>
+          
+          <div class="relative grid grid-cols-2 gap-4 z-10">
+            <div class="space-y-4">
+              <img src="https://picsum.photos/id/28/500/600" alt="秋天的树木" class="w-full h-64 object-cover rounded-lg shadow-lg transform hover:scale-105 transition-transform">
+              <img src="https://picsum.photos/id/29/500/400" alt="秋天的落叶" class="w-full h-48 object-cover rounded-lg shadow-lg transform hover:scale-105 transition-transform">
+            </div>
+            <div class="space-y-4 pt-8">
+              <img src="https://picsum.photos/id/30/500/400" alt="秋天的风景" class="w-full h-48 object-cover rounded-lg shadow-lg transform hover:scale-105 transition-transform">
+              <img src="https://picsum.photos/id/31/500/600" alt="秋天的农田" class="w-full h-64 object-cover rounded-lg shadow-lg transform hover:scale-105 transition-transform">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 冬之章 -->
+  <section id="winter" class="py-24 bg-gradient-to-b from-slate-50 to-slate-100">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col md:flex-row-reverse items-center gap-12">
+        <div class="md:w-1/2">
+          <span class="inline-block text-slate-600 font-semibold mb-2">WINTER</span>
+          <h2 class="text-[clamp(1.8rem,5vw,3rem)] font-bold text-gray-900 mb-6">
+            寒冬腊月<br>银装素裹
+          </h2>
+          <p class="text-gray-700 mb-8 text-lg leading-relaxed">
+            冬天是宁静的季节，大自然进入休眠状态，世界被雪覆盖，变成了一个银白的童话世界。在这个季节里，我们可以感受到大自然的宁静和生命的坚韧。
+          </p>
+          <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="flex items-center">
+              <i class="fa fa-snowflake-o text-slate-500 text-xl mr-3"></i>
+              <span>雪花纷飞</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fa fa-tree text-slate-500 text-xl mr-3"></i>
+              <span>冰雪世界</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fa fa-pagelines text-slate-500 text-xl mr-3"></i>
+              <span>冬日森林</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fa fa-sun-o text-slate-500 text-xl mr-3"></i>
+              <span>冬日阳光</span>
+            </div>
+          </div>
+          <a href="#gallery" class="inline-block text-slate-600 font-semibold border-b-2 border-slate-600 hover:text-slate-800 hover:border-slate-800 transition-colors">
+            查看冬天画廊 <i class="fa fa-long-arrow-right ml-1"></i>
+          </a>
+        </div>
+        
+        <div class="md:w-1/2 relative">
+          <div class="absolute -top-6 -right-6 w-24 h-24 bg-slate-200 rounded-full opacity-70"></div>
+          <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-slate-300 rounded-full opacity-50"></div>
+          
+          <div class="relative grid grid-cols-2 gap-4 z-10">
+            <div class="space-y-4">
+              <img src="https://picsum.photos/id/42/500/600" alt="冬天的雪景" class="w-full h-64 object-cover rounded-lg shadow-lg transform hover:scale-105 transition-transform">
+              <img src="https://picsum.photos/id/43/500/400" alt="冬天的树木" class="w-full h-48 object-cover rounded-lg shadow-lg transform hover:scale-105 transition-transform">
+            </div>
+            <div class="space-y-4 pt-8">
+              <img src="https://picsum.photos/id/44/500/400" alt="冬天的湖泊" class="w-full h-48 object-cover rounded-lg shadow-lg transform hover:scale-105 transition-transform">
+              <img src="https://picsum.photos/id/45/500/600" alt="冬天的山脉" class="w-full h-64 object-cover rounded-lg shadow-lg transform hover:scale-105 transition-transform">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 画廊部分 -->
+  <section id="gallery" class="py-24 bg-white">
+    <div class="container mx-auto px-6">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="inline-block text-nature-600 font-semibold mb-2">GALLERY</span>
+        <h2 class="text-[clamp(1.8rem,5vw,3rem)] font-bold text-gray-900 mb-6">
+          四季画廊
+        </h2>
+        <p class="text-gray-700 text-lg leading-relaxed">
+          欣赏四季变换中的自然美景，每一张照片都捕捉了大自然最动人的瞬间
+        </p>
+      </div>
+      
+      <!-- 过滤器 -->
+      <div class="flex flex-wrap justify-center gap-4 mb-12">
+        <button class="filter-btn active px-6 py-2 rounded-full bg-nature-600 text-white font-medium hover:bg-nature-700 transition-colors">
+          全部
+        </button>
+        <button class="filter-btn px-6 py-2 rounded-full bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition-colors">
+          春天
+        </button>
+        <button class="filter-btn px-6 py-2 rounded-full bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition-colors">
+          夏天
+        </button>
+        <button class="filter-btn px-6 py-2 rounded-full bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition-colors">
+          秋天
+        </button>
+        <button class="filter-btn px-6 py-2 rounded-full bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition-colors">
+          冬天
+        </button>
+      </div>
+      
+      <!-- 图片网格 -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="gallery-item group relative overflow-hidden rounded-lg shadow-lg">
+          <img src="https://picsum.photos/id/110/600/800" alt="春天的花朵" class="w-full h-80 object-cover transform group-hover:scale-110 transition-transform duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+            <div class="p-6 text-white">
+              <h3 class="text-xl font-bold mb-2">春日绽放</h3>
+              <p class="text-sm opacity-80">樱花盛开的季节，美丽的花朵点缀着整个城市</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="gallery-item group relative overflow-hidden rounded-lg shadow-lg">
+          <img src="https://picsum.photos/id/10/600/800" alt="夏天的海滩" class="w-full h-80 object-cover transform group-hover:scale-110 transition-transform duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+            <div class="p-6 text-white">
+              <h3 class="text-xl font-bold mb-2">夏日海滨</h3>
+              <p class="text-sm opacity-80">蔚蓝的海水与金色的沙滩，夏日最完美的组合</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="gallery-item group relative overflow-hidden rounded-lg shadow-lg">
+          <img src="https://picsum.photos/id/28/600/800" alt="秋天的树木" class="w-full h-80 object-cover transform group-hover:scale-110 transition-transform duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+            <div class="p-6 text-white">
+              <h3 class="text-xl font-bold mb-2">金秋时节</h3>
+              <p class="text-sm opacity-80">枫叶变红的季节，山林间仿佛燃烧的火焰</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="gallery-item group relative overflow-hidden rounded-lg shadow-lg">
+          <img src="https://picsum.photos/id/42/600/800" alt="冬天的雪景" class="w-full h-80 object-cover transform group-hover:scale-110 transition-transform duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+            <div class="p-6 text-white">
+              <h3 class="text-xl font-bold mb-2">冬日雪景</h3>
+              <p class="text-sm opacity-80">洁白的雪覆盖大地，整个世界变得宁静而美丽</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="gallery-item group relative overflow-hidden rounded-lg shadow-lg">
+          <img src="https://picsum.photos/id/133/600/800" alt="春天的风景" class="w-full h-80 object-cover transform group-hover:scale-110 transition-transform duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+            <div class="p-6 text-white">
+              <h3 class="text-xl font-bold mb-2">春之气息</h3>
+              <p class="text-sm opacity-80">嫩绿的新芽和盛开的花朵，带来春天的气息</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="gallery-item group relative overflow-hidden rounded-lg shadow-lg">
+          <img src="https://picsum.photos/id/167/600/800" alt="夏天的森林" class="w-full h-80 object-cover transform group-hover:scale-110 transition-transform duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+            <div class="p-6 text-white">
+              <h3 class="text-xl font-bold mb-2">夏日森林</h3>
+              <p class="text-sm opacity-80">茂密的森林，清凉的树荫，夏日避暑的好去处</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="text-center mt-12">
+        <button class="px-8 py-3 bg-nature-600 hover:bg-nature-700 text-white font-semibold rounded-full transition-all transform hover:scale-105 shadow-lg hover:shadow-xl">
+          加载更多 <i class="fa fa-refresh ml-2"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 联系部分 -->
+  <section id="contact" class="py-24 bg-gray-900 text-white">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col lg:flex-row gap-12">
+        <div class="lg:w-1/2">
+          <span class="inline-block text-nature-400 font-semibold mb-2">CONTACT</span>
+          <h2 class="text-[clamp(1.8rem,5vw,3rem)] font-bold mb-6">
+            联系我们
+          </h2>
+          <p class="text-gray-300 mb-8 text-lg leading-relaxed">
+            如果你对我们的自然之旅有任何疑问或建议，欢迎随时联系我们。我们期待与你分享更多关于大自然的美丽与神奇。
+          </p>
+          
+          <div class="space-y-6 mb-8">
+            <div class="flex items-start">
+              <div class="bg-nature-800 p-3 rounded-full mr-4">
+                <i class="fa fa-map-marker text-nature-400 text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-1">地址</h3>
+                <p class="text-gray-400">北京市海淀区中关村南大街5号</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="bg-nature-800 p-3 rounded-full mr-4">
+                <i class="fa fa-envelope text-nature-400 text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-1">邮箱</h3>
+                <p class="text-gray-400">contact@naturaltour.com</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="bg-nature-800 p-3 rounded-full mr-4">
+                <i class="fa fa-phone text-nature-400 text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-1">电话</h3>
+                <p class="text-gray-400">+86 10 8888 8888</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex space-x-4">
+            <a href="#" class="bg-nature-800 hover:bg-nature-700 p-3 rounded-full transition-colors">
+              <i class="fa fa-weixin text-nature-400 text-xl"></i>
+            </a>
+            <a href="#" class="bg-nature-800 hover:bg-nature-700 p-3 rounded-full transition-colors">
+              <i class="fa fa-weibo text-nature-400 text-xl"></i>
+            </a>
+            <a href="#" class="bg-nature-800 hover:bg-nature-700 p-3 rounded-full transition-colors">
+              <i class="fa fa-instagram text-nature-400 text-xl"></i>
+            </a>
+            <a href="#" class="bg-nature-800 hover:bg-nature-700 p-3 rounded-full transition-colors">
+              <i class="fa fa-youtube-play text-nature-400 text-xl"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div class="lg:w-1/2">
+          <form class="bg-gray-800 p-8 rounded-xl shadow-2xl">
+            <h3 class="text-2xl font-bold mb-6">发送消息</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label for="name" class="block text-sm font-medium text-gray-300 mb-2">姓名</label>
+                <input type="text" id="name" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-nature-500 focus:border-transparent text-white" placeholder="请输入您的姓名">
+              </div>
+              
+              <div>
+                <label for="email" class="block text-sm font-medium text-gray-300 mb-2">邮箱</label>
+                <input type="email" id="email" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-nature-500 focus:border-transparent text-white" placeholder="请输入您的邮箱">
+              </div>
+            </div>
+            
+            <div class="mb-6">
+              <label for="subject" class="block text-sm font-medium text-gray-300 mb-2">主题</label>
+              <input type="text" id="subject" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-nature-500 focus:border-transparent text-white" placeholder="请输入消息主题">
+            </div>
+            
+            <div class="mb-6">
+              <label for="message" class="block text-sm font-medium text-gray-300 mb-2">消息内容</label>
+              <textarea id="message" rows="5" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-nature-500 focus:border-transparent text-white" placeholder="请输入您的消息内容"></textarea>
+            </div>
+            
+            <button type="submit" class="w-full py-3 bg-nature-600 hover:bg-nature-700 text-white font-semibold rounded-lg transition-colors transform hover:scale-[1.02]">
+              发送消息 <i class="fa fa-paper-plane ml-2"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="bg-gray-950 text-white py-12">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-6 md:mb-0">
+          <a href="#" class="text-2xl font-bold flex items-center">
+            <i class="fa fa-leaf mr-2 text-nature-400"></i>
+            <span>四季自然之旅</span>
+          </a>
+          <p class="text-gray-400 mt-2">探索自然之美，感受四季变换</p>
+        </div>
+        
+        <div class="flex flex-wrap justify-center gap-8">
+          <div>
+            <h4 class="text-lg font-semibold mb-4">快速链接</h4>
+            <ul class="space-y-2">
+              <li><a href="#spring" class="text-gray-400 hover:text-nature-400 transition-colors">春天</a></li>
+              <li><a href="#summer" class="text-gray-400 hover:text-nature-400 transition-colors">夏天</a></li>
+              <li><a href="#autumn" class="text-gray-400 hover:text-nature-400 transition-colors">秋天</a></li>
+              <li><a href="#winter" class="text-gray-400 hover:text-nature-400 transition-colors">冬天</a></li>
+              <li><a href="#gallery" class="text-gray-400 hover:text-nature-400 transition-colors">画廊</a></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h4 class="text-lg font-semibold mb-4">关于我们</h4>
+            <ul class="space-y-2">
+              <li><a href="#" class="text-gray-400 hover:text-nature-400 transition-colors">关于项目</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-nature-400 transition-colors">联系方式</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-nature-400 transition-colors">隐私政策</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-nature-400 transition-colors">使用条款</a></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h4 class="text-lg font-semibold mb-4">订阅更新</h4>
+            <p class="text-gray-400 mb-4">订阅我们的通讯，获取最新的自然摄影作品和旅行灵感</p>
+            <form class="flex">
+              <input type="email" placeholder="您的邮箱地址" class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-l-lg focus:ring-2 focus:ring-nature-500 focus:border-transparent text-white w-full">
+              <button type="submit" class="bg-nature-600 hover:bg-nature-700 px-4 py-2 rounded-r-lg transition-colors">
+                <i class="fa fa-envelope-o"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+        <p class="text-gray-500">© 2025 四季自然之旅. 保留所有权利.</p>
+        <div class="flex space-x-4 mt-4 md:mt-0">
+          <a href="#" class="text-gray-500 hover:text-nature-400 transition-colors">
+            <i class="fa fa-weixin text-xl"></i>
+          </a>
+          <a href="#" class="text-gray-500 hover:text-nature-400 transition-colors">
+            <i class="fa fa-weibo text-xl"></i>
+          </a>
+          <a href="#" class="text-gray-500 hover:text-nature-400 transition-colors">
+            <i class="fa fa-instagram text-xl"></i>
+          </a>
+          <a href="#" class="text-gray-500 hover:text-nature-400 transition-colors">
+            <i class="fa fa-youtube-play text-xl"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 返回顶部按钮 -->
+  <button id="backToTop" class="fixed bottom-8 right-8 bg-nature-600 hover:bg-nature-700 text-white p-3 rounded-full shadow-lg transform hover:scale-110 transition-all opacity-0 invisible">
+    <i class="fa fa-arrow-up"></i>
+  </button>
+
+  <!-- JavaScript -->
+  <script>
+    // 导航栏滚动效果
+    const navbar = document.getElementById('navbar');
+    const backToTopBtn = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navbar.classList.add('bg-black/80', 'bg-blur', 'shadow-lg');
+        navbar.classList.remove('bg-transparent');
+        
+        backToTopBtn.classList.remove('opacity-0', 'invisible');
+        backToTopBtn.classList.add('opacity-100', 'visible');
+      } else {
+        navbar.classList.remove('bg-black/80', 'bg-blur', 'shadow-lg');
+        navbar.classList.add('bg-transparent');
+        
+        backToTopBtn.classList.add('opacity-0', 'invisible');
+        backToTopBtn.classList.remove('opacity-100', 'visible');
+      }
+    });
+    
+    // 移动端菜单
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+      
+      // 切换图标
+      const icon = menuBtn.querySelector('i');
+      if (icon.classList.contains('fa-bars')) {
+        icon.classList.remove('fa-bars');
+        icon.classList.add('fa-times');
+      } else {
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+      }
+    });
+    
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // 关闭移动菜单（如果打开）
+        if (!mobileMenu.classList.contains('hidden')) {
+          mobileMenu.classList.add('hidden');
+          const icon = menuBtn.querySelector('i');
+          icon.classList.remove('fa-times');
+          icon.classList.add('fa-bars');
+        }
+        
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+    
+    // 返回顶部按钮
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // 画廊过滤
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // 移除所有按钮的活动状态
+        filterBtns.forEach(b => {
+          b.classList.remove('active', 'bg-nature-600', 'text-white');
+          b.classList.add('bg-gray-200', 'text-gray-700');
+        });
+        
+        // 添加当前按钮的活动状态
+        btn.classList.add('active', 'bg-nature-600', 'text-white');
+        btn.classList.remove('bg-gray-200', 'text-gray-700');
+        
+        // 这里可以添加实际的过滤逻辑
+        const filter = btn.textContent.trim();
+        filterGallery(filter);
+      });
+    });
+    
+    function filterGallery(filter) {
+      // 实际项目中，这里可以根据过滤条件显示/隐藏图片
+      console.log(`过滤画廊: ${filter}`);
+      
+      // 模拟过滤效果
+      const galleryItems = document.querySelectorAll('.gallery-item');
+      galleryItems.forEach(item => {
+        item.style.opacity = '0.5';
+        setTimeout(() => {
+          item.style.opacity = '1';
+        }, 500);
+      });
+    }
+  </script>
+</body>
+</html>
