@@ -7,7 +7,13 @@
 
 ## 📁 模板列表
 
+### 20250709:  简洁美观的主题介绍 | HaloBug
 
+- **描述**：使用 HTML 编写一个简洁美观的 Halobug 主页面，重点突出品牌名称，无需过多介绍内容。
+- **技术**：HTML
+- **Prompt**：`使用 HTML 编写一个简洁美观的 Halobug 主页面，重点突出品牌名称，无需过多介绍内容。`
+- 🔗 **预览地址**：[点击预览](https://github.halobug.cn/demo-ai/Template/HaloBug_20250709/index.html)
+  
 ### 20250709:  数据可视化小工具 | DataVizTool
 
 - **描述**：数据可视化小工具，支持上传表格文件并生成图表。
