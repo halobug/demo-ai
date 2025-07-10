@@ -7,6 +7,17 @@
 
 ## 📁 模板列表
 
+### 20250710:  未来主义人工智能实验室网站｜NeuroCore
+
+- **描述**：设计一个名为 NeuroCore 的未来主义人工智能实验室网站，以动画神经网络和深蓝色调色板为特色，展示前沿的机器学习研究。
+
+- **技术**：HTML
+- **Prompt**：`Design a futuristic AI lab website named NeuroCore, featuring animated neural networks and deep blue color palettes to illustrate cutting-edge machine learning research.
+`
+- 🔗 **预览地址**：[点击预览](https://github.halobug.cn/demo-ai/Template/neurocore-ai-lab-20250710/index.html)
+![预览](https://github.halobug.cn/demo-ai/Template/neurocore-ai-lab-20250710/previewimage.png "预览")
+
+
 ### 20250709:  探索无限 | 技术与创意的交汇点
 
 - **描述**：生成个性酷炫的博客网站，要包含精选文章，个人项目和作者信息的展示

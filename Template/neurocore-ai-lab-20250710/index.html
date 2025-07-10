@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroCore | Artificial Intelligence Research Lab</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0B3D91',      // Deep blue
+                        secondary: '#1261A0',    // Medium blue
+                        accent: '#00BFFF',       // Bright blue
+                        dark: '#030E26',         // Near black
+                        light: '#E6F4F1',        // Light blue/white
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-balance {
+                text-wrap: balance;
+            }
+            .animate-pulse-slow {
+                animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            }
+            .animate-float {
+                animation: float 6s ease-in-out infinite;
+            }
+            .text-glow {
+                text-shadow: 0 0 10px rgba(0, 191, 255, 0.7);
+            }
+            .bg-gradient-futuristic {
+                background: linear-gradient(135deg, #030E26 0%, #0B3D91 100%);
+            }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .neural-path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: dash 8s linear infinite;
+        }
+
+        @keyframes dash {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        .neuron {
+            transition: all 0.3s ease;
+        }
+
+        .neuron:hover {
+            transform: scale(1.2);
+            filter: brightness(1.5);
+        }
+    </style>
+</head>
+<body class="font-inter bg-dark text-light antialiased">
+    <!-- Navigation -->
+    <header id="navbar" class="fixed w-full z-50 transition-all duration-300 py-4">
+        <div class="container mx-auto px-6 md:px-12 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold tracking-tight flex items-center">
+                <span class="text-accent mr-2">Neuro</span>Core
+                <span class="h-1.5 w-1.5 rounded-full bg-accent animate-pulse ml-1"></span>
+            </a>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#research" class="text-sm uppercase tracking-widest hover:text-accent transition-colors">Research</a>
+                <a href="#team" class="text-sm uppercase tracking-widest hover:text-accent transition-colors">Team</a>
+                <a href="#publications" class="text-sm uppercase tracking-widest hover:text-accent transition-colors">Publications</a>
+                <a href="#news" class="text-sm uppercase tracking-widest hover:text-accent transition-colors">News</a>
+                <a href="#contact" class="text-sm uppercase tracking-widest hover:text-accent transition-colors">Contact</a>
+            </nav>
+            <button id="menu-toggle" class="md:hidden text-xl text-accent">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-dark/95 absolute w-full border-t border-accent/20 py-4 animate-fade-in backdrop-blur-lg">
+            <div class="container mx-auto px-6 flex flex-col space-y-4">
+                <a href="#research" class="text-sm uppercase tracking-widest hover:text-accent transition-colors py-2">Research</a>
+                <a href="#team" class="text-sm uppercase tracking-widest hover:text-accent transition-colors py-2">Team</a>
+                <a href="#publications" class="text-sm uppercase tracking-widest hover:text-accent transition-colors py-2">Publications</a>
+                <a href="#news" class="text-sm uppercase tracking-widest hover:text-accent transition-colors py-2">News</a>
+                <a href="#contact" class="text-sm uppercase tracking-widest hover:text-accent transition-colors py-2">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section with Neural Network Animation -->
+    <section class="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-futuristic">
+        <!-- Animated Neural Network Background -->
+        <div id="neural-network" class="absolute inset-0 opacity-30"></div>
+
+        <div class="container mx-auto px-6 md:px-12 py-24 md:py-0 relative z-10">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-[clamp(2.5rem,8vw,5rem)] font-light leading-tight mb-8 animate-fade-in opacity-0 text-glow" style="animation-delay: 0.2s">
+                    Advancing the Boundaries of <span class="font-bold text-accent">Artificial Intelligence</span>
+                </h1>
+                <p class="text-[clamp(1rem,3vw,1.25rem)] text-light/80 max-w-2xl mx-auto mb-12 text-balance animate-fade-in opacity-0" style="animation-delay: 0.4s">
+                    NeuroCore is at the forefront of AI research, developing cutting-edge machine learning algorithms and neural network architectures to solve humanity's most complex challenges.
+                </p>
+                <a href="#research" class="inline-block border-2 border-accent px-8 py-3 text-sm uppercase tracking-widest hover:bg-accent hover:text-dark transition-all duration-300 animate-fade-in opacity-0" style="animation-delay: 0.6s">
+                    Explore Our Research
+                </a>
+            </div>
+        </div>
+
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <a href="#research" class="text-accent">
+                <i class="fa-solid fa-chevron-down"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Research Section -->
+    <section id="research" class="py-24 relative">
+        <div class="absolute inset-0 bg-primary/20"></div>
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.5rem,4vw,2.5rem)] font-light mb-4">Our Research</h2>
+                <p class="text-light/70 max-w-2xl mx-auto">Pioneering breakthroughs in artificial intelligence, machine learning, and neural networks to create a smarter future.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Research Area 1 -->
+                <div class="bg-dark/50 backdrop-blur-md p-8 rounded-lg border border-accent/20 hover:shadow-xl hover:shadow-accent/10 transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="text-accent text-3xl mb-6">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <h3 class="text-xl font-medium mb-4">Deep Learning Architectures</h3>
+                    <p class="text-light/70 text-sm leading-relaxed mb-4">
+                        Developing novel neural network architectures that learn more efficiently and achieve state-of-the-art performance across diverse domains.
+                    </p>
+                    <a href="#" class="text-accent inline-flex items-center text-sm group">
+                        Learn more <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+
+                <!-- Research Area 2 -->
+                <div class="bg-dark/50 backdrop-blur-md p-8 rounded-lg border border-accent/20 hover:shadow-xl hover:shadow-accent/10 transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="text-accent text-3xl mb-6">
+                        <i class="fa-solid fa-comments"></i>
+                    </div>
+                    <h3 class="text-xl font-medium mb-4">Natural Language Processing</h3>
+                    <p class="text-light/70 text-sm leading-relaxed mb-4">
+                        Advancing the understanding of human language by machines through innovative transformer models and contextual language representations.
+                    </p>
+                    <a href="#" class="text-accent inline-flex items-center text-sm group">
+                        Learn more <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+
+                <!-- Research Area 3 -->
+                <div class="bg-dark/50 backdrop-blur-md p-8 rounded-lg border border-accent/20 hover:shadow-xl hover:shadow-accent/10 transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="text-accent text-3xl mb-6">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+                    <h3 class="text-xl font-medium mb-4">Computer Vision</h3>
+                    <p class="text-light/70 text-sm leading-relaxed mb-4">
+                        Enabling machines to interpret and understand visual information from the world, with applications in healthcare, autonomous systems, and more.
+                    </p>
+                    <a href="#" class="text-accent inline-flex items-center text-sm group">
+                        Learn more <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+
+                <!-- Research Area 4 -->
+                <div class="bg-dark/50 backdrop-blur-md p-8 rounded-lg border border-accent/20 hover:shadow-xl hover:shadow-accent/10 transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="text-accent text-3xl mb-6">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <h3 class="text-xl font-medium mb-4">Reinforcement Learning</h3>
+                    <p class="text-light/70 text-sm leading-relaxed mb-4">
+                        Developing algorithms that enable agents to learn optimal behaviors through interaction with environments, with applications in robotics and optimization.
+                    </p>
+                    <a href="#" class="text-accent inline-flex items-center text-sm group">
+                        Learn more <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+
+                <!-- Research Area 5 -->
+                <div class="bg-dark/50 backdrop-blur-md p-8 rounded-lg border border-accent/20 hover:shadow-xl hover:shadow-accent/10 transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="text-accent text-3xl mb-6">
+                        <i class="fa-solid fa-shield"></i>
+                    </div>
+                    <h3 class="text-xl font-medium mb-4">AI Safety & Ethics</h3>
+                    <p class="text-light/70 text-sm leading-relaxed mb-4">
+                        Researching methods to ensure AI systems are robust, beneficial, aligned with human values, and equitably deployed across society.
+                    </p>
+                    <a href="#" class="text-accent inline-flex items-center text-sm group">
+                        Learn more <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+
+                <!-- Research Area 6 -->
+                <div class="bg-dark/50 backdrop-blur-md p-8 rounded-lg border border-accent/20 hover:shadow-xl hover:shadow-accent/10 transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="text-accent text-3xl mb-6">
+                        <i class="fa-solid fa-sitemap"></i>
+                    </div>
+                    <h3 class="text-xl font-medium mb-4">Quantum Machine Learning</h3>
+                    <p class="text-light/70 text-sm leading-relaxed mb-4">
+                        Exploring the intersection of quantum computing and AI to develop algorithms that leverage quantum advantages for machine learning tasks.
+                    </p>
+                    <a href="#" class="text-accent inline-flex items-center text-sm group">
+                        Learn more <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="text-center mt-16">
+                <a href="#" class="inline-block border-2 border-accent px-8 py-3 text-sm uppercase tracking-widest hover:bg-accent hover:text-dark transition-all duration-300">
+                    View All Research Projects
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Research Project with Chart -->
+    <section class="py-24 bg-dark">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-[clamp(1.5rem,4vw,2.5rem)] font-light mb-6">Featured Research: Neural Network Optimization</h2>
+                    <p class="text-light/70 mb-6 leading-relaxed">
+                        Our latest breakthrough in neural network optimization has reduced training time by 40% while achieving 15% higher accuracy on benchmark datasets. This revolutionary approach combines novel architectural innovations with advanced optimization techniques.
+                    </p>
+
+                    <div class="space-y-4 mb-8">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium">Training Efficiency</span>
+                                <span class="text-accent text-sm">92%</span>
+                            </div>
+                            <div class="h-2 bg-primary/30 rounded-full overflow-hidden">
+                                <div class="h-full bg-accent rounded-full" style="width: 92%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium">Accuracy Improvement</span>
+                                <span class="text-accent text-sm">87%</span>
+                            </div>
+                            <div class="h-2 bg-primary/30 rounded-full overflow-hidden">
+                                <div class="h-full bg-accent rounded-full" style="width: 87%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium">Energy Efficiency</span>
+                                <span class="text-accent text-sm">78%</span>
+                            </div>
+                            <div class="h-2 bg-primary/30 rounded-full overflow-hidden">
+                                <div class="h-full bg-accent rounded-full" style="width: 78%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="#" class="inline-block border-2 border-accent px-8 py-3 text-sm uppercase tracking-widest hover:bg-accent hover:text-dark transition-all duration-300">
+                        Read Research Paper
+                    </a>
+                </div>
+
+                <div class="bg-dark/50 backdrop-blur-md p-8 rounded-lg border border-accent/20">
+                    <h3 class="text-xl font-medium mb-6">Performance Metrics</h3>
+                    <div class="h-[400px]">
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="py-24 relative">
+        <div class="absolute inset-0 bg-primary/20"></div>
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.5rem,4vw,2.5rem)] font-light mb-4">Our Team</h2>
+                <p class="text-light/70 max-w-2xl mx-auto">Meet the brilliant minds behind NeuroCore's groundbreaking research in artificial intelligence.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Team Member 1 -->
+                <div class="bg-dark/50 backdrop-blur-md rounded-lg overflow-hidden group">
+                    <div class="relative overflow-hidden">
+                        <img src="https://picsum.photos/id/1005/400/400" alt="Dr. Sarah Chen" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                            <div class="p-6">
+                                <div class="flex space-x-3">
+                                    <a href="#" class="w-8 h-8 rounded-full bg-accent/80 flex items-center justify-center hover:bg-accent transition-colors">
+                                        <i class="fa-brands fa-linkedin text-dark"></i>
+                                    </a>
+                                    <a href="#" class="w-8 h-8 rounded-full bg-accent/80 flex items-center justify-center hover:bg-accent transition-colors">
+                                        <i class="fa-brands fa-twitter text-dark"></i>
+                                    </a>
+                                    <a href="#" class="w-8 h-8 rounded-full bg-accent/80 flex items-center justify-center hover:bg-accent transition-colors">
+                                        <i class="fa-brands fa-github text-dark"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-medium mb-1">Dr. Sarah Chen</h3>
+                        <p class="text-accent text-sm mb-3">Research Director</p>
+                        <p class="text-light/70 text-sm">
+                            Expert in deep learning architectures and computational neuroscience with over 10 years of experience.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Team Member 2 -->
+                <div class="bg-dark/50 backdrop-blur-md rounded-lg overflow-hidden group">
+                    <div class="relative overflow-hidden">
+                        <img src="https://picsum.photos/id/1012/400/400" alt="Prof. James Wilson" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                            <div class="p-6">
+                                <div class="flex space-x-3">
+                                    <a href="#" class="w-8 h-8 rounded-full bg-accent/80 flex items-center justify-center hover:bg-accent transition-colors">
+                                        <i class="fa-brands fa-linkedin text-dark"></i>
+                                    </a>
+                                    <a href="#" class="w-8 h-8 rounded-full bg-accent/80 flex items-center justify-center hover:bg-accent transition-colors">
+                                        <i class="fa-brands fa-twitter text-dark"></i>
+                                    </a>
+                                    <a href="#" class="w-8 h-8 rounded-full bg-accent/80 flex items-center justify-center hover:bg-accent transition-colors">
+                                        <i class="fa-brands fa-github text-dark"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-medium mb-1">Prof. James Wilson</h3>
+                        <p class="text-accent text-sm mb-3">Lead Researcher</p>
+                        <p class="text-light/70 text-sm">
+                            Specializes in reinforcement learning and robotics, with breakthroughs in autonomous system optimization.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Team Member 3 -->
+                <div class="bg-dark/50 backdrop-blur-md rounded-lg overflow-hidden group">
+                    <div class="relative overflow-hidden">
+                        <img src="https://picsum.photos/id/1027/400/400" alt="Dr. Mei Lin" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                            <div class="p-6">
+                                <div class="flex space-x-3">
+                                    <a href="#" class="w-8 h-8 rounded-full bg-accent/80 flex items-center justify-center hover:bg-accent transition-colors">
+                                        <i class="fa-brands fa-linkedin text-dark"></i>
+                                    </a>
+                                    <a href="#" class="w-8 h-8 rounded-full bg-accent/80 flex items-center justify-center hover:bg-accent transition-colors">
+                                        <i class="fa-brands fa-twitter text-dark"></i>
+                                    </a>
+                                    <a href="#" class="w-8 h-8 rounded-full bg-accent/80 flex items-center justify-center hover:bg-accent transition-colors">
+                                        <i class="fa-brands fa-github text-dark"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-medium mb-1">Dr. Mei Lin</h3>
+                        <p class="text-accent text-sm mb-3">AI Ethics Lead</p>
+                        <p class="text-light/70 text-sm">
+                            Pioneering research in AI safety, fairness, and ethical deployment of artificial intelligence systems.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Team Member 4 -->
+                <div class="bg-dark/50 backdrop-blur-md rounded-lg overflow-hidden group">
+                    <div class="relative overflow-hidden">
+                        <img src="https://picsum.photos/id/1074/400/400" alt="Dr. Alex Kumar" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                            <div class="p-6">
+                                <div class="flex space-x-3">
+                                    <a href="#" class="w-8 h-8 rounded-full bg-accent/80 flex items-center justify-center hover:bg-accent transition-colors">
+                                        <i class="fa-brands fa-linkedin text-dark"></i>
+                                    </a>
+                                    <a href="#" class="w-8 h-8 rounded-full bg-accent/80 flex items-center justify-center hover:bg-accent transition-colors">
+                                        <i class="fa-brands fa-twitter text-dark"></i>
+                                    </a>
+                                    <a href="#" class="w-8 h-8 rounded-full bg-accent/80 flex items-center justify-center hover:bg-accent transition-colors">
+                                        <i class="fa-brands fa-github text-dark"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-medium mb-1">Dr. Alex Kumar</h3>
+                        <p class="text-accent text-sm mb-3">Quantum ML Specialist</p>
+                        <p class="text-light/70 text-sm">
+                            Leading research at the intersection of quantum computing and machine learning, developing novel algorithms.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-16">
+                <a href="#" class="inline-block border-2 border-accent px-8 py-3 text-sm uppercase tracking-widest hover:bg-accent hover:text-dark transition-all duration-300">
+                    View Full Team
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Publications Section -->
+    <section id="publications" class="py-24 bg-dark">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.5rem,4vw,2.5rem)] font-light mb-4">Recent Publications</h2>
+                <p class="text-light/70 max-w-2xl mx-auto">Our research has been published in top-tier AI conferences and journals.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Publication 1 -->
+                <div class="bg-dark/50 backdrop-blur-md p-6 rounded-lg border border-accent/20 hover:shadow-xl hover:shadow-accent/10 transition-all duration-300">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-xs uppercase tracking-wider text-accent bg-accent/10 px-3 py-1 rounded-full">NeurIPS 2025</span>
+                        <span class="text-xs text-light/50">Nov 2025</span>
+                    </div>
+                    <h3 class="text-lg font-medium mb-3">Efficient Attention: Attention with Linear Complexity</h3>
+                    <p class="text-light/70 text-sm mb-4">
+                        Chen, S., Wilson, J., & Kumar, A.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-xs text-accent hover:underline">PDF</a>
+                        <a href="#" class="text-xs text-accent hover:underline">Code</a>
+                        <a href="#" class="text-xs text-accent hover:underline">Slides</a>
+                    </div>
+                </div>
+
+                <!-- Publication 2 -->
+                <div class="bg-dark/50 backdrop-blur-md p-6 rounded-lg border border-accent/20 hover:shadow-xl hover:shadow-accent/10 transition-all duration-300">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-xs uppercase tracking-wider text-accent bg-accent/10 px-3 py-1 rounded-full">ICML 2025</span>
+                        <span class="text-xs text-light/50">July 2025</span>
+                    </div>
+                    <h3 class="text-lg font-medium mb-3">Quantum-Inspired Machine Learning for Optimization Problems</h3>
+                    <p class="text-light/70 text-sm mb-4">
+                        Kumar, A., Lin, M., & Chen, S.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-xs text-accent hover:underline">PDF</a>
+                        <a href="#" class="text-xs text-accent hover:underline">Code</a>
+                        <a href="#" class="text-xs text-accent hover:underline">Slides</a>
+                    </div>
+                </div>
+
+                <!-- Publication 3 -->
+                <div class="bg-dark/50 backdrop-blur-md p-6 rounded-lg border border-accent/20 hover:shadow-xl hover:shadow-accent/10 transition-all duration-300">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-xs uppercase tracking-wider text-accent bg-accent/10 px-3 py-1 rounded-full">ICLR 2025</span>
+                        <span class="text-xs text-light/50">May 2025</span>
+                    </div>
+                    <h3 class="text-lg font-medium mb-3">Towards Ethical AI: A Framework for Fairness and Accountability</h3>
+                    <p class="text-light/70 text-sm mb-4">
+                        Lin, M., Wilson, J., & Chen, S.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-xs text-accent hover:underline">PDF</a>
+                        <a href="#" class="text-xs text-accent hover:underline">Code</a>
+                        <a href="#" class="text-xs text-accent hover:underline">Slides</a>
+                    </div>
+                </div>
+
+                <!-- Publication 4 -->
+                <div class="bg-dark/50 backdrop-blur-md p-6 rounded-lg border border-accent/20 hover:shadow-xl hover:shadow-accent/10 transition-all duration-300">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-xs uppercase tracking-wider text-accent bg-accent/10 px-3 py-1 rounded-full">CVPR 2025</span>
+                        <span class="text-xs text-light/50">June 2025</span>
+                    </div>
+                    <h3 class="text-lg font-medium mb-3">Neural Architecture Search for Efficient Computer Vision Models</h3>
+                    <p class="text-light/70 text-sm mb-4">
+                        Wilson, J., Kumar, A., & Lin, M.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-xs text-accent hover:underline">PDF</a>
+                        <a href="#" class="text-xs text-accent hover:underline">Code</a>
+                        <a href="#" class="text-xs text-accent hover:underline">Slides</a>
+                    </div>
+                </div>
+
+                <!-- Publication 5 -->
+                <div class="bg-dark/50 backdrop-blur-md p-6 rounded-lg border border-accent/20 hover:shadow-xl hover:shadow-accent/10 transition-all duration-300">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-xs uppercase tracking-wider text-accent bg-accent/10 px-3 py-1 rounded-full">ACL 2025</span>
+                        <span class="text-xs text-light/50">August 2025</span>
+                    </div>
+                    <h3 class="text-lg font-medium mb-3">Contextual Language Models with Dynamic Memory Networks</h3>
+                    <p class="text-light/70 text-sm mb-4">
+                        Chen, S., Lin, M., & Wilson, J.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-xs text-accent hover:underline">PDF</a>
+                        <a href="#" class="text-xs text-accent hover:underline">Code</a>
+                        <a href="#" class="text-xs text-accent hover:underline">Slides</a>
+                    </div>
+                </div>
+
+                <!-- Publication 6 -->
+                <div class="bg-dark/50 backdrop-blur-md p-6 rounded-lg border border-accent/20 hover:shadow-xl hover:shadow-accent/10 transition-all duration-300">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-xs uppercase tracking-wider text-accent bg-accent/10 px-3 py-1 rounded-full">Science 2025</span>
+                        <span class="text-xs text-light/50">March 2025</span>
+                    </div>
+                    <h3 class="text-lg font-medium mb-3">Brain-Inspired Computing: Bridging Neuroscience and AI</h3>
+                    <p class="text-light/70 text-sm mb-4">
+                        All authors
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-xs text-accent hover:underline">PDF</a>
+                        <a href="#" class="text-xs text-accent hover:underline">Code</a>
+                        <a href="#" class="text-xs text-accent hover:underline">Slides</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-16">
+                <a href="#" class="inline-block border-2 border-accent px-8 py-3 text-sm uppercase tracking-widest hover:bg-accent hover:text-dark transition-all duration-300">
+                    Browse All Publications
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- News & Updates Section -->
+    <section id="news" class="py-24 relative">
+        <div class="absolute inset-0 bg-primary/20"></div>
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.5rem,4vw,2.5rem)] font-light mb-4">News & Updates</h2>
+                <p class="text-light/70 max-w-2xl mx-auto">Stay informed about the latest developments at NeuroCore.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- News Item 1 -->
+                <div class="bg-dark/50 backdrop-blur-md rounded-lg overflow-hidden group">
+                    <div class="relative overflow-hidden">
+                        <img src="https://picsum.photos/id/1/600/400" alt="NeuroCore Awarded NSF Grant" class="w-full h-60 object-cover transition-transform duration-500 group-hover:scale-110">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xs text-light/50">June 15, 2025</span>
+                            <span class="text-xs uppercase tracking-wider text-accent">Press Release</span>
+                        </div>
+                        <h3 class="text-xl font-medium mb-3 group-hover:text-accent transition-colors">NeuroCore Awarded $5M NSF Grant for Quantum AI Research</h3>
+                        <p class="text-light/70 text-sm mb-4">
+                            NeuroCore has been awarded a $5 million grant from the National Science Foundation to advance research in quantum machine learning...
+                        </p>
+                        <a href="#" class="text-accent inline-flex items-center text-sm group">
+                            Read more <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- News Item 2 -->
+                <div class="bg-dark/50 backdrop-blur-md rounded-lg overflow-hidden group">
+                    <div class="relative overflow-hidden">
+                        <img src="https://picsum.photos/id/2/600/400" alt="New Research Collaboration" class="w-full h-60 object-cover transition-transform duration-500 group-hover:scale-110">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xs text-light/50">May 28, 2025</span>
+                            <span class="text-xs uppercase tracking-wider text-accent">Announcement</span>
+                        </div>
+                        <h3 class="text-xl font-medium mb-3 group-hover:text-accent transition-colors">NeuroCore Partners with NASA on AI for Space Exploration</h3>
+                        <p class="text-light/70 text-sm mb-4">
+                            NeuroCore has announced a new research collaboration with NASA to develop advanced AI systems for space exploration missions...
+                        </p>
+                        <a href="#" class="text-accent inline-flex items-center text-sm group">
+                            Read more <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- News Item 3 -->
+                <div class="bg-dark/50 backdrop-blur-md rounded-lg overflow-hidden group">
+                    <div class="relative overflow-hidden">
+                        <img src="https://picsum.photos/id/3/600/400" alt="Open Source Release" class="w-full h-60 object-cover transition-transform duration-500 group-hover:scale-110">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xs text-light/50">April 10, 2025</span>
+                            <span class="text-xs uppercase tracking-wider text-accent">Technology</span>
+                        </div>
+                        <h3 class="text-xl font-medium mb-3 group-hover:text-accent transition-colors">NeuroCore Releases Neural Network Optimization Framework</h3>
+                        <p class="text-light/70 text-sm mb-4">
+                            NeuroCore has open-sourced its latest neural network optimization framework, enabling researchers worldwide to accelerate their AI projects...
+                        </p>
+                        <a href="#" class="text-accent inline-flex items-center text-sm group">
+                            Read more <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-16">
+                <a href="#" class="inline-block border-2 border-accent px-8 py-3 text-sm uppercase tracking-widest hover:bg-accent hover:text-dark transition-all duration-300">
+                    View All News
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-dark">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <div>
+                    <h2 class="text-[clamp(1.5rem,4vw,2.5rem)] font-light mb-6">Get in Touch</h2>
+                    <p class="text-light/70 mb-8 leading-relaxed">
+                        Interested in collaborating, learning more about our research, or joining our team? Reach out to us.
+                    </p>
+
+                    <div class="space-y-6 mb-8">
+                        <div class="flex items-start">
+                            <div class="text-accent text-xl mr-4 mt-1">
+                                <i class="fa-solid fa-map-marker"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Location</h4>
+                                <p class="text-light/70">123 Innovation Drive, Tech Hub City, CA 94105, United States</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <div class="text-accent text-xl mr-4 mt-1">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Email</h4>
+                                <p class="text-light/70">contact@neurocore.ai</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <div class="text-accent text-xl mr-4 mt-1">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Phone</h4>
+                                <p class="text-light/70">+1 (555) 789-0123</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-12">
+                        <h3 class="text-xl font-medium mb-6">Follow Us</h3>
+                        <div class="flex space-x-4">
+                            <a href="#" class="w-10 h-10 rounded-full border border-accent/30 flex items-center justify-center hover:bg-accent hover:border-accent transition-all duration-300">
+                                <i class="fa-brands fa-twitter"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 rounded-full border border-accent/30 flex items-center justify-center hover:bg-accent hover:border-accent transition-all duration-300">
+                                <i class="fa-brands fa-linkedin"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 rounded-full border border-accent/30 flex items-center justify-center hover:bg-accent hover:border-accent transition-all duration-300">
+                                <i class="fa-brands fa-github"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 rounded-full border border-accent/30 flex items-center justify-center hover:bg-accent hover:border-accent transition-all duration-300">
+                                <i class="fa-brands fa-youtube"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-dark/50 backdrop-blur-md p-8 rounded-lg border border-accent/20">
+                    <h3 class="text-xl font-medium mb-6">Send us a message</h3>
+
+                    <form class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium mb-2">Name</label>
+                            <input type="text" id="name" class="w-full bg-primary/30 border border-accent/20 rounded px-4 py-3 text-light placeholder-light/50 focus:outline-none focus:ring-2 focus:ring-accent" placeholder="Your name">
+                        </div>
+
+                        <div>
+                            <label for="email" class="block text-sm font-medium mb-2">Email</label>
+                            <input type="email" id="email" class="w-full bg-primary/30 border border-accent/20 rounded px-4 py-3 text-light placeholder-light/50 focus:outline-none focus:ring-2 focus:ring-accent" placeholder="Your email">
+                        </div>
+
+                        <div>
+                            <label for="subject" class="block text-sm font-medium mb-2">Subject</label>
+                            <input type="text" id="subject" class="w-full bg-primary/30 border border-accent/20 rounded px-4 py-3 text-light placeholder-light/50 focus:outline-none focus:ring-2 focus:ring-accent" placeholder="Subject">
+                        </div>
+
+                        <div>
+                            <label for="message" class="block text-sm font-medium mb-2">Message</label>
+                            <textarea id="message" rows="5" class="w-full bg-primary/30 border border-accent/20 rounded px-4 py-3 text-light placeholder-light/50 focus:outline-none focus:ring-2 focus:ring-accent" placeholder="Your message"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full bg-accent text-dark px-8 py-3 text-sm uppercase tracking-widest hover:bg-accent/80 transition-all duration-300">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 bg-dark border-t border-accent/20">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h3 class="text-xl font-bold mb-6 flex items-center">
+                        <span class="text-accent mr-2">Neuro</span>Core
+                        <span class="h-1 w-1 rounded-full bg-accent animate-pulse ml-1"></span>
+                    </h3>
+                    <p class="text-light/70 text-sm leading-relaxed">
+                        Advancing the boundaries of artificial intelligence through innovative research and development.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-medium mb-6">Quick Links</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#research" class="text-light/70 hover:text-accent transition-colors">Research</a></li>
+                        <li><a href="#team" class="text-light/70 hover:text-accent transition-colors">Team</a></li>
+                        <li><a href="#publications" class="text-light/70 hover:text-accent transition-colors">Publications</a></li>
+                        <li><a href="#news" class="text-light/70 hover:text-accent transition-colors">News</a></li>
+                        <li><a href="#contact" class="text-light/70 hover:text-accent transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-medium mb-6">Resources</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#" class="text-light/70 hover:text-accent transition-colors">Open Source Projects</a></li>
+                        <li><a href="#" class="text-light/70 hover:text-accent transition-colors">Datasets</a></li>
+                        <li><a href="#" class="text-light/70 hover:text-accent transition-colors">Research Papers</a></li>
+                        <li><a href="#" class="text-light/70 hover:text-accent transition-colors">Blog</a></li>
+                        <li><a href="#" class="text-light/70 hover:text-accent transition-colors">Careers</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-medium mb-6">Newsletter</h4>
+                    <p class="text-light/70 text-sm mb-4">Subscribe to our newsletter to receive updates on our latest research and events.</p>
+                    <form class="flex">
+                        <input type="email" placeholder="Your email" class="bg-primary/30 border border-accent/20 rounded-l px-4 py-2 text-light placeholder-light/50 focus:outline-none focus:ring-2 focus:ring-accent w-full">
+                        <button type="submit" class="bg-accent text-dark px-4 py-2 rounded-r hover:bg-accent/80 transition-all duration-300">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="border-t border-accent/20 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-light/50 text-sm mb-4 md:mb-0">© 2025 NeuroCore. All rights reserved.</p>
+                <div class="flex space-x-6 text-sm">
+                    <a href="#" class="text-light/50 hover:text-accent transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-light/50 hover:text-accent transition-colors">Terms of Service</a>
+                    <a href="#" class="text-light/50 hover:text-accent transition-colors">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navigation scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-dark/90', 'shadow-lg', 'py-2', 'backdrop-blur-md');
+                navbar.classList.remove('py-4');
+            } else {
+                navbar.classList.remove('bg-dark/90', 'shadow-lg', 'py-2', 'backdrop-blur-md');
+                navbar.classList.add('py-4');
+            }
+        });
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            if (mobileMenu.classList.contains('hidden')) {
+                menuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+            } else {
+                menuToggle.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+            }
+        });
+
+        // Close mobile menu when clicking on a link
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                menuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Create neural network animation
+        function createNeuralNetwork() {
+            const container = document.getElementById('neural-network');
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('width', width);
+            svg.setAttribute('height', height);
+            svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+            container.appendChild(svg);
+
+            // Create neurons
+            const neurons = [];
+            const numNeurons = 50;
+
+            for (let i = 0; i < numNeurons; i++) {
+                const x = Math.random() * width;
+                const y = Math.random() * height;
+                const radius = Math.random() * 3 + 1;
+
+                const neuron = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                neuron.setAttribute('cx', x);
+                neuron.setAttribute('cy', y);
+                neuron.setAttribute('r', radius);
+                neuron.setAttribute('fill', 'rgba(0, 191, 255, 0.8)');
+                neuron.setAttribute('class', 'neuron');
+                svg.appendChild(neuron);
+
+                neurons.push({ x, y, element: neuron });
+            }
+
+            // Create connections
+            for (let i = 0; i < neurons.length; i++) {
+                for (let j = i + 1; j < neurons.length; j++) {
+                    if (Math.random() < 0.1) { // Only create connections between 10% of neurons
+                        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        const d = `M ${neurons[i].x} ${neurons[i].y} Q ${(neurons[i].x + neurons[j].x) / 2} ${(neurons[i].y + neurons[j].y) / 2 - 50} ${neurons[j].x} ${neurons[j].y}`;
+                        path.setAttribute('d', d);
+                        path.setAttribute('stroke', 'rgba(0, 191, 255, 0.3)');
+                        path.setAttribute('stroke-width', '0.5');
+                        path.setAttribute('fill', 'none');
+                        path.setAttribute('class', 'neural-path');
+                        svg.appendChild(path);
+                    }
+                }
+            }
+
+            // Animate neurons
+            function animateNeurons() {
+                neurons.forEach(neuron => {
+                    const dx = (Math.random() - 0.5) * 2;
+                    const dy = (Math.random() - 0.5) * 2;
+                    neuron.x += dx;
+                    neuron.y += dy;
+
+                    // Keep neurons within bounds
+                    if (neuron.x < 0) neuron.x = 0;
+                    if (neuron.x > width) neuron.x = width;
+                    if (neuron.y < 0) neuron.y = 0;
+                    if (neuron.y > height) neuron.y = height;
+
+                    neuron.element.setAttribute('cx', neuron.x);
+                    neuron.element.setAttribute('cy', neuron.y);
+                });
+
+                requestAnimationFrame(animateNeurons);
+            }
+
+            animateNeurons();
+        }
+
+        // Initialize neural network animation when window loads
+        window.addEventListener('load', createNeuralNetwork);
+
+        // Initialize performance chart
+        window.addEventListener('load', function() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+
+            const chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [
+                        {
+                            label: 'Training Efficiency',
+                            data: [45, 52, 58, 65, 68, 72, 75, 78, 82, 85, 88, 92],
+                            borderColor: '#00BFFF',
+                            backgroundColor: 'rgba(0, 191, 255, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Accuracy',
+                            data: [50, 55, 60, 65, 68, 72, 75, 79, 83, 86, 89, 93],
+                            borderColor: '#1261A0',
+                            backgroundColor: 'rgba(18, 97, 160, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Energy Efficiency',
+                            data: [30, 38, 45, 50, 55, 60, 65, 68, 71, 73, 76, 78],
+                            borderColor: '#0B3D91',
+                            backgroundColor: 'rgba(11, 61, 145, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'rgba(255, 255, 255, 0.7)'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+        // Scroll animation for elements
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('section > div > div.text-center, section > div > div.grid');
+
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+
+                if (elementPosition < windowHeight * 0.85) {
+                    element.classList.add('animate-fade-in');
+                }
+            });
+        };
+
+        // Initial check on page load
+        window.addEventListener('load', animateOnScroll);
+        // Check on scroll
+        window.addEventListener('scroll', animateOnScroll);
+    </script>
+</body>
+</html>
