@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mellow Crumbs - Vintage Bakery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#D4A373',
+                        secondary: '#E9EDC9',
+                        accent: '#FAEDCD',
+                        dark: '#582F0E',
+                        light: '#FEFAE0',
+                    },
+                    fontFamily: {
+                        display: ['"Playfair Display"', 'serif'],
+                        body: ['"Poppins"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            }
+            .vintage-filter {
+                filter: sepia(20%) brightness(105%) contrast(95%);
+            }
+            .animate-float {
+                animation: float 3s ease-in-out infinite;
+            }
+            @keyframes float {
+                0% { transform: translateY(0px); }
+                50% { transform: translateY(-10px); }
+                100% { transform: translateY(0px); }
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="bg-light text-dark font-body">
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-light/90 backdrop-blur-sm shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="flex items-center space-x-2">
+                <img src="https://picsum.photos/seed/bakerylogo/60/60" alt="Mellow Crumbs Logo" class="h-10 w-10 rounded-full vintage-filter">
+                <span class="font-display font-bold text-2xl text-dark">Mellow Crumbs</span>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#home" class="font-medium hover:text-primary transition-colors">Home</a>
+                <a href="#about" class="font-medium hover:text-primary transition-colors">Our Story</a>
+                <a href="#products" class="font-medium hover:text-primary transition-colors">Baked Goods</a>
+                <a href="#testimonials" class="font-medium hover:text-primary transition-colors">Reviews</a>
+                <a href="#contact" class="font-medium hover:text-primary transition-colors">Contact</a>
+                <a href="#order" class="bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-full font-medium transition-all hover:shadow-lg">Order Now</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="menu-toggle" class="md:hidden text-dark text-2xl focus:outline-none">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-light border-t border-gray-100 shadow-lg">
+            <div class="container mx-auto px-4 py-3 flex flex-col space-y-4">
+                <a href="#home" class="font-medium hover:text-primary transition-colors py-2">Home</a>
+                <a href="#about" class="font-medium hover:text-primary transition-colors py-2">Our Story</a>
+                <a href="#products" class="font-medium hover:text-primary transition-colors py-2">Baked Goods</a>
+                <a href="#testimonials" class="font-medium hover:text-primary transition-colors py-2">Reviews</a>
+                <a href="#contact" class="font-medium hover:text-primary transition-colors py-2">Contact</a>
+                <a href="#order" class="bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-full font-medium transition-all hover:shadow-lg text-center">Order Now</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="pt-24 md:pt-0 min-h-screen flex items-center relative overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://picsum.photos/seed/bakeryhero/1920/1080" alt="Vintage bakery interior with display cases" class="w-full h-full object-cover vintage-filter opacity-20">
+        </div>
+        <div class="container mx-auto px-4 py-20 relative z-10">
+            <div class="grid md:grid-cols-2 gap-10 items-center">
+                <div class="space-y-6">
+                    <h1 class="font-display font-bold text-[clamp(2.5rem,5vw,4rem)] leading-tight text-dark">
+                        Handcrafted Breads & <span class="text-primary">Pastries</span> Since 1952
+                    </h1>
+                    <p class="text-lg md:text-xl text-dark/80 max-w-lg">
+                        Experience the warmth and nostalgia of our family-owned bakery, where every bite tells a story of tradition and love.
+                    </p>
+                    <div class="flex flex-wrap gap-4 pt-4">
+                        <a href="#products" class="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-full font-medium transition-all hover:shadow-lg flex items-center gap-2">
+                            <i class="fa fa-shopping-basket"></i>
+                            Shop Now
+                        </a>
+                        <a href="#about" class="bg-transparent border-2 border-dark text-dark hover:bg-dark hover:text-white px-8 py-3 rounded-full font-medium transition-all hover:shadow-lg flex items-center gap-2">
+                            <i class="fa fa-history"></i>
+                            Our Story
+                        </a>
+                    </div>
+                    <div class="flex items-center gap-4 pt-8">
+                        <div class="flex -space-x-2">
+                            <img src="https://picsum.photos/seed/customer1/100/100" alt="Customer" class="w-10 h-10 rounded-full border-2 border-light">
+                            <img src="https://picsum.photos/seed/customer2/100/100" alt="Customer" class="w-10 h-10 rounded-full border-2 border-light">
+                            <img src="https://picsum.photos/seed/customer3/100/100" alt="Customer" class="w-10 h-10 rounded-full border-2 border-light">
+                        </div>
+                        <div>
+                            <div class="flex text-yellow-400">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <p class="text-sm text-dark/70">From 200+ happy customers</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative">
+                    <img src="https://picsum.photos/seed/bakerydisplay/800/800" alt="Assortment of freshly baked goods" class="rounded-2xl shadow-2xl vintage-filter animate-float">
+                    <div class="absolute -bottom-6 -left-6 bg-secondary p-4 rounded-xl shadow-lg">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-primary/20 p-3 rounded-full">
+                                <i class="fa fa-trophy text-primary text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="font-display font-bold text-lg">Award Winning</p>
+                                <p class="text-sm text-dark/70">Best Bakery 2023</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <a href="#about" class="text-dark/50 hover:text-dark transition-colors">
+                <i class="fa fa-angle-down text-3xl"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-secondary/30">
+        <div class="container mx-auto px-4">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-primary font-medium">OUR STORY</span>
+                <h2 class="font-display font-bold text-[clamp(1.8rem,4vw,3rem)] mt-2 mb-6">A Legacy of Baking Excellence</h2>
+                <p class="text-dark/80 text-lg">Since 1952, Mellow Crumbs has been dedicated to creating exceptional baked goods using time-honored recipes and the finest ingredients.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="relative">
+                    <img src="https://picsum.photos/seed/bakerykitchen/800/600" alt="Traditional bakery kitchen with vintage equipment" class="rounded-2xl shadow-xl vintage-filter">
+                    <img src="https://picsum.photos/seed/baker/400/400" alt="Baker preparing dough" class="absolute -bottom-10 -right-10 w-64 h-64 rounded-2xl shadow-xl border-4 border-light vintage-filter">
+                    <div class="absolute -top-5 -left-5 bg-accent p-4 rounded-xl shadow-lg">
+                        <p class="font-display font-bold text-xl">70+ Years</p>
+                        <p class="text-sm text-dark/70">Baking Tradition</p>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <h3 class="font-display font-bold text-2xl">Our Heritage</h3>
+                    <p class="text-dark/80">Mellow Crumbs was founded in 1952 by Eleanor Winters, a passionate baker who emigrated from France with her family recipes. What started as a small neighborhood bakery has grown into a beloved local institution while retaining its old-world charm and commitment to quality.</p>
+
+                    <div class="grid grid-cols-2 gap-6 pt-4">
+                        <div class="bg-light p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                            <div class="text-primary text-3xl mb-3">
+                                <i class="fa fa-leaf"></i>
+                            </div>
+                            <h4 class="font-display font-bold text-lg mb-2">Organic Ingredients</h4>
+                            <p class="text-sm text-dark/70">We source only the finest organic ingredients for our baked goods.</p>
+                        </div>
+                        <div class="bg-light p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                            <div class="text-primary text-3xl mb-3">
+                                <i class="fa fa-clock-o"></i>
+                            </div>
+                            <h4 class="font-display font-bold text-lg mb-2">Traditional Methods</h4>
+                            <p class="text-sm text-dark/70">Each item is crafted using time-tested techniques passed down through generations.</p>
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
+                        <h3 class="font-display font-bold text-2xl">Meet The Baker</h3>
+                        <div class="flex items-center gap-4 pt-3">
+                            <img src="https://picsum.photos/seed/bakerportrait/150/150" alt="Headshot of current baker" class="w-20 h-20 rounded-full vintage-filter">
+                            <div>
+                                <h4 class="font-display font-bold text-lg">Emma Winters</h4>
+                                <p class="text-sm text-dark/70">Third Generation Baker</p>
+                                <p class="text-sm italic text-primary">"Baking is not just a job, it's a labor of love passed down through my family for generations."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section id="products" class="py-20 bg-light">
+        <div class="container mx-auto px-4">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-primary font-medium">OUR SPECIALTIES</span>
+                <h2 class="font-display font-bold text-[clamp(1.8rem,4vw,3rem)] mt-2 mb-6">Baked With Love Daily</h2>
+                <p class="text-dark/80 text-lg">Each morning, our bakers rise before dawn to create these mouthwatering delights using traditional recipes and techniques.</p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Product 1 -->
+                <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow group">
+                    <div class="relative overflow-hidden">
+                        <img src="https://picsum.photos/seed/bread/600/400" alt="Artisan sourdough bread" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110 vintage-filter">
+                        <div class="absolute top-4 right-4 bg-primary text-white text-sm font-medium px-3 py-1 rounded-full">
+                            Bestseller
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="font-display font-bold text-xl">Artisan Sourdough</h3>
+                            <p class="font-bold text-primary text-xl">$8.50</p>
+                        </div>
+                        <p class="text-dark/70 mb-4">Our signature sourdough, slow fermented for 48 hours for maximum flavor and texture.</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex text-yellow-400">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star-half-o"></i>
+                            </div>
+                            <button class="bg-primary/10 hover:bg-primary/20 text-primary px-4 py-2 rounded-full font-medium transition-colors flex items-center gap-2">
+                                <i class="fa fa-shopping-cart"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow group">
+                    <div class="relative overflow-hidden">
+                        <img src="https://picsum.photos/seed/croissant/600/400" alt="Assorted buttery croissants" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110 vintage-filter">
+                        <div class="absolute top-4 right-4 bg-secondary text-dark text-sm font-medium px-3 py-1 rounded-full">
+                            Fresh Daily
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="font-display font-bold text-xl">Buttery Croissants</h3>
+                            <p class="font-bold text-primary text-xl">$3.75</p>
+                        </div>
+                        <p class="text-dark/70 mb-4">Flaky, buttery croissants made with European-style butter and a touch of vanilla.</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex text-yellow-400">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <button class="bg-primary/10 hover:bg-primary/20 text-primary px-4 py-2 rounded-full font-medium transition-colors flex items-center gap-2">
+                                <i class="fa fa-shopping-cart"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow group">
+                    <div class="relative overflow-hidden">
+                        <img src="https://picsum.photos/seed/macarons/600/400" alt="Assorted flavored macarons" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110 vintage-filter">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="font-display font-bold text-xl">French Macarons</h3>
+                            <p class="font-bold text-primary text-xl">$2.50 ea</p>
+                        </div>
+                        <p class="text-dark/70 mb-4">Delicate almond meringue cookies filled with various flavored buttercreams or jams.</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex text-yellow-400">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star-o"></i>
+                            </div>
+                            <button class="bg-primary/10 hover:bg-primary/20 text-primary px-4 py-2 rounded-full font-medium transition-colors flex items-center gap-2">
+                                <i class="fa fa-shopping-cart"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow group">
+                    <div class="relative overflow-hidden">
+                        <img src="https://picsum.photos/seed/cake/600/400" alt="Vintage-style layered cake" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110 vintage-filter">
+                        <div class="absolute top-4 right-4 bg-accent text-dark text-sm font-medium px-3 py-1 rounded-full">
+                            Custom Orders
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="font-display font-bold text-xl">Vintage Layer Cake</h3>
+                            <p class="font-bold text-primary text-xl">$45.00</p>
+                        </div>
+                        <p class="text-dark/70 mb-4">Our classic vanilla cake with buttercream frosting, decorated with fresh flowers and edible pearls.</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex text-yellow-400">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <button class="bg-primary/10 hover:bg-primary/20 text-primary px-4 py-2 rounded-full font-medium transition-colors flex items-center gap-2">
+                                <i class="fa fa-shopping-cart"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 5 -->
+                <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow group">
+                    <div class="relative overflow-hidden">
+                        <img src="https://picsum.photos/seed/muffins/600/400" alt="Assorted seasonal muffins" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110 vintage-filter">
+                        <div class="absolute top-4 right-4 bg-secondary text-dark text-sm font-medium px-3 py-1 rounded-full">
+                            Seasonal
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="font-display font-bold text-xl">Seasonal Muffins</h3>
+                            <p class="font-bold text-primary text-xl">$3.25</p>
+                        </div>
+                        <p class="text-dark/70 mb-4">Freshly baked muffins with seasonal ingredients like blueberries, pumpkin, or cranberries.</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex text-yellow-400">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star-half-o"></i>
+                            </div>
+                            <button class="bg-primary/10 hover:bg-primary/20 text-primary px-4 py-2 rounded-full font-medium transition-colors flex items-center gap-2">
+                                <i class="fa fa-shopping-cart"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 6 -->
+                <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow group">
+                    <div class="relative overflow-hidden">
+                        <img src="https://picsum.photos/seed/brownie/600/400" alt="Rich chocolate brownies" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110 vintage-filter">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="font-display font-bold text-xl">Fudgy Brownies</h3>
+                            <p class="font-bold text-primary text-xl">$3.00</p>
+                        </div>
+                        <p class="text-dark/70 mb-4">Rich, fudgy brownies made with premium Belgian chocolate and a hint of sea salt.</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex text-yellow-400">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star-half-o"></i>
+                            </div>
+                            <button class="bg-primary/10 hover:bg-primary/20 text-primary px-4 py-2 rounded-full font-medium transition-colors flex items-center gap-2">
+                                <i class="fa fa-shopping-cart"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-12">
+                <a href="#" class="inline-flex items-center gap-2 bg-dark hover:bg-dark/90 text-white px-8 py-3 rounded-full font-medium transition-all hover:shadow-lg">
+                    <span>View All Products</span>
+                    <i class="fa fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="py-20 bg-accent/30">
+        <div class="container mx-auto px-4">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-primary font-medium">TESTIMONIALS</span>
+                <h2 class="font-display font-bold text-[clamp(1.8rem,4vw,3rem)] mt-2 mb-6">What Our Customers Say</h2>
+                <p class="text-dark/80 text-lg">We're proud to have built a loyal customer base who appreciate our commitment to quality and tradition.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-white p-8 rounded-2xl shadow-md relative">
+                    <div class="text-primary text-5xl absolute -top-5 left-8 opacity-20">
+                        <i class="fa fa-quote-left"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="flex text-yellow-400 mb-4">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <p class="text-dark/80 mb-6 italic">"Mellow Crumbs has the best croissants I've ever tasted outside of Paris. The flakiness and buttery flavor are absolutely divine. I visit every Saturday without fail!"</p>
+                        <div class="flex items-center gap-4">
+                            <img src="https://picsum.photos/seed/customer4/100/100" alt="Customer Sarah J." class="w-14 h-14 rounded-full vintage-filter">
+                            <div>
+                                <h4 class="font-display font-bold">Sarah Johnson</h4>
+                                <p class="text-sm text-dark/70">Loyal Customer Since 2015</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="bg-white p-8 rounded-2xl shadow-md relative">
+                    <div class="text-primary text-5xl absolute -top-5 left-8 opacity-20">
+                        <i class="fa fa-quote-left"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="flex text-yellow-400 mb-4">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <p class="text-dark/80 mb-6 italic">"The sourdough bread from Mellow Crumbs is worth getting up early for. The crust is perfectly crispy, and the interior is soft and chewy with amazing flavor. A true labor of love!"</p>
+                        <div class="flex items-center gap-4">
+                            <img src="https://picsum.photos/seed/customer5/100/100" alt="Customer Michael T." class="w-14 h-14 rounded-full vintage-filter">
+                            <div>
+                                <h4 class="font-display font-bold">Michael Thompson</h4>
+                                <p class="text-sm text-dark/70">Local Chef</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="bg-white p-8 rounded-2xl shadow-md relative">
+                    <div class="text-primary text-5xl absolute -top-5 left-8 opacity-20">
+                        <i class="fa fa-quote-left"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="flex text-yellow-400 mb-4">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-half-o"></i>
+                        </div>
+                        <p class="text-dark/80 mb-6 italic">"We ordered our wedding cake from Mellow Crumbs and it was absolutely stunning - both in appearance and taste. Emma worked with us to create the perfect design, and our guests couldn't stop raving about it!"</p>
+                        <div class="flex items-center gap-4">
+                            <img src="https://picsum.photos/seed/customer6/100/100" alt="Customer Emily R." class="w-14 h-14 rounded-full vintage-filter">
+                            <div>
+                                <h4 class="font-display font-bold">Emily Rodriguez</h4>
+                                <p class="text-sm text-dark/70">Newlywed</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-light">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <span class="text-primary font-medium">GET IN TOUCH</span>
+                    <h2 class="font-display font-bold text-[clamp(1.8rem,4vw,3rem)] mt-2 mb-6">Visit Our Bakery</h2>
+                    <p class="text-dark/80 text-lg mb-8">We'd love to welcome you to our cozy bakery. Stop by for a freshly baked treat and a warm cup of coffee.</p>
+
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-primary/10 p-3 rounded-full">
+                                <i class="fa fa-map-marker text-primary text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-display font-bold text-lg">Address</h4>
+                                <p class="text-dark/70">123 Vintage Lane<br>Springfield, IL 62704</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="bg-primary/10 p-3 rounded-full">
+                                <i class="fa fa-clock-o text-primary text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-display font-bold text-lg">Hours</h4>
+                                <p class="text-dark/70">Monday - Friday: 7AM - 6PM<br>Saturday: 7AM - 4PM<br>Sunday: 8AM - 2PM</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="bg-primary/10 p-3 rounded-full">
+                                <i class="fa fa-phone text-primary text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-display font-bold text-lg">Phone</h4>
+                                <p class="text-dark/70">(555) 123-4567</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="bg-primary/10 p-3 rounded-full">
+                                <i class="fa fa-envelope text-primary text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-display font-bold text-lg">Email</h4>
+                                <p class="text-dark/70">hello@mellowcrumbs.com</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-10">
+                        <h4 class="font-display font-bold text-lg mb-4">Follow Us</h4>
+                        <div class="flex gap-4">
+                            <a href="#" class="bg-primary/10 hover:bg-primary/20 text-primary w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                                <i class="fa fa-facebook"></i>
+                            </a>
+                            <a href="#" class="bg-primary/10 hover:bg-primary/20 text-primary w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                                <i class="fa fa-instagram"></i>
+                            </a>
+                            <a href="#" class="bg-primary/10 hover:bg-primary/20 text-primary w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+                            <a href="#" class="bg-primary/10 hover:bg-primary/20 text-primary w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                                <i class="fa fa-pinterest"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="bg-white p-8 rounded-2xl shadow-xl">
+                        <h3 class="font-display font-bold text-2xl mb-6">Send Us a Message</h3>
+                        <form id="contact-form" class="space-y-6">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="name" class="block text-dark/70 mb-2">Your Name</label>
+                                    <input type="text" id="name" class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors" placeholder="John Doe">
+                                </div>
+                                <div>
+                                    <label for="email" class="block text-dark/70 mb-2">Email Address</label>
+                                    <input type="email" id="email" class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors" placeholder="john@example.com">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="subject" class="block text-dark/70 mb-2">Subject</label>
+                                <input type="text" id="subject" class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors" placeholder="I'd like to order...">
+                            </div>
+
+                            <div>
+                                <label for="message" class="block text-dark/70 mb-2">Your Message</label>
+                                <textarea id="message" rows="5" class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors" placeholder="Tell us what you're looking for..."></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full bg-primary hover:bg-primary/90 text-white py-3 rounded-lg font-medium transition-all hover:shadow-lg flex items-center justify-center gap-2">
+                                <i class="fa fa-paper-plane"></i>
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="py-16 bg-primary/10">
+        <div class="container mx-auto px-4">
+            <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32"></div>
+                <div class="absolute bottom-0 left-0 w-48 h-48 bg-primary/5 rounded-full -ml-24 -mb-24"></div>
+
+                <div class="relative z-10 max-w-3xl mx-auto text-center">
+                    <h2 class="font-display font-bold text-[clamp(1.5rem,3vw,2.5rem)] mb-4">Join Our Mailing List</h2>
+                    <p class="text-dark/70 text-lg mb-8">Subscribe to receive updates, special offers, and exclusive recipes from our kitchen.</p>
+
+                    <form class="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
+                        <input type="email" placeholder="Your email address" class="flex-1 px-5 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors">
+                        <button type="submit" class="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-full font-medium transition-all hover:shadow-lg whitespace-nowrap">
+                            Subscribe Now
+                        </button>
+                    </form>
+
+                    <p class="text-dark/50 text-sm mt-4">We respect your privacy. Unsubscribe at any time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-12">
+                <div>
+                    <div class="flex items-center space-x-2 mb-6">
+                        <img src="https://picsum.photos/seed/bakerylogofooter/60/60" alt="Mellow Crumbs Logo" class="h-10 w-10 rounded-full vintage-filter">
+                        <span class="font-display font-bold text-2xl">Mellow Crumbs</span>
+                    </div>
+                    <p class="text-white/70 mb-6">Bringing the warmth of tradition and the joy of baking to your everyday life since 1952.</p>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-white/70 hover:text-white transition-colors">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                        <a href="#" class="text-white/70 hover:text-white transition-colors">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-white/70 hover:text-white transition-colors">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-white/70 hover:text-white transition-colors">
+                            <i class="fa fa-pinterest"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-display font-bold text-xl mb-6">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#home" class="text-white/70 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="#about" class="text-white/70 hover:text-white transition-colors">Our Story</a></li>
+                        <li><a href="#products" class="text-white/70 hover:text-white transition-colors">Baked Goods</a></li>
+                        <li><a href="#testimonials" class="text-white/70 hover:text-white transition-colors">Testimonials</a></li>
+                        <li><a href="#contact" class="text-white/70 hover:text-white transition-colors">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-display font-bold text-xl mb-6">Our Products</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-white/70 hover:text-white transition-colors">Artisan Breads</a></li>
+                        <li><a href="#" class="text-white/70 hover:text-white transition-colors">Pastries & Croissants</a></li>
+                        <li><a href="#" class="text-white/70 hover:text-white transition-colors">Cakes & Cupcakes</a></li>
+                        <li><a href="#" class="text-white/70 hover:text-white transition-colors">Specialty Desserts</a></li>
+                        <li><a href="#" class="text-white/70 hover:text-white transition-colors">Custom Orders</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-display font-bold text-xl mb-6">Contact Info</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <i class="fa fa-map-marker text-primary mt-1"></i>
+                            <span class="text-white/70">123 Vintage Lane, Springfield, IL 62704</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa fa-phone text-primary mt-1"></i>
+                            <span class="text-white/70">(555) 123-4567</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa fa-envelope text-primary mt-1"></i>
+                            <span class="text-white/70">hello@mellowcrumbs.com</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa fa-clock-o text-primary mt-1"></i>
+                            <span class="text-white/70">Mon-Fri: 7AM - 6PM<br>Sat: 7AM - 4PM<br>Sun: 8AM - 2PM</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-white/50 text-sm mb-4 md:mb-0">&copy; 2025 Mellow Crumbs Bakery. All rights reserved.</p>
+                <div class="flex gap-6">
+                    <a href="#" class="text-white/50 hover:text-white text-sm transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-white/50 hover:text-white text-sm transition-colors">Terms of Service</a>
+                    <a href="#" class="text-white/50 hover:text-white text-sm transition-colors">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 bg-primary text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg transform translate-y-20 opacity-0 transition-all z-50">
+        <i class="fa fa-arrow-up"></i>
+    </button>
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            if (menuToggle.innerHTML.includes('fa-bars')) {
+                menuToggle.innerHTML = '<i class="fa fa-times"></i>';
+            } else {
+                menuToggle.innerHTML = '<i class="fa fa-bars"></i>';
+            }
+        });
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('py-2', 'shadow-lg');
+                navbar.classList.remove('py-3');
+            } else {
+                navbar.classList.add('py-3');
+                navbar.classList.remove('py-2', 'shadow-lg');
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // Close mobile menu if open
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                    menuToggle.innerHTML = '<i class="fa fa-bars"></i>';
+                }
+
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Back to top button
+        const backToTopButton = document.getElementById('back-to-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopButton.classList.remove('translate-y-20', 'opacity-0');
+                backToTopButton.classList.add('translate-y-0', 'opacity-100');
+            } else {
+                backToTopButton.classList.add('translate-y-20', 'opacity-0');
+                backToTopButton.classList.remove('translate-y-0', 'opacity-100');
+            }
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Contact form submission
+        const contactForm = document.getElementById('contact-form');
+
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Simulate form submission
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            const originalText = submitButton.innerHTML;
+
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Sending...';
+
+            setTimeout(() => {
+                submitButton.innerHTML = '<i class="fa fa-check"></i> Message Sent!';
+                contactForm.reset();
+
+                setTimeout(() => {
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalText;
+                }, 2000);
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
