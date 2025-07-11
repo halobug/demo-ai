@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nomad Notes | Digital Nomad Travel Journal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Merriweather:wght@300;400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2A4365', // Deep blue - nature, trust
+                        secondary: '#48BB78', // Green - growth, outdoors
+                        accent: '#ED8936', // Warm orange - adventure
+                        neutral: {
+                            100: '#F7FAFC',
+                            200: '#EDF2F7',
+                            300: '#E2E8F0',
+                            700: '#4A5568',
+                            800: '#2D3748',
+                            900: '#1A202C',
+                        }
+                    },
+                    fontFamily: {
+                        script: ['Dancing Script', 'cursive'],
+                        serif: ['Merriweather', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            }
+            .journal-paper {
+                background-image: url('https://picsum.photos/id/106/1200/800');
+                background-size: cover;
+                background-position: center;
+            }
+            .transition-transform-opacity {
+                transition-property: transform, opacity;
+                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                transition-duration: 300ms;
+            }
+        }
+    </style>
+</head>
+<body class="font-sans bg-neutral-100 text-neutral-800">
+    <!-- Header with Parallax Effect -->
+    <header class="relative h-screen overflow-hidden">
+        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700" style="background-image: url('https://picsum.photos/id/10/1920/1080'); transform: scale(1.05);" id="parallax-bg"></div>
+        <div class="absolute inset-0 bg-neutral-900/40"></div>
+
+        <div class="relative h-full flex flex-col justify-center items-center text-center px-4">
+            <h1 class="font-script text-[clamp(3rem,8vw,5rem)] font-bold text-white text-shadow mb-4 transition-all duration-500 opacity-0 transform translate-y-8" id="title-animation">Nomad Notes</h1>
+            <p class="font-serif text-[clamp(1.2rem,3vw,1.8rem)] text-white text-shadow max-w-2xl mx-auto transition-all duration-500 delay-100 opacity-0 transform translate-y-8" id="subtitle-animation">
+                A digital journal of adventures, nature, and the nomadic lifestyle
+            </p>
+            <a href="#featured" class="mt-10 inline-block px-8 py-3 bg-accent hover:bg-accent/90 text-white font-medium rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg opacity-0 transition-opacity duration-500 delay-200" id="cta-animation">
+                <i class="fa fa-compass mr-2"></i> Explore Journeys
+            </a>
+        </div>
+
+        <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="navbar">
+            <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                <a href="#" class="font-script text-2xl text-white text-shadow">Nomad Notes</a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="#featured" class="text-white hover:text-accent transition-colors">Featured</a>
+                    <a href="#journeys" class="text-white hover:text-accent transition-colors">Journeys</a>
+                    <a href="#gallery" class="text-white hover:text-accent transition-colors">Gallery</a>
+                    <a href="#about" class="text-white hover:text-accent transition-colors">About Me</a>
+                    <a href="#subscribe" class="text-white hover:text-accent transition-colors">Subscribe</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden text-white text-2xl" id="menu-toggle">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div class="md:hidden bg-neutral-900/95 absolute w-full left-0 top-full transform -translate-y-full opacity-0 transition-all duration-300 pointer-events-none" id="mobile-menu">
+                <div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
+                    <a href="#featured" class="text-white hover:text-accent transition-colors py-2">Featured</a>
+                    <a href="#journeys" class="text-white hover:text-accent transition-colors py-2">Journeys</a>
+                    <a href="#gallery" class="text-white hover:text-accent transition-colors py-2">Gallery</a>
+                    <a href="#about" class="text-white hover:text-accent transition-colors py-2">About Me</a>
+                    <a href="#subscribe" class="text-white hover:text-accent transition-colors py-2">Subscribe</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="relative">
+        <!-- Featured Post -->
+        <section id="featured" class="py-20 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <span class="inline-block font-script text-2xl text-accent mb-2">Featured Journey</span>
+                    <h2 class="font-serif text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-neutral-800">Into the Wilderness</h2>
+                    <div class="w-24 h-1 bg-secondary mx-auto mt-4 mb-6"></div>
+                    <p class="max-w-2xl mx-auto text-neutral-700">A two-week expedition through the untouched forests of Patagonia, documenting rare wildlife and breathtaking landscapes.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="order-2 md:order-1">
+                        <div class="relative">
+                            <img src="https://picsum.photos/id/15/800/600" alt="Mountain landscape with lake and trees" class="w-full h-auto rounded-lg shadow-xl">
+                            <div class="absolute -bottom-6 -right-6 bg-white p-4 rounded-lg shadow-lg journal-paper">
+                                <p class="font-script text-lg text-primary">April 12, 2025</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="order-1 md:order-2">
+                        <div class="bg-neutral-100 p-8 rounded-lg relative">
+                            <div class="absolute -top-4 -left-4 text-6xl text-accent/20">"</div>
+                            <p class="font-serif italic text-lg mb-6">The journey into the heart of Patagonia was nothing short of transformative. Every step revealed a new wonder, from crystal clear lakes reflecting snow-capped peaks to the call of distant condors echoing through the valleys.</p>
+
+                            <div class="space-y-4 mb-8">
+                                <p class="text-neutral-700">After months of planning, I set out with nothing but a backpack and a camera to document the hidden gems of this remote region. The challenges were many, but the rewards were beyond measure.</p>
+                                <p class="text-neutral-700">This journey taught me the true meaning of solitude, the importance of preparation, and the overwhelming beauty of our natural world when left untouched by human hands.</p>
+                            </div>
+
+                            <a href="#" class="inline-flex items-center text-accent hover:text-accent/80 font-medium transition-colors">
+                                Continue Reading <i class="fa fa-long-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Journeys -->
+        <section id="journeys" class="py-20 bg-neutral-100">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <span class="inline-block font-script text-2xl text-accent mb-2">Travel Journal</span>
+                    <h2 class="font-serif text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-neutral-800">Recent Journeys</h2>
+                    <div class="w-24 h-1 bg-secondary mx-auto mt-4 mb-6"></div>
+                    <p class="max-w-2xl mx-auto text-neutral-700">Exploring the world, one adventure at a time. Join me as I document my travels through stunning landscapes and vibrant cultures.</p>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Journey Card 1 -->
+                    <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 group">
+                        <div class="relative overflow-hidden h-64">
+                            <img src="https://picsum.photos/id/29/600/400" alt="Sunset over tropical beach" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-6">
+                                <span class="bg-accent text-white text-xs font-semibold px-3 py-1 rounded-full">Tropical Paradise</span>
+                                <h3 class="font-serif text-xl font-bold text-white mt-2">Bali Beaches & Temples</h3>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-neutral-700 mb-4">Exploring the spiritual and natural wonders of Bali, from ancient temples to hidden waterfalls and pristine beaches.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-neutral-500"><i class="fa fa-calendar-o mr-1"></i> May 20, 2025</span>
+                                <a href="#" class="text-accent hover:text-accent/80 font-medium transition-colors">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Journey Card 2 -->
+                    <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 group">
+                        <div class="relative overflow-hidden h-64">
+                            <img src="https://picsum.photos/id/1036/600/400" alt="Mountain village with snow-capped peaks" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-6">
+                                <span class="bg-secondary text-white text-xs font-semibold px-3 py-1 rounded-full">Mountain Adventure</span>
+                                <h3 class="font-serif text-xl font-bold text-white mt-2">Swiss Alpine Trek</h3>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-neutral-700 mb-4">A challenging trek through the Swiss Alps, staying in mountain huts and experiencing the breathtaking beauty of alpine landscapes.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-neutral-500"><i class="fa fa-calendar-o mr-1"></i> June 5, 2025</span>
+                                <a href="#" class="text-accent hover:text-accent/80 font-medium transition-colors">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Journey Card 3 -->
+                    <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 group">
+                        <div class="relative overflow-hidden h-64">
+                            <img src="https://picsum.photos/id/110/600/400" alt="Desert landscape with sand dunes at sunset" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-6">
+                                <span class="bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full">Desert Exploration</span>
+                                <h3 class="font-serif text-xl font-bold text-white mt-2">Sahara Desert Expedition</h3>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-neutral-700 mb-4">Camping under the stars in the world's largest hot desert, learning survival skills from local nomads and experiencing desert life.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-neutral-500"><i class="fa fa-calendar-o mr-1"></i> July 1, 2025</span>
+                                <a href="#" class="text-accent hover:text-accent/80 font-medium transition-colors">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-12">
+                    <a href="#" class="inline-block px-8 py-3 border-2 border-accent text-accent hover:bg-accent hover:text-white font-medium rounded-full transition-all duration-300">
+                        View All Journeys
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Photography Gallery -->
+        <section id="gallery" class="py-20 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <span class="inline-block font-script text-2xl text-accent mb-2">Visual Stories</span>
+                    <h2 class="font-serif text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-neutral-800">Photography Gallery</h2>
+                    <div class="w-24 h-1 bg-secondary mx-auto mt-4 mb-6"></div>
+                    <p class="max-w-2xl mx-auto text-neutral-700">Capturing the beauty of our planet through my lens. Each photo tells a story of places visited and moments cherished.</p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <div class="overflow-hidden group relative h-64 cursor-pointer">
+                        <img src="https://picsum.photos/id/164/600/600" alt="Mountain lake with reflection" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <span class="text-white font-script text-xl px-4">Mountain Reflections</span>
+                        </div>
+                    </div>
+                    <div class="overflow-hidden group relative h-64 cursor-pointer">
+                        <img src="https://picsum.photos/id/177/600/600" alt="Forest with morning mist" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <span class="text-white font-script text-xl px-4">Morning in the Woods</span>
+                        </div>
+                    </div>
+                    <div class="overflow-hidden group relative h-64 cursor-pointer">
+                        <img src="https://picsum.photos/id/184/600/600" alt="Desert landscape with rocks" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <span class="text-white font-script text-xl px-4">Desert Solitude</span>
+                        </div>
+                    </div>
+                    <div class="overflow-hidden group relative h-64 cursor-pointer">
+                        <img src="https://picsum.photos/id/188/600/600" alt="Beach at sunset" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <span class="text-white font-script text-xl px-4">Golden Hour</span>
+                        </div>
+                    </div>
+                    <div class="overflow-hidden group relative h-64 cursor-pointer">
+                        <img src="https://picsum.photos/id/192/600/600" alt="Mountain village" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <span class="text-white font-script text-xl px-4">Alpine Haven</span>
+                        </div>
+                    </div>
+                    <div class="overflow-hidden group relative h-64 cursor-pointer">
+                        <img src="https://picsum.photos/id/237/600/600" alt="Cute dog in nature" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <span class="text-white font-script text-xl px-4">Four-Legged Companion</span>
+                        </div>
+                    </div>
+                    <div class="overflow-hidden group relative h-64 cursor-pointer">
+                        <img src="https://picsum.photos/id/252/600/600" alt="Waterfall in forest" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <span class="text-white font-script text-xl px-4">Hidden Falls</span>
+                        </div>
+                    </div>
+                    <div class="overflow-hidden group relative h-64 cursor-pointer">
+                        <img src="https://picsum.photos/id/287/600/600" alt="Sunrise over mountains" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <span class="text-white font-script text-xl px-4">Dawn Patrol</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-12">
+                    <a href="#" class="inline-block px-8 py-3 border-2 border-accent text-accent hover:bg-accent hover:text-white font-medium rounded-full transition-all duration-300">
+                        View Full Gallery
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About the Nomad -->
+        <section id="about" class="py-20 bg-neutral-900 text-white">
+            <div class="container mx-auto px-4">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <div class="relative">
+                            <img src="https://picsum.photos/id/1025/800/800" alt="Portrait of the digital nomad" class="w-full h-auto rounded-lg shadow-xl">
+                            <div class="absolute -bottom-6 -left-6 border-4 border-white p-4 rounded-lg shadow-lg journal-paper">
+                                <p class="font-script text-lg text-primary">Always on the move</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="inline-block font-script text-2xl text-accent mb-2">About the Nomad</span>
+                        <h2 class="font-serif text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-6">Hello, I'm Alex</h2>
+
+                        <p class="text-neutral-300 mb-6">I'm a photographer, writer, and digital nomad with a passion for exploring remote corners of the world. For the past five years, I've been traveling full-time, documenting my adventures and sharing them with others through this blog.</p>
+
+                        <p class="text-neutral-300 mb-6">What started as a personal journal has evolved into a platform where I hope to inspire others to step outside their comfort zones, appreciate the beauty of our planet, and consider alternative lifestyles that prioritize experiences over material possessions.</p>
+
+                        <p class="text-neutral-300 mb-8">When I'm not on the road, you can find me in my minimalist home base in Chiang Mai, Thailand, planning my next adventure or working on photography projects.</p>
+
+                        <div class="flex space-x-4">
+                            <a href="#" class="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center hover:bg-accent transition-colors duration-300">
+                                <i class="fa fa-instagram"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center hover:bg-accent transition-colors duration-300">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center hover:bg-accent transition-colors duration-300">
+                                <i class="fa fa-youtube-play"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center hover:bg-accent transition-colors duration-300">
+                                <i class="fa fa-pinterest-p"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter Section -->
+        <section id="subscribe" class="py-20 bg-accent/10 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-1/2 h-full opacity-10">
+                <img src="https://picsum.photos/id/1015/800/800" alt="Background texture" class="w-full h-full object-cover">
+            </div>
+
+            <div class="container mx-auto px-4 relative z-10">
+                <div class="max-w-3xl mx-auto text-center">
+                    <span class="inline-block font-script text-2xl text-accent mb-2">Join the Journey</span>
+                    <h2 class="font-serif text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-neutral-800 mb-6">Subscribe to Nomad Notes</h2>
+
+                    <p class="text-neutral-700 mb-8">Get exclusive travel tips, photography tutorials, and first access to new journey updates delivered straight to your inbox.</p>
+
+                    <form class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto mb-8">
+                        <input type="email" placeholder="Your email address" class="flex-1 px-6 py-4 rounded-full focus:outline-none focus:ring-2 focus:ring-accent">
+                        <button type="submit" class="px-8 py-4 bg-accent hover:bg-accent/90 text-white font-medium rounded-full transition-all duration-300 transform hover:scale-105">
+                            Subscribe <i class="fa fa-paper-plane ml-2"></i>
+                        </button>
+                    </form>
+
+                    <p class="text-sm text-neutral-600">I respect your privacy. Unsubscribe at any time.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-neutral-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <a href="#" class="font-script text-3xl mb-4 inline-block">Nomad Notes</a>
+                    <p class="text-neutral-400 mb-6 max-w-md">A travel journal documenting adventures around the world through the eyes of a digital nomad. Join me as I explore remote destinations, capture stunning photographs, and embrace the nomadic lifestyle.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-neutral-400 hover:text-white transition-colors">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-neutral-400 hover:text-white transition-colors">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-neutral-400 hover:text-white transition-colors">
+                            <i class="fa fa-youtube-play"></i>
+                        </a>
+                        <a href="#" class="text-neutral-400 hover:text-white transition-colors">
+                            <i class="fa fa-pinterest-p"></i>
+                        </a>
+                        <a href="#" class="text-neutral-400 hover:text-white transition-colors">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="font-serif text-lg font-bold mb-4">Explore</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#featured" class="text-neutral-400 hover:text-white transition-colors">Featured Journey</a></li>
+                        <li><a href="#journeys" class="text-neutral-400 hover:text-white transition-colors">All Journeys</a></li>
+                        <li><a href="#gallery" class="text-neutral-400 hover:text-white transition-colors">Photography Gallery</a></li>
+                        <li><a href="#about" class="text-neutral-400 hover:text-white transition-colors">About Me</a></li>
+                        <li><a href="#" class="text-neutral-400 hover:text-white transition-colors">Travel Resources</a></li>
+                        <li><a href="#" class="text-neutral-400 hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="font-serif text-lg font-bold mb-4">Journey Categories</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-neutral-400 hover:text-white transition-colors">Mountain Adventures</a></li>
+                        <li><a href="#" class="text-neutral-400 hover:text-white transition-colors">Tropical Escapes</a></li>
+                        <li><a href="#" class="text-neutral-400 hover:text-white transition-colors">Desert Explorations</a></li>
+                        <li><a href="#" class="text-neutral-400 hover:text-white transition-colors">Cultural Immersions</a></li>
+                        <li><a href="#" class="text-neutral-400 hover:text-white transition-colors">Urban Discoveries</a></li>
+                        <li><a href="#" class="text-neutral-400 hover:text-white transition-colors">Photography Tips</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-neutral-800 mt-12 pt-8 text-center text-neutral-500 text-sm">
+                <p>&copy; 2025 Nomad Notes. All rights reserved.</p>
+                <div class="mt-2 space-x-4">
+                    <a href="#" class="hover:text-neutral-400 transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-neutral-400 transition-colors">Terms of Use</a>
+                    <a href="#" class="hover:text-neutral-400 transition-colors">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Header animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navbar scroll effect
+            const navbar = document.getElementById('navbar');
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            // Parallax effect
+            const parallaxBg = document.getElementById('parallax-bg');
+
+            // Header animations
+            const title = document.getElementById('title-animation');
+            const subtitle = document.getElementById('subtitle-animation');
+            const cta = document.getElementById('cta-animation');
+
+            // Animate in elements
+            setTimeout(() => {
+                title.classList.remove('opacity-0', 'translate-y-8');
+            }, 300);
+
+            setTimeout(() => {
+                subtitle.classList.remove('opacity-0', 'translate-y-8');
+            }, 600);
+
+            setTimeout(() => {
+                cta.classList.remove('opacity-0');
+                cta.classList.add('opacity-100');
+            }, 900);
+
+            // Navbar scroll effect
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('bg-neutral-900/95', 'shadow-lg');
+                    navbar.classList.remove('py-4');
+                    navbar.classList.add('py-2');
+                } else {
+                    navbar.classList.remove('bg-neutral-900/95', 'shadow-lg');
+                    navbar.classList.remove('py-2');
+                    navbar.classList.add('py-4');
+                }
+
+                // Parallax effect
+                if (window.scrollY < window.innerHeight) {
+                    parallaxBg.style.transform = `scale(1.05) translateY(${window.scrollY * 0.2}px)`;
+                }
+            });
+
+            // Mobile menu toggle
+            menuToggle.addEventListener('click', function() {
+                if (mobileMenu.classList.contains('opacity-0')) {
+                    mobileMenu.classList.remove('opacity-0', '-translate-y-full', 'pointer-events-none');
+                    mobileMenu.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+                    menuToggle.innerHTML = '<i class="fa fa-times"></i>';
+                } else {
+                    mobileMenu.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
+                    mobileMenu.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+                    menuToggle.innerHTML = '<i class="fa fa-bars"></i>';
+                }
+            });
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    // Close mobile menu if open
+                    if (!mobileMenu.classList.contains('opacity-0')) {
+                        mobileMenu.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
+                        mobileMenu.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+                        menuToggle.innerHTML = '<i class="fa fa-bars"></i>';
+                    }
+
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Image gallery hover effects
+            const galleryItems = document.querySelectorAll('#gallery .group');
+            galleryItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.querySelector('img').style.transform = 'scale(1.1)';
+                    this.querySelector('div').style.opacity = '1';
+                });
+
+                item.addEventListener('mouseleave', function() {
+                    this.querySelector('img').style.transform = 'scale(1)';
+                    this.querySelector('div').style.opacity = '0';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlockPulse - Crypto Analytics Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6C5CE7',
+                        secondary: '#00CEFF',
+                        accent: '#00FFA3',
+                        danger: '#FF3E78',
+                        warning: '#FFDD57',
+                        info: '#00CEFF',
+                        dark: {
+                            100: '#8D8D8D',
+                            200: '#4F4F4F',
+                            300: '#333333',
+                            400: '#2D2D2D',
+                            500: '#252525',
+                            600: '#1E1E1E',
+                            700: '#171717',
+                            800: '#121212',
+                            900: '#0A0A0A',
+                        }
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                },
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            .card-hover {
+                @apply transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-1;
+            }
+            .text-gradient {
+                @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary;
+            }
+            .glass {
+                @apply bg-dark-700/70 backdrop-blur-md;
+            }
+        }
+    </style>
+</head>
+<body class="bg-dark-800 text-white font-inter antialiased min-h-screen flex flex-col">
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-50 glass border-b border-dark-400">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <div class="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                        <i class="fa fa-line-chart text-white"></i>
+                    </div>
+                    <span class="text-xl font-bold text-gradient">BlockPulse</span>
+                </div>
+
+                <!-- Main Navigation - Desktop -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#" class="text-white font-medium hover:text-primary transition-colors">Dashboard</a>
+                    <a href="#" class="text-dark-100 font-medium hover:text-primary transition-colors">Markets</a>
+                    <a href="#" class="text-dark-100 font-medium hover:text-primary transition-colors">Portfolio</a>
+                    <a href="#" class="text-dark-100 font-medium hover:text-primary transition-colors">News</a>
+                    <a href="#" class="text-dark-100 font-medium hover:text-primary transition-colors">Insights</a>
+                </nav>
+
+                <!-- User Controls -->
+                <div class="flex items-center space-x-4">
+                    <button class="text-dark-100 hover:text-white transition-colors">
+                        <i class="fa fa-bell-o"></i>
+                    </button>
+                    <button class="text-dark-100 hover:text-white transition-colors">
+                        <i class="fa fa-cog"></i>
+                    </button>
+                    <div class="h-8 w-8 rounded-full bg-dark-500 flex items-center justify-center">
+                        <span class="text-xs font-medium">JS</span>
+                    </div>
+                    <button class="md:hidden text-dark-100 hover:text-white transition-colors">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-6">
+        <!-- Dashboard Header -->
+        <div class="mb-8">
+            <h1 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-2">Market Overview</h1>
+            <p class="text-dark-100">Real-time cryptocurrency analytics and insights</p>
+        </div>
+
+        <!-- Time Range Selector -->
+        <div class="flex justify-between items-center mb-6">
+            <div class="flex space-x-2">
+                <button class="px-4 py-2 rounded-lg bg-dark-600 hover:bg-dark-500 transition-colors text-sm font-medium">24h</button>
+                <button class="px-4 py-2 rounded-lg bg-primary hover:bg-primary/90 transition-colors text-sm font-medium">7d</button>
+                <button class="px-4 py-2 rounded-lg bg-dark-600 hover:bg-dark-500 transition-colors text-sm font-medium">30d</button>
+                <button class="px-4 py-2 rounded-lg bg-dark-600 hover:bg-dark-500 transition-colors text-sm font-medium">1y</button>
+                <button class="px-4 py-2 rounded-lg bg-dark-600 hover:bg-dark-500 transition-colors text-sm font-medium">All</button>
+            </div>
+            <div class="relative">
+                <input type="text" placeholder="Search coins..." class="pl-10 pr-4 py-2 rounded-lg bg-dark-600 border border-dark-400 focus:border-primary focus:outline-none w-64">
+                <i class="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-dark-100"></i>
+            </div>
+        </div>
+
+        <!-- Market Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Total Market Cap -->
+            <div class="bg-dark-700 rounded-xl p-6 border border-dark-600 card-hover">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <p class="text-dark-100 text-sm font-medium">Total Market Cap</p>
+                        <h3 class="text-2xl font-bold mt-1">$1.84T</h3>
+                    </div>
+                    <div class="h-10 w-10 rounded-lg bg-dark-600 flex items-center justify-center">
+                        <i class="fa fa-usd text-primary"></i>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <span class="text-accent text-sm font-medium flex items-center">
+                        <i class="fa fa-caret-up mr-1"></i> 2.4%
+                    </span>
+                    <span class="text-dark-100 text-xs ml-2">vs last 7d</span>
+                </div>
+            </div>
+
+            <!-- Trading Volume -->
+            <div class="bg-dark-700 rounded-xl p-6 border border-dark-600 card-hover">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <p class="text-dark-100 text-sm font-medium">24h Trading Volume</p>
+                        <h3 class="text-2xl font-bold mt-1">$78.5B</h3>
+                    </div>
+                    <div class="h-10 w-10 rounded-lg bg-dark-600 flex items-center justify-center">
+                        <i class="fa fa-exchange text-secondary"></i>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <span class="text-danger text-sm font-medium flex items-center">
+                        <i class="fa fa-caret-down mr-1"></i> 3.8%
+                    </span>
+                    <span class="text-dark-100 text-xs ml-2">vs last 7d</span>
+                </div>
+            </div>
+
+            <!-- BTC Dominance -->
+            <div class="bg-dark-700 rounded-xl p-6 border border-dark-600 card-hover">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <p class="text-dark-100 text-sm font-medium">BTC Dominance</p>
+                        <h3 class="text-2xl font-bold mt-1">42.3%</h3>
+                    </div>
+                    <div class="h-10 w-10 rounded-lg bg-dark-600 flex items-center justify-center">
+                        <i class="fa fa-btc text-warning"></i>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <span class="text-accent text-sm font-medium flex items-center">
+                        <i class="fa fa-caret-up mr-1"></i> 0.7%
+                    </span>
+                    <span class="text-dark-100 text-xs ml-2">vs last 7d</span>
+                </div>
+            </div>
+
+            <!-- Fear & Greed Index -->
+            <div class="bg-dark-700 rounded-xl p-6 border border-dark-600 card-hover">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <p class="text-dark-100 text-sm font-medium">Fear & Greed</p>
+                        <h3 class="text-2xl font-bold mt-1">68 <span class="text-accent">Greed</span></h3>
+                    </div>
+                    <div class="h-10 w-10 rounded-lg bg-dark-600 flex items-center justify-center">
+                        <i class="fa fa-line-chart text-danger"></i>
+                    </div>
+                </div>
+                <div class="w-full h-2 bg-dark-500 rounded-full overflow-hidden mt-4">
+                    <div class="h-full bg-gradient-to-r from-danger via-warning to-accent" style="width: 68%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Price Chart Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Main Chart -->
+            <div class="bg-dark-700 rounded-xl p-6 border border-dark-600 lg:col-span-2 card-hover">
+                <div class="flex justify-between items-center mb-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="h-10 w-10 rounded-full bg-dark-600 flex items-center justify-center">
+                            <img src="https://picsum.photos/seed/btc/100/100" alt="Bitcoin logo" class="h-6 w-6 rounded-full">
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg">Bitcoin</h3>
+                            <p class="text-dark-100 text-sm">BTC/USD</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-2xl font-bold">$42,587.36</span>
+                        <span class="text-accent text-sm font-medium flex items-center">
+                            <i class="fa fa-caret-up mr-1"></i> 3.2%
+                        </span>
+                    </div>
+                </div>
+                <div class="h-80">
+                    <canvas id="priceChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Top Movers -->
+            <div class="bg-dark-700 rounded-xl p-6 border border-dark-600 card-hover">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-bold text-lg">Top Movers</h3>
+                    <a href="#" class="text-primary text-sm font-medium hover:underline">View All</a>
+                </div>
+                <div class="space-y-4">
+                    <!-- Mover 1 -->
+                    <div class="flex justify-between items-center p-3 bg-dark-600 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <div class="h-8 w-8 rounded-full bg-dark-500 flex items-center justify-center">
+                                <img src="https://picsum.photos/seed/eth/100/100" alt="Ethereum logo" class="h-6 w-6 rounded-full">
+                            </div>
+                            <div>
+                                <h4 class="font-medium">Ethereum</h4>
+                                <p class="text-dark-100 text-xs">ETH</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-medium">$2,418.56</p>
+                            <p class="text-accent text-xs font-medium flex items-center justify-end">
+                                <i class="fa fa-caret-up mr-1"></i> 5.8%
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Mover 2 -->
+                    <div class="flex justify-between items-center p-3 bg-dark-600 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <div class="h-8 w-8 rounded-full bg-dark-500 flex items-center justify-center">
+                                <img src="https://picsum.photos/seed/sol/100/100" alt="Solana logo" class="h-6 w-6 rounded-full">
+                            </div>
+                            <div>
+                                <h4 class="font-medium">Solana</h4>
+                                <p class="text-dark-100 text-xs">SOL</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-medium">$128.42</p>
+                            <p class="text-accent text-xs font-medium flex items-center justify-end">
+                                <i class="fa fa-caret-up mr-1"></i> 8.3%
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Mover 3 -->
+                    <div class="flex justify-between items-center p-3 bg-dark-600 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <div class="h-8 w-8 rounded-full bg-dark-500 flex items-center justify-center">
+                                <img src="https://picsum.photos/seed/ada/100/100" alt="Cardano logo" class="h-6 w-6 rounded-full">
+                            </div>
+                            <div>
+                                <h4 class="font-medium">Cardano</h4>
+                                <p class="text-dark-100 text-xs">ADA</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-medium">$0.523</p>
+                            <p class="text-danger text-xs font-medium flex items-center justify-end">
+                                <i class="fa fa-caret-down mr-1"></i> 2.1%
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Mover 4 -->
+                    <div class="flex justify-between items-center p-3 bg-dark-600 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <div class="h-8 w-8 rounded-full bg-dark-500 flex items-center justify-center">
+                                <img src="https://picsum.photos/seed/doge/100/100" alt="Dogecoin logo" class="h-6 w-6 rounded-full">
+                            </div>
+                            <div>
+                                <h4 class="font-medium">Dogecoin</h4>
+                                <p class="text-dark-100 text-xs">DOGE</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-medium">$0.108</p>
+                            <p class="text-accent text-xs font-medium flex items-center justify-end">
+                                <i class="fa fa-caret-up mr-1"></i> 12.4%
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Mover 5 -->
+                    <div class="flex justify-between items-center p-3 bg-dark-600 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <div class="h-8 w-8 rounded-full bg-dark-500 flex items-center justify-center">
+                                <img src="https://picsum.photos/seed/xrp/100/100" alt="XRP logo" class="h-6 w-6 rounded-full">
+                            </div>
+                            <div>
+                                <h4 class="font-medium">XRP</h4>
+                                <p class="text-dark-100 text-xs">XRP</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-medium">$0.732</p>
+                            <p class="text-danger text-xs font-medium flex items-center justify-end">
+                                <i class="fa fa-caret-down mr-1"></i> 1.7%
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Portfolio and News -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Portfolio -->
+            <div class="bg-dark-700 rounded-xl p-6 border border-dark-600 card-hover">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-bold text-lg">Your Portfolio</h3>
+                    <button class="px-3 py-1 rounded-lg bg-primary/20 hover:bg-primary/30 text-primary text-sm font-medium transition-colors">
+                        <i class="fa fa-plus mr-1"></i> Add Coin
+                    </button>
+                </div>
+                <div class="h-64 overflow-y-auto scrollbar-hide">
+                    <div class="space-y-4">
+                        <!-- Portfolio Item 1 -->
+                        <div class="flex justify-between items-center p-3 bg-dark-600 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="h-8 w-8 rounded-full bg-dark-500 flex items-center justify-center">
+                                    <img src="https://picsum.photos/seed/btc/100/100" alt="Bitcoin logo" class="h-6 w-6 rounded-full">
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">Bitcoin</h4>
+                                    <p class="text-dark-100 text-xs">BTC</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-medium">$24,689.23</p>
+                                <p class="text-accent text-xs font-medium flex items-center justify-end">
+                                    <i class="fa fa-caret-up mr-1"></i> 3.2%
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Portfolio Item 2 -->
+                        <div class="flex justify-between items-center p-3 bg-dark-600 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="h-8 w-8 rounded-full bg-dark-500 flex items-center justify-center">
+                                    <img src="https://picsum.photos/seed/eth/100/100" alt="Ethereum logo" class="h-6 w-6 rounded-full">
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">Ethereum</h4>
+                                    <p class="text-dark-100 text-xs">ETH</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-medium">$8,421.56</p>
+                                <p class="text-accent text-xs font-medium flex items-center justify-end">
+                                    <i class="fa fa-caret-up mr-1"></i> 5.8%
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Portfolio Item 3 -->
+                        <div class="flex justify-between items-center p-3 bg-dark-600 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="h-8 w-8 rounded-full bg-dark-500 flex items-center justify-center">
+                                    <img src="https://picsum.photos/seed/sol/100/100" alt="Solana logo" class="h-6 w-6 rounded-full">
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">Solana</h4>
+                                    <p class="text-dark-100 text-xs">SOL</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-medium">$3,210.89</p>
+                                <p class="text-accent text-xs font-medium flex items-center justify-end">
+                                    <i class="fa fa-caret-up mr-1"></i> 8.3%
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Portfolio Item 4 -->
+                        <div class="flex justify-between items-center p-3 bg-dark-600 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="h-8 w-8 rounded-full bg-dark-500 flex items-center justify-center">
+                                    <img src="https://picsum.photos/seed/ada/100/100" alt="Cardano logo" class="h-6 w-6 rounded-full">
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">Cardano</h4>
+                                    <p class="text-dark-100 text-xs">ADA</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-medium">$1,245.67</p>
+                                <p class="text-danger text-xs font-medium flex items-center justify-end">
+                                    <i class="fa fa-caret-down mr-1"></i> 2.1%
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6 pt-4 border-t border-dark-600">
+                    <div class="flex justify-between items-center">
+                        <p class="text-dark-100">Total Value</p>
+                        <p class="font-bold text-xl">$37,567.35</p>
+                    </div>
+                    <div class="flex justify-between items-center mt-2">
+                        <p class="text-dark-100">24h Change</p>
+                        <p class="text-accent font-medium flex items-center">
+                            <i class="fa fa-caret-up mr-1"></i> 4.7%
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Latest News -->
+            <div class="bg-dark-700 rounded-xl p-6 border border-dark-600 lg:col-span-2 card-hover">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-bold text-lg">Latest Crypto News</h3>
+                    <a href="#" class="text-primary text-sm font-medium hover:underline">View All</a>
+                </div>
+                <div class="space-y-6">
+                    <!-- News Item 1 -->
+                    <div class="flex flex-col md:flex-row gap-4 p-4 bg-dark-600 rounded-lg hover:bg-dark-500 transition-colors cursor-pointer">
+                        <div class="md:w-1/4">
+                            <img src="https://picsum.photos/seed/crypto1/400/300" alt="Bitcoin hits new all-time high" class="w-full h-32 object-cover rounded-lg">
+                        </div>
+                        <div class="md:w-3/4">
+                            <div class="flex items-center text-xs text-dark-100 mb-2">
+                                <span>2 hours ago</span>
+                                <span class="mx-2">•</span>
+                                <span class="font-medium text-primary">Coindesk</span>
+                            </div>
+                            <h4 class="font-medium text-lg mb-2">Bitcoin Reaches New All-Time High of $45,000</h4>
+                            <p class="text-dark-100 text-sm mb-3 line-clamp-2">Bitcoin surges past previous record as institutional adoption continues to grow. Analysts predict further upside potential in the coming months.</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <button class="text-dark-100 hover:text-white transition-colors">
+                                        <i class="fa fa-bookmark-o"></i>
+                                    </button>
+                                    <button class="text-dark-100 hover:text-white transition-colors">
+                                        <i class="fa fa-share-alt"></i>
+                                    </button>
+                                </div>
+                                <span class="text-xs text-dark-100">245 reactions</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- News Item 2 -->
+                    <div class="flex flex-col md:flex-row gap-4 p-4 bg-dark-600 rounded-lg hover:bg-dark-500 transition-colors cursor-pointer">
+                        <div class="md:w-1/4">
+                            <img src="https://picsum.photos/seed/crypto2/400/300" alt="Major bank announces crypto services" class="w-full h-32 object-cover rounded-lg">
+                        </div>
+                        <div class="md:w-3/4">
+                            <div class="flex items-center text-xs text-dark-100 mb-2">
+                                <span>5 hours ago</span>
+                                <span class="mx-2">•</span>
+                                <span class="font-medium text-secondary">CryptoNews</span>
+                            </div>
+                            <h4 class="font-medium text-lg mb-2">Major Global Bank Announces Crypto Services for Clients</h4>
+                            <p class="text-dark-100 text-sm mb-3 line-clamp-2">One of the world's largest financial institutions reveals plans to offer cryptocurrency trading and custody services to its high-net-worth clients starting next quarter.</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <button class="text-dark-100 hover:text-white transition-colors">
+                                        <i class="fa fa-bookmark-o"></i>
+                                    </button>
+                                    <button class="text-dark-100 hover:text-white transition-colors">
+                                        <i class="fa fa-share-alt"></i>
+                                    </button>
+                                </div>
+                                <span class="text-xs text-dark-100">189 reactions</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark-900 border-t border-dark-700 py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                            <i class="fa fa-line-chart text-white"></i>
+                        </div>
+                        <span class="text-xl font-bold text-gradient">BlockPulse</span>
+                    </div>
+                    <p class="text-dark-100 text-sm mb-4">Real-time cryptocurrency analytics and insights for traders and investors.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-dark-100 hover:text-white transition-colors">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-dark-100 hover:text-white transition-colors">
+                            <i class="fa fa-telegram"></i>
+                        </a>
+                        <a href="#" class="text-dark-100 hover:text-white transition-colors">
+                            <i class="fa fa-discord"></i>
+                        </a>
+                        <a href="#" class="text-dark-100 hover:text-white transition-colors">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Products</h4>
+                    <ul class="space-y-2 text-dark-100">
+                        <li><a href="#" class="hover:text-primary transition-colors">Dashboard</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Portfolio</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Markets</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">News</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">API</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Company</h4>
+                    <ul class="space-y-2 text-dark-100">
+                        <li><a href="#" class="hover:text-primary transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Careers</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Blog</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Press</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Legal</h4>
+                    <ul class="space-y-2 text-dark-100">
+                        <li><a href="#" class="hover:text-primary transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Cookie Policy</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Disclaimer</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-dark-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-dark-100 text-sm">© 2025 BlockPulse. All rights reserved.</p>
+                <div class="mt-4 md:mt-0">
+                    <select class="bg-dark-800 border border-dark-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary">
+                        <option>English (US)</option>
+                        <option>Español</option>
+                        <option>Français</option>
+                        <option>中文</option>
+                        <option>日本語</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Chart.js
+        document.addEventListener('DOMContentLoaded', function() {
+            // Generate random price data for demonstration
+            const generateRandomData = (count, min, max) => {
+                return Array.from({length: count}, () => Math.floor(Math.random() * (max - min + 1)) + min);
+            };
+
+            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            const prices = generateRandomData(7, 38000, 43000);
+
+            // Create price chart
+            const ctx = document.getElementById('priceChart').getContext('2d');
+            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(108, 92, 231, 0.3)');
+            gradient.addColorStop(1, 'rgba(108, 92, 231, 0)');
+
+            const priceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: days,
+                    datasets: [{
+                        label: 'Price (USD)',
+                        data: prices,
+                        borderColor: '#6C5CE7',
+                        backgroundColor: gradient,
+                        borderWidth: 2,
+                        pointBackgroundColor: '#00FFA3',
+                        pointBorderColor: '#00FFA3',
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(37, 37, 37, 0.9)',
+                            borderColor: 'rgba(79, 79, 79, 0.5)',
+                            borderWidth: 1,
+                            padding: 12,
+                            titleColor: '#fff',
+                            titleFont: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            bodyColor: '#fff',
+                            bodyFont: {
+                                size: 13
+                            },
+                            displayColors: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return `$${context.parsed.y.toLocaleString()}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false,
+                                drawBorder: false
+                            },
+                            ticks: {
+                                color: '#8D8D8D'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: 'rgba(79, 79, 79, 0.2)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                color: '#8D8D8D',
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
