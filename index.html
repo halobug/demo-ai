@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo AI - 探索AI的无限可能</title>
+    <meta name="keywords" content="人工智能，AI 应用，前端模板，HTML 模板，AI 项目案例，开发者工具，创意实现，AI 落地解决方案，前沿 AI 技术，网页模板，AI 开发资源，智能应用开发">
+    <meta name="description" content="Demo AI 汇集全球前沿 AI 项目案例、专业前端模板（含 HTML 模板）及开发资源，为开发者与创作者提供从创意构思到技术实现的全流程支持。通过丰富的 AI 工具与落地解决方案，助力快速搭建智能应用，加速 AI 技术在各领域的实际落地，解锁人工智能的无限应用可能。">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#722ED1',
+                        accent: '#FF7D00',
+                        dark: '#1D2129',
+                        'dark-light': '#4E5969',
+                        'light-gray': '#F2F3F5',
+                        'gray': '#C9CDD4',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                },
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+            }
+            .gradient-text {
+                background-clip: text;
+                -webkit-background-clip: text;
+                color: transparent;
+                background-image: linear-gradient(135deg, #165DFF, #722ED1);
+            }
+            .nav-shadow {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            }
+            .hero-gradient {
+                background: linear-gradient(135deg, rgba(22, 93, 255, 0.05), rgba(114, 46, 209, 0.05));
+            }
+            .animate-float {
+                animation: float 6s ease-in-out infinite;
+            }
+            @keyframes float {
+                0% {
+                    transform: translateY(0px);
+                }
+                50% {
+                    transform: translateY(-20px);
+                }
+                100% {
+                    transform: translateY(0px);
+                }
+            }
+            .animate-float-delay {
+                animation: float 6s ease-in-out 2s infinite;
+            }
+            .animate-fade-in {
+                animation: fadeIn 0.8s ease-in-out;
+            }
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            .animate-scale {
+                transition: transform 0.3s ease;
+            }
+            .animate-scale:hover {
+                transform: scale(1.03);
+            }
+            .loading-shimmer {
+                background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+                background-size: 200% 100%;
+                animation: shimmer 1.5s infinite;
+            }
+            @keyframes shimmer {
+                0% {
+                    background-position: -200% 0;
+                }
+                100% {
+                    background-position: 200% 0;
+                }
+            }
+        }
+    </style>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            }
+            .animate-fadeIn {
+                animation: fadeIn 0.5s ease-in-out;
+            }
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        }
+    </style>
+
+</head>
+
+<body class="font-inter bg-white text-dark antialiased">
+    <!-- 导航栏 -->
+    <header id="navbar" class="fixed w-full top-0 z-50 transition-all duration-300 bg-white/95 backdrop-blur-sm">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 md:h-20">
+                <div class="flex items-center">
+                    <a href="#" class="flex items-center">
+            <span class="text-primary text-2xl mr-1"><i class="fa fa-cube"></i></span>
+            <span class="font-bold text-xl text-dark">Demo<span class="text-primary">AI</span></span>
+          </a>
+                    <nav class="hidden md:ml-10 md:flex space-x-8">
+                        <a href="#home" class="text-dark-light hover:text-primary font-medium transition-colors">首页</a>
+                        <a href="#templates" class="text-dark-light hover:text-primary font-medium transition-colors">精选AI模版</a>
+                        <a href="#about" class="text-dark-light hover:text-primary font-medium transition-colors">关于Demo AI</a>
+                    </nav>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="https://github.com/halobug/demo-ai" target="_blank" class="text-dark-light hover:text-primary transition-colors">
+            <i class="fa fa-github text-xl"></i>
+          </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-light-gray">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="block px-3 py-2 rounded-md text-base font-medium text-dark-light hover:text-primary hover:bg-light-gray">首页</a>
+                <a href="#templates" class="block px-3 py-2 rounded-md text-base font-medium text-dark-light hover:text-primary hover:bg-light-gray">精选AI模版</a>
+                <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium text-dark-light hover:text-primary hover:bg-light-gray">关于Demo AI</a>
+                <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-white bg-primary hover:bg-primary/90">联系Demo AI</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 英雄区 -->
+    <section id="home" class="pt-24 md:pt-32 pb-16 md:pb-24 hero-gradient">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 md:pr-12 animate-fade-in">
+                    <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight mb-4">
+                        探索<span class="gradient-text">AI</span>的无限可能
+                    </h1>
+                    <p class="text-dark-light text-lg md:text-xl mb-8 max-w-lg">
+                        Demo AI 汇集了最前沿的AI项目和模板，帮助开发者和创作者快速实现创意，加速AI应用落地。
+                    </p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="#templates" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 transition-all shadow-lg shadow-primary/20">
+              探索模板 <i class="fa fa-arrow-right ml-2"></i>
+            </a>
+                        <a href="https://github.com/halobug/demo-ai" target="_blank" class="inline-flex items-center justify-center px-6 py-3 border border-dark-light text-base font-medium rounded-md text-dark-light hover:text-white hover:bg-dark-light transition-all">
+              <i class="fa fa-github mr-2"></i> 查看GitHub
+            </a>
+                    </div>
+                    <div class="mt-10 flex items-center">
+                        <div class="flex -space-x-2">
+                            <img class="w-10 h-10 rounded-full border-2 border-white" src="	https://avatars.githubusercontent.com/u/77707010?v=4" alt="用户头像">
+                        </div>
+                        <div class="ml-4">
+                            <div class="text-sm font-medium text-dark">已有 <span class="text-primary font-bold">1+</span> 开发者加入</div>
+                            <div class="flex items-center mt-1">
+                                <div class="flex">
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star-half-o text-yellow-400"></i>
+                                </div>
+                                <span class="ml-1 text-sm text-dark-light">4.8/5 评分</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:w-1/2 mt-12 md:mt-0 animate-float">
+                    <div class="relative">
+                        <div class="absolute -inset-0.5 bg-gradient-to-r from-primary to-secondary rounded-2xl blur opacity-30 animate-pulse"></div>
+                        <div class="relative bg-white p-4 rounded-2xl shadow-xl">
+                            <!-- 移除图片 -->
+                            <div class="w-full h-64 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-xl flex items-center justify-center">
+                                <div class="text-center">
+                                    <i class="fa fa-cogs text-6xl text-primary/30 mb-4"></i>
+                                    <h3 class="text-xl font-semibold text-primary/70">AI技术模版</h3>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <div class="text-sm font-medium text-primary">推荐模版</div>
+                                        <div class="text-xs text-dark-light">基于大模型技术</div>
+                                    </div>
+                                    <button class="px-3 py-1 bg-primary text-white text-xs rounded-md hover:bg-primary/90 transition-colors">
+                    探索AI模版
+                  </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 模板集合 -->
+    <section id="templates" class="py-16 bg-light-gray/50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4">精选AI模板</h2>
+                <p class="text-dark-light max-w-2xl mx-auto">探索我们精心挑选的AI模板集合，从简单的脚本到完整的应用程序，满足不同场景需求</p>
+            </div>
+
+            <div id="templates-container" class="space-y-6">
+                <!-- 20250710: 宠物宇宙 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover mb-6">
+                    <div class="p-6 flex flex-col md:flex-row gap-6">
+                        <div class="md:w-1/3">
+                            <img src="https://github.halobug.cn/demo-ai/Template/PetVerse_20250710/previewimage.png" alt="宠物宇宙网站预览" class="w-full h-auto max-h-64 object-cover rounded-lg" style="max-width: 300px;">
+                        </div>
+                        <div class="md:w-2/3">
+                            <a href="https://github.halobug.cn/demo-ai/Template/PetVerse_20250710/index.html" class="text-xl font-semibold mb-4 block hover:underline">20250710: 宠物宇宙</a>
+                            <p class="text-dark-light text-sm mb-2">描述：生成一个名为 “PetVerse” 的有趣网站，面向宠物护理初创公司，包含动画吉祥物、明亮的色彩和交互式宠物档案。</p>
+                            <p class="text-dark-light text-sm mb-2">标签：#动画设计 #交互设计 #响应式布局 #色彩搭配 #吉祥物设计 #宠物档案功能开发</p>
+                            <p class="text-dark-light text-sm mb-2">Prompt：Generate a playful website called <strong>PetVerse</strong>, aimed at a pet care startup, with animated mascots, bright colors, and interactive pet profiles.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 20250710: 醇厚面包屑复古面包店 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover mb-6">
+                    <div class="p-6 flex flex-col md:flex-row gap-6">
+                        <div class="md:w-1/3">
+                            <img src="https://github.halobug.cn/demo-ai/Template/MellowCrumbs_Bakery_20250710/previewimage.png" alt="醇厚面包屑复古面包店网站预览" class="w-full h-auto max-h-64 object-cover rounded-lg" style="max-width: 300px;">
+                        </div>
+
+                        <div class="md:w-2/3">
+                            <a href="https://github.halobug.cn/demo-ai/Template/MellowCrumbs_Bakery_20250710/index.html" class="text-xl font-semibold mb-4 block hover:underline">20250710: 醇厚面包屑复古面包店</a>
+                            <p class="text-dark-light text-sm mb-2">描述：创建一个名为 “醇厚面包屑” 的舒适复古主题面包店网站，灵感源自 20 世纪 50 年代的复古设计、手绘元素和温暖色调。</p>
+                            <p class="text-dark-light text-sm mb-2">标签：#网站开发 #复古设计 #1950s 风格 #手绘元素 #温暖色调 #响应式设计 #前端开发</p>
+                            <p class="text-dark-light text-sm mb-2">Prompt：Create a cozy, vintage-themed bakery website called <strong>Mellow Crumbs</strong>, inspired by 1950s retro design, hand-drawn elements, and warm tones.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 20250710: NeuroCore 的未来主义人工智能实验室网站 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover mb-6">
+                    <div class="p-6 flex flex-col md:flex-row gap-6">
+                        <div class="md:w-1/3">
+                            <img src="https://github.halobug.cn/demo-ai/Template/neurocore-ai-lab-20250710/previewimage.png" alt="NeuroCore 人工智能实验室网站预览" class="w-full h-auto max-h-64 object-cover rounded-lg" style="max-width: 300px;">
+                        </div>
+
+                        <div class="md:w-2/3">
+                            <a href="https://github.halobug.cn/demo-ai/Template/neurocore-ai-lab-20250710/index.html" class="text-xl font-semibold mb-4 block hover:underline">20250710: NeuroCore 的未来主义人工智能实验室网站</a>
+                            <p class="text-dark-light text-sm mb-2">描述：设计一个名为 NeuroCore 的未来主义人工智能实验室网站，以动画神经网络和深蓝色调色板为特色，展示前沿的机器学习研究。</p>
+                            <p class="text-dark-light text-sm mb-2">标签：#网站开发 #未来主义设计 #人工智能 #动画神经网络 #深蓝色调 #机器学习 #响应式设计 #前端开发</p>
+                            <p class="text-dark-light text-sm mb-2">Prompt：Design a futuristic AI lab website named NeuroCore, featuring animated neural networks and deep blue color palettes to illustrate cutting-edge machine learning research.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 20250709: 探索无限 | 技术与创意的交汇点 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover mb-6">
+                    <div class="p-6 flex flex-col md:flex-row gap-6">
+                        <div class="md:w-1/3">
+                            <img src="https://github.halobug.cn/demo-ai/Template/tech-blog-20250709/previewimage.png" alt="探索无限博客网站预览" class="w-full h-auto max-h-64 object-cover rounded-lg" style="max-width: 300px;">
+                        </div>
+
+                        <div class="md:w-2/3">
+                            <a href="https://github.halobug.cn/demo-ai/Template/tech-blog-20250709/index.html" class="text-xl font-semibold mb-4 block hover:underline">20250709: 探索无限 | 技术与创意的交汇点</a>
+                            <p class="text-dark-light text-sm mb-2">描述：生成个性酷炫的博客网站，要包含精选文章，个人项目和作者信息的展示</p>
+                            <p class="text-dark-light text-sm mb-2">标签：#网站开发 #博客网站 #个性设计 #酷炫风格 #内容展示 #响应式设计 #前端开发</p>
+                            <p class="text-dark-light text-sm mb-2">Prompt：生成个性酷炫的博客网站，要包含精选文章，个人项目和作者信息的展示</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 20250709: 简洁美观的主题介绍 | HaloBug -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover mb-6">
+                    <div class="p-6 flex flex-col md:flex-row gap-6">
+                        <div class="md:w-1/3">
+                            <img src="https://github.halobug.cn/demo-ai/Template/HaloBug_20250709/previewimage.png" alt="HaloBug 主题介绍网站预览" class="w-full h-auto max-h-64 object-cover rounded-lg" style="max-width: 300px;">
+                        </div>
+
+                        <div class="md:w-2/3">
+                            <a href="https://github.halobug.cn/demo-ai/Template/HaloBug_20250709/index.html" class="text-xl font-semibold mb-4 block hover:underline">20250709: 简洁美观的主题介绍 | HaloBug</a>
+                            <p class="text-dark-light text-sm mb-2">描述：使用 HTML 编写一个简洁美观的 Halobug 主页面，重点突出品牌名称，无需过多介绍内容。</p>
+                            <p class="text-dark-light text-sm mb-2">标签：#网站开发 #品牌展示 #简洁设计 #美观风格 #响应式设计 #前端开发</p>
+                            <p class="text-dark-light text-sm mb-2">Prompt：使用 HTML 编写一个简洁美观的 Halobug 主页面，重点突出品牌名称，无需过多介绍内容。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 隐藏的模板 -->
+                <div id="hidden-templates" class="hidden">
+                    <!-- 20250709: 数据可视化小工具 | DataVizTool -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover mb-6">
+                        <div class="p-6 flex flex-col md:flex-row gap-6">
+                            <div class="md:w-1/3">
+                                <img src="https://github.halobug.cn/demo-ai/Template/DataVizTool_20250709/previewimage.png" alt="DataVizTool 数据可视化工具预览" class="w-full h-auto max-h-64 object-cover rounded-lg" style="max-width: 300px;">
+                            </div>
+
+                            <div class="md:w-2/3">
+                                <a href="https://github.halobug.cn/demo-ai/Template/DataVizTool_20250709/index.html" class="text-xl font-semibold mb-4 block hover:underline">20250709: 数据可视化小工具 | DataVizTool</a>
+                                <p class="text-dark-light text-sm mb-2">描述：数据可视化小工具，支持上传表格文件并生成图表。</p>
+                                <p class="text-dark-light text-sm mb-2">标签：#工具开发 #数据可视化 #表格处理 #图表生成 #交互设计 #响应式设计 #HTML + Tailwind CSS + 原生 JavaScript（Chart.js）</p>
+                                <p class="text-dark-light text-sm mb-2">Prompt：生成一个数据可视化小工具，支持用户上传 excel 等数据格式文件，生成可交互的图表</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 20250709: 多模板聚合平台 | TemplateHub -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover mb-6">
+                        <div class="p-6 flex flex-col md:flex-row gap-6">
+                            <div class="md:w-1/3">
+                                <img src="https://github.halobug.cn/demo-ai/Template/TemplateHub_20250709/previewimage.png" alt="TemplateHub 多模板聚合平台预览" class="w-full h-auto max-h-64 object-cover rounded-lg" style="max-width: 300px;">
+                            </div>
+
+                            <div class="md:w-2/3">
+                                <a href="https://github.halobug.cn/demo-ai/Template/TemplateHub_20250709/index.html" class="text-xl font-semibold mb-4 block hover:underline">20250709: 多模板聚合平台 | TemplateHub</a>
+                                <p class="text-dark-light text-sm mb-2">描述：一个聚合多种前端模板的展示平台，可用于快速预览与切换各类页面样式。</p>
+                                <p class="text-dark-light text-sm mb-2">标签：#平台开发 #模板聚合 #前端展示 #预览切换 #交互设计 #响应式设计 #HTML + Tailwind CSS + 原生 JavaScript</p>
+                                <p class="text-dark-light text-sm mb-2">Prompt：`制作一个前端模板聚合页面，展示多个模板的缩略图和预览入口，支持跳转到各自的模板页面。`</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 20250709: 多模板聚合平台 | TemplateVault -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover mb-6">
+                        <div class="p-6 flex flex-col md:flex-row gap-6">
+                            <div class="md:w-1/3">
+                                <img src="https://github.halobug.cn/demo-ai/Template/TemplateVault/previewimage.png" alt="TemplateVault 多模板聚合平台预览" class="w-full h-auto max-h-64 object-cover rounded-lg" style="max-width: 300px;">
+                            </div>
+
+                            <div class="md:w-2/3">
+                                <a href="https://github.halobug.cn/demo-ai/Template/TemplateVault/index.html" class="text-xl font-semibold mb-4 block hover:underline">20250709: 多模板聚合平台 | TemplateVault</a>
+                                <p class="text-dark-light text-sm mb-2">描述：一个聚合多种前端模板的展示平台，可用于快速预览与切换各类页面样式。</p>
+                                <p class="text-dark-light text-sm mb-2">标签：#平台开发 #模板聚合 #前端展示 #预览切换 #交互设计 #响应式设计 #HTML + Tailwind CSS + 原生 JavaScript</p>
+                                <p class="text-dark-light text-sm mb-2">Prompt：制作一个前端模板聚合页面，展示多个模板的缩略图和预览入口，支持跳转到各自的模板页面。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 20250709: 春日自然之旅 | 四季主题模板 -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover mb-6">
+                        <div class="p-6 flex flex-col md:flex-row gap-6">
+                            <div class="md:w-1/3">
+                                <img src="https://github.halobug.cn/demo-ai/Template/SeasonalNatureGallery_20250709/previewimage.png" alt="春日自然之旅四季主题模板预览" class="w-full h-auto max-h-64 object-cover rounded-lg" style="max-width: 300px;">
+                            </div>
+
+                            <div class="md:w-2/3">
+                                <a href="https://github.halobug.cn/demo-ai/Template/SeasonalNatureGallery_20250709" class="text-xl font-semibold mb-4 block hover:underline">20250709: 春日自然之旅 | 四季主题模板</a>
+                                <p class="text-dark-light text-sm mb-2">描述：春日自然之旅 四季主题模板。</p>
+                                <p class="text-dark-light text-sm mb-2">标签：#主题模板 #四季风光 #自然元素 #视觉美感 #静态展示 #作品集封面 #响应式布局 #HTML + Tailwind CSS</p>
+                                <p class="text-dark-light text-sm mb-2">Prompt：制作一个四季主题的自然风光展示页面，展示春季的自然元素和视觉美感。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 查看更多按钮 -->
+                <div class="text-center mt-10">
+                    <button id="load-more-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center mx-auto">
+                    <span id="btn-text">查看更多</span>
+                    <i class="fa fa-chevron-down ml-2" id="btn-icon"></i>
+                </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我们 -->
+    <section id="about" class="py-16 bg-light-gray/50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0 md:pr-12">
+                    <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4">关于 Demo AI</h2>
+                    <p class="text-dark-light mb-6">Demo AI 是一个致力于推动AI技术普及和应用的开源社区。我们相信AI技术应该被更多人理解和使用，因此创建了这个平台，提供高质量的AI项目模板和学习资源。</p>
+                    <p class="text-dark-light mb-6">我们的使命是降低AI技术的使用门槛，帮助开发者、创业者和创作者快速实现他们的AI创意，加速AI技术在各个领域的应用和创新。</p>
+
+                    <div class="mt-8">
+                        <h3 class="text-lg font-semibold mb-4">我们的愿景</h3>
+                        <div class="space-y-4">
+                            <div class="flex">
+                                <div class="mt-1 mr-4 text-primary">
+                                    <i class="fa fa-check-circle text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">开放协作</h4>
+                                    <p class="text-dark-light text-sm">通过开源社区的力量，共同推动AI技术的发展和应用</p>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="mt-1 mr-4 text-primary">
+                                    <i class="fa fa-check-circle text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">知识共享</h4>
+                                    <p class="text-dark-light text-sm">打破技术壁垒，让AI知识和资源更加公平地被获取</p>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="mt-1 mr-4 text-primary">
+                                    <i class="fa fa-check-circle text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">创新应用</h4>
+                                    <p class="text-dark-light text-sm">鼓励和支持AI技术在各个领域的创新应用和探索</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="md:w-1/2">
+                    <div class="relative">
+                        <div class="absolute -inset-0.5 bg-gradient-to-r from-secondary to-primary rounded-2xl blur opacity-30 animate-pulse"></div>
+                        <div class="relative bg-white p-4 rounded-2xl shadow-xl">
+                            <!-- 移除图片 -->
+                            <div class="w-full h-64 bg-gradient-to-r from-secondary/10 to-primary/10 rounded-xl flex items-center justify-center">
+                                <div class="text-center">
+                                    <i class="fa fa-users text-6xl text-secondary/30 mb-4"></i>
+                                    <h3 class="text-xl font-semibold text-secondary/70">AI驱动的团队</h3>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="text-xl font-semibold mb-2"></h3>
+                                <p class="text-dark-light text-sm">由AI驱动的团队</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 mt-6">
+                        <div class="bg-white p-4 rounded-xl shadow-lg">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mr-4">
+                                    <i class="fa fa-users text-primary"></i>
+                                </div>
+                                <div>
+                                    <div class="text-2xl font-bold text-dark">1+</div>
+                                    <div class="text-dark-light text-sm">贡献者</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-lg">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center mr-4">
+                                    <i class="fa fa-code text-secondary"></i>
+                                </div>
+                                <div>
+                                    <div class="text-2xl font-bold text-dark">30+</div>
+                                    <div class="text-dark-light text-sm">代码提交</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <span class="text-primary text-2xl mr-1"><i class="fa fa-cube"></i></span>
+                        <span class="font-bold text-xl">Demo<span class="text-primary">AI</span></span>
+                    </div>
+                    <p class="text-white/70 mb-4">探索AI的无限可能，提供高质量的AI模板和项目示例。</p>
+                    <div class="flex space-x-4">
+                        <a href="https://github.com/halobug/demo-ai" class="text-white/70 hover:text-primary transition-colors">
+              <i class="fa fa-github"></i>
+            </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <div class="text-white/70 text-sm mb-4 md:mb-0">
+                    &copy; 2025 Demo AI. 保留所有权利。
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <button id="back-to-top" class="fixed bottom-6 right-6 w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center shadow-lg transform transition-all duration-300 translate-y-20 opacity-0 hover:bg-primary/90">
+    <i class="fa fa-arrow-up"></i>
+  </button>
+
+    <script>
+        // 导航栏滚动效果
+        const navbar = document.getElementById('navbar');
+        const backToTop = document.getElementById('back-to-top');
+
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 100) {
+                navbar.classList.add('nav-shadow');
+                backToTop.classList.remove('translate-y-20', 'opacity-0');
+            } else {
+                navbar.classList.remove('nav-shadow');
+                backToTop.classList.add('translate-y-20', 'opacity-0');
+            }
+        });
+
+        // 移动端菜单
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 返回顶部
+        backToTop.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+
+                    // 关闭移动端菜单
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+    </script>
+
+    <script>
+        // 查看更多按钮功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadMoreBtn = document.getElementById('load-more-btn');
+            const hiddenTemplates = document.getElementById('hidden-templates');
+            const btnText = document.getElementById('btn-text');
+            const btnIcon = document.getElementById('btn-icon');
+
+            let isExpanded = false;
+
+            loadMoreBtn.addEventListener('click', function() {
+                isExpanded = !isExpanded;
+
+                if (isExpanded) {
+                    // 展开隐藏内容
+                    hiddenTemplates.classList.remove('hidden');
+                    hiddenTemplates.classList.add('animate-fadeIn');
+                    btnText.textContent = '收起';
+                    btnIcon.classList.remove('fa-chevron-down');
+                    btnIcon.classList.add('fa-chevron-up');
+                    loadMoreBtn.classList.add('bg-red-500');
+                    loadMoreBtn.classList.remove('bg-blue-500');
+                } else {
+                    // 收起内容
+                    hiddenTemplates.classList.add('hidden');
+                    btnText.textContent = '查看更多';
+                    btnIcon.classList.remove('fa-chevron-up');
+                    btnIcon.classList.add('fa-chevron-down');
+                    loadMoreBtn.classList.remove('bg-red-500');
+                    loadMoreBtn.classList.add('bg-blue-500');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
