@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArcMod | Architecture Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#000000',
+                        secondary: '#FFFFFF',
+                        accent: '#333333',
+                        neutral: '#E0E0E0',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    gridTemplateColumns: {
+                        'golden': '1fr 1.618fr',
+                    }
+                },
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .grid-golden {
+                grid-template-columns: 1fr 1.618fr;
+            }
+            .text-bauhaus {
+                letter-spacing: 0.15em;
+            }
+            .image-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 1.618rem;
+            }
+            .grid-lines {
+                background-image: linear-gradient(#000 1px, transparent 1px),
+                                linear-gradient(90deg, #000 1px, transparent 1px);
+                background-size: 20px 20px;
+            }
+            .perspective {
+                perspective: 1000px;
+            }
+            .preserve-3d {
+                transform-style: preserve-3d;
+            }
+            .rotate-y-45 {
+                transform: rotateY(45deg);
+            }
+            .clip-path-slant {
+                clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
+            }
+            .transition-transform {
+                transition-property: transform;
+                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                transition-duration: 300ms;
+            }
+            .hover-lift:hover {
+                transform: translateY(-5px);
+            }
+            .scale-up {
+                transform: scale(1.05);
+            }
+        }
+    </style>
+</head>
+<body class="font-inter bg-secondary text-primary antialiased">
+    <!-- Sound effects -->
+    <audio id="clickSound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-metal-hit-with-a-hammer-1747.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="scrollSound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-paper-shuffle-129.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Navigation -->
+    <header class="fixed top-0 left-0 w-full z-50 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-4 py-6 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold tracking-wider text-bauhaus hover:text-accent transition-colors">
+                ARCMOD
+            </a>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#projects" class="text-sm uppercase tracking-widest hover:text-accent transition-colors">Projects</a>
+                <a href="#about" class="text-sm uppercase tracking-widest hover:text-accent transition-colors">About</a>
+                <a href="#services" class="text-sm uppercase tracking-widest hover:text-accent transition-colors">Services</a>
+                <a href="#contact" class="text-sm uppercase tracking-widest hover:text-accent transition-colors">Contact</a>
+            </nav>
+            <button class="md:hidden text-2xl" id="menu-toggle">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile menu -->
+        <div class="md:hidden bg-secondary absolute w-full left-0 top-full transform -translate-y-full opacity-0 transition-all duration-300 pointer-events-none" id="mobile-menu">
+            <div class="container mx-auto px-4 py-6 flex flex-col space-y-6">
+                <a href="#projects" class="text-sm uppercase tracking-widest hover:text-accent transition-colors py-2 border-b border-primary/10">Projects</a>
+                <a href="#about" class="text-sm uppercase tracking-widest hover:text-accent transition-colors py-2 border-b border-primary/10">About</a>
+                <a href="#services" class="text-sm uppercase tracking-widest hover:text-accent transition-colors py-2 border-b border-primary/10">Services</a>
+                <a href="#contact" class="text-sm uppercase tracking-widest hover:text-accent transition-colors py-2">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://picsum.photos/id/1073/1920/1080" alt="Modern architectural building" class="w-full h-full object-cover grayscale opacity-70">
+            <div class="absolute inset-0 grid-lines opacity-30"></div>
+        </div>
+        <div class="container mx-auto px-4 z-10 text-center">
+            <h1 class="text-[clamp(2.5rem,8vw,5rem)] font-bold leading-tight mb-6 tracking-widest text-bauhaus">
+                FORM FOLLOWS FUNCTION
+            </h1>
+            <p class="text-[clamp(1rem,3vw,1.25rem)] max-w-2xl mx-auto mb-10 text-white/90">
+                We design spaces that transcend time, inspired by the principles of Bauhaus and modernist architecture.
+            </p>
+            <a href="#projects" class="inline-block px-8 py-3 border-2 border-secondary text-secondary hover:bg-secondary hover:text-primary transition-colors duration-300 text-sm uppercase tracking-widest">
+                Explore Our Work
+            </a>
+        </div>
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <a href="#projects" class="text-secondary opacity-80 hover:opacity-100 transition-opacity">
+                <i class="fa fa-chevron-down"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-24 bg-secondary">
+        <div class="container mx-auto px-4">
+            <div class="mb-16 text-center">
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4 tracking-widest text-bauhaus">SELECTED PROJECTS</h2>
+                <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
+                <p class="max-w-2xl mx-auto text-accent">A curated collection of our most impactful architectural designs, showcasing the perfect balance of form and function.</p>
+            </div>
+
+            <!-- Project Filters -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <button class="project-filter px-6 py-2 border border-primary text-primary hover:bg-primary hover:text-secondary transition-colors active" data-filter="all">All</button>
+                <button class="project-filter px-6 py-2 border border-primary text-primary hover:bg-primary hover:text-secondary transition-colors" data-filter="residential">Residential</button>
+                <button class="project-filter px-6 py-2 border border-primary text-primary hover:bg-primary hover:text-secondary transition-colors" data-filter="commercial">Commercial</button>
+                <button class="project-filter px-6 py-2 border border-primary text-primary hover:bg-primary hover:text-secondary transition-colors" data-filter="public">Public</button>
+            </div>
+
+            <!-- Projects Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid">
+                <!-- Project 1 -->
+                <div class="project-item residential" data-category="residential">
+                    <div class="group relative overflow-hidden perspective hover-lift cursor-pointer">
+                        <img src="https://picsum.photos/id/1067/800/600" alt="Minimalist concrete house" class="w-full h-80 object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <h3 class="text-xl font-semibold text-secondary mb-2">The Glass House</h3>
+                            <p class="text-secondary/80 text-sm mb-4">Residential, New York</p>
+                            <a href="#" class="inline-block text-secondary border-b border-secondary/50 text-sm uppercase tracking-wider hover:border-secondary transition-colors">View Project</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-item commercial" data-category="commercial">
+                    <div class="group relative overflow-hidden perspective hover-lift cursor-pointer">
+                        <img src="https://picsum.photos/id/1076/800/600" alt="Modern office building" class="w-full h-80 object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <h3 class="text-xl font-semibold text-secondary mb-2">Metropolitan Tower</h3>
+                            <p class="text-secondary/80 text-sm mb-4">Commercial, Chicago</p>
+                            <a href="#" class="inline-block text-secondary border-b border-secondary/50 text-sm uppercase tracking-wider hover:border-secondary transition-colors">View Project</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-item public" data-category="public">
+                    <div class="group relative overflow-hidden perspective hover-lift cursor-pointer">
+                        <img src="https://picsum.photos/id/1074/800/600" alt="Contemporary museum building" class="w-full h-80 object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <h3 class="text-xl font-semibold text-secondary mb-2">National Art Museum</h3>
+                            <p class="text-secondary/80 text-sm mb-4">Public, Berlin</p>
+                            <a href="#" class="inline-block text-secondary border-b border-secondary/50 text-sm uppercase tracking-wider hover:border-secondary transition-colors">View Project</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="project-item residential" data-category="residential">
+                    <div class="group relative overflow-hidden perspective hover-lift cursor-pointer">
+                        <img src="https://picsum.photos/id/1071/800/600" alt="Modern villa with pool" class="w-full h-80 object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <h3 class="text-xl font-semibold text-secondary mb-2">Seaside Residence</h3>
+                            <p class="text-secondary/80 text-sm mb-4">Residential, Malibu</p>
+                            <a href="#" class="inline-block text-secondary border-b border-secondary/50 text-sm uppercase tracking-wider hover:border-secondary transition-colors">View Project</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="project-item commercial" data-category="commercial">
+                    <div class="group relative overflow-hidden perspective hover-lift cursor-pointer">
+                        <img src="https://picsum.photos/id/1072/800/600" alt="Modern shopping center" class="w-full h-80 object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <h3 class="text-xl font-semibold text-secondary mb-2">Urban Retail Center</h3>
+                            <p class="text-secondary/80 text-sm mb-4">Commercial, London</p>
+                            <a href="#" class="inline-block text-secondary border-b border-secondary/50 text-sm uppercase tracking-wider hover:border-secondary transition-colors">View Project</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 6 -->
+                <div class="project-item public" data-category="public">
+                    <div class="group relative overflow-hidden perspective hover-lift cursor-pointer">
+                        <img src="https://picsum.photos/id/1075/800/600" alt="Modern library building" class="w-full h-80 object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <h3 class="text-xl font-semibold text-secondary mb-2">Central Library</h3>
+                            <p class="text-secondary/80 text-sm mb-4">Public, Tokyo</p>
+                            <a href="#" class="inline-block text-secondary border-b border-secondary/50 text-sm uppercase tracking-wider hover:border-secondary transition-colors">View Project</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-16">
+                <a href="#" class="inline-block px-8 py-3 border-2 border-primary text-primary hover:bg-primary hover:text-secondary transition-colors duration-300 text-sm uppercase tracking-widest">
+                    View All Projects
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 bg-primary text-secondary">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="relative">
+                    <div class="relative z-10 perspective preserve-3d">
+                        <img src="https://picsum.photos/id/1070/800/1000" alt="Architect at work" class="w-full h-auto grayscale hover:grayscale-0 transition-all duration-500 clip-path-slant">
+                    </div>
+                    <div class="absolute -bottom-8 -right-8 w-64 h-64 border border-secondary/30 -z-10"></div>
+                </div>
+                <div>
+                    <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-6 tracking-wider text-bauhaus">ABOUT ARCMOD</h2>
+                    <div class="w-20 h-1 bg-secondary mb-8"></div>
+                    <p class="mb-6 text-secondary/80 leading-relaxed">
+                        Founded in 2010, ArcMod is an architectural firm dedicated to creating spaces that balance functionality with aesthetic purity. Our work is deeply influenced by the principles of the Bauhaus movement, emphasizing form follows function, mass production, and the integration of art and technology.
+                    </p>
+                    <p class="mb-8 text-secondary/80 leading-relaxed">
+                        We believe architecture should serve as a catalyst for human experience while respecting the surrounding environment. Our approach combines rigorous analysis with creative problem-solving to produce designs that stand the test of time.
+                    </p>
+
+                    <div class="grid grid-cols-2 gap-8 mb-10">
+                        <div>
+                            <h3 class="text-4xl font-bold mb-2">120+</h3>
+                            <p class="text-secondary/70 text-sm">Projects Completed</p>
+                        </div>
+                        <div>
+                            <h3 class="text-4xl font-bold mb-2">15+</h3>
+                            <p class="text-secondary/70 text-sm">Design Awards</p>
+                        </div>
+                        <div>
+                            <h3 class="text-4xl font-bold mb-2">25</h3>
+                            <p class="text-secondary/70 text-sm">Expert Architects</p>
+                        </div>
+                        <div>
+                            <h3 class="text-4xl font-bold mb-2">12</h3>
+                            <p class="text-secondary/70 text-sm">Global Locations</p>
+                        </div>
+                    </div>
+
+                    <a href="#contact" class="inline-block px-8 py-3 border-2 border-secondary text-secondary hover:bg-secondary hover:text-primary transition-colors duration-300 text-sm uppercase tracking-widest">
+                        Work With Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 bg-secondary">
+        <div class="container mx-auto px-4">
+            <div class="mb-16 text-center">
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4 tracking-widest text-bauhaus">OUR SERVICES</h2>
+                <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
+                <p class="max-w-2xl mx-auto text-accent">We offer comprehensive architectural services from initial concept to final construction, with a focus on precision and innovation.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="service-card p-8 border border-primary hover:bg-primary hover:text-secondary transition-colors duration-300 cursor-pointer hover-lift">
+                    <div class="text-4xl mb-6">
+                        <i class="fa fa-pencil-square-o"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Architectural Design</h3>
+                    <p class="text-accent service-text mb-6">We create innovative architectural designs that balance functionality, aesthetics, and sustainability, tailored to your specific needs and context.</p>
+                    <a href="#" class="inline-block text-primary service-link hover:text-secondary transition-colors">
+                        Learn more <i class="fa fa-long-arrow-right ml-2"></i>
+                    </a>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="service-card p-8 border border-primary hover:bg-primary hover:text-secondary transition-colors duration-300 cursor-pointer hover-lift">
+                    <div class="text-4xl mb-6">
+                        <i class="fa fa-building-o"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Interior Design</h3>
+                    <p class="text-accent service-text mb-6">Our interior design services create cohesive, functional spaces that reflect your brand identity or personal style while maximizing usability.</p>
+                    <a href="#" class="inline-block text-primary service-link hover:text-secondary transition-colors">
+                        Learn more <i class="fa fa-long-arrow-right ml-2"></i>
+                    </a>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="service-card p-8 border border-primary hover:bg-primary hover:text-secondary transition-colors duration-300 cursor-pointer hover-lift">
+                    <div class="text-4xl mb-6">
+                        <i class="fa fa-map-o"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Urban Planning</h3>
+                    <p class="text-accent service-text mb-6">We develop comprehensive urban planning strategies that create sustainable, livable communities and revitalize existing urban environments.</p>
+                    <a href="#" class="inline-block text-primary service-link hover:text-secondary transition-colors">
+                        Learn more <i class="fa fa-long-arrow-right ml-2"></i>
+                    </a>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="service-card p-8 border border-primary hover:bg-primary hover:text-secondary transition-colors duration-300 cursor-pointer hover-lift">
+                    <div class="text-4xl mb-6">
+                        <i class="fa fa-paint-brush"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Landscape Architecture</h3>
+                    <p class="text-accent service-text mb-6">Our landscape architecture services integrate outdoor spaces with building designs, creating harmonious environments that enhance quality of life.</p>
+                    <a href="#" class="inline-block text-primary service-link hover:text-secondary transition-colors">
+                        Learn more <i class="fa fa-long-arrow-right ml-2"></i>
+                    </a>
+                </div>
+
+                <!-- Service 5 -->
+                <div class="service-card p-8 border border-primary hover:bg-primary hover:text-secondary transition-colors duration-300 cursor-pointer hover-lift">
+                    <div class="text-4xl mb-6">
+                        <i class="fa fa-lightbulb-o"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Sustainability Consulting</h3>
+                    <p class="text-accent service-text mb-6">We provide sustainability consulting to help design energy-efficient, environmentally responsible buildings that meet or exceed green building standards.</p>
+                    <a href="#" class="inline-block text-primary service-link hover:text-secondary transition-colors">
+                        Learn more <i class="fa fa-long-arrow-right ml-2"></i>
+                    </a>
+                </div>
+
+                <!-- Service 6 -->
+                <div class="service-card p-8 border border-primary hover:bg-primary hover:text-secondary transition-colors duration-300 cursor-pointer hover-lift">
+                    <div class="text-4xl mb-6">
+                        <i class="fa fa-cogs"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Project Management</h3>
+                    <p class="text-accent service-text mb-6">Our comprehensive project management services ensure your project is delivered on time, within budget, and to the highest quality standards.</p>
+                    <a href="#" class="inline-block text-primary service-link hover:text-secondary transition-colors">
+                        Learn more <i class="fa fa-long-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Project Section -->
+    <section class="py-24 bg-neutral/30">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
+                <div class="lg:col-span-2">
+                    <span class="text-sm uppercase tracking-widest text-accent">Featured Project</span>
+                    <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mt-2 mb-6 tracking-wider text-bauhaus">THE CUBE RESIDENCES</h2>
+                    <div class="w-20 h-1 bg-primary mb-8"></div>
+                    <p class="mb-6 text-accent leading-relaxed">
+                        A revolutionary housing complex that reimagines urban living through modular design and sustainable technology. The Cube Residences exemplifies our commitment to innovative solutions that maximize space and minimize environmental impact.
+                    </p>
+                    <p class="mb-8 text-accent leading-relaxed">
+                        The project features 50 modular units arranged in a geometric grid, each with flexible interior spaces that adapt to the changing needs of modern living. The exterior facade incorporates photovoltaic panels and a rainwater harvesting system, making the complex energy-efficient and self-sufficient.
+                    </p>
+                    <div class="grid grid-cols-2 gap-6 mb-8">
+                        <div>
+                            <h4 class="text-sm uppercase tracking-wider text-accent mb-1">Client</h4>
+                            <p class="font-medium">Urban Living Group</p>
+                        </div>
+                        <div>
+                            <h4 class="text-sm uppercase tracking-wider text-accent mb-1">Location</h4>
+                            <p class="font-medium">Singapore</p>
+                        </div>
+                        <div>
+                            <h4 class="text-sm uppercase tracking-wider text-accent mb-1">Size</h4>
+                            <p class="font-medium">15,000 sqm</p>
+                        </div>
+                        <div>
+                            <h4 class="text-sm uppercase tracking-wider text-accent mb-1">Year</h4>
+                            <p class="font-medium">2023</p>
+                        </div>
+                    </div>
+                    <a href="#" class="inline-block px-8 py-3 border-2 border-primary text-primary hover:bg-primary hover:text-secondary transition-colors duration-300 text-sm uppercase tracking-widest">
+                        View Case Study
+                    </a>
+                </div>
+                <div class="lg:col-span-3 grid grid-cols-2 gap-4">
+                    <div class="overflow-hidden">
+                        <img src="https://picsum.photos/id/1068/800/1000" alt="Modern apartment building" class="w-full h-auto grayscale hover:grayscale-0 transition-all duration-500 hover:scale-105">
+                    </div>
+                    <div class="overflow-hidden self-end">
+                        <img src="https://picsum.photos/id/1069/800/600" alt="Apartment interior" class="w-full h-auto grayscale hover:grayscale-0 transition-all duration-500 hover:scale-105">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-24 bg-primary text-secondary">
+        <div class="container mx-auto px-4">
+            <div class="mb-16 text-center">
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4 tracking-widest text-bauhaus">CLIENT TESTIMONIALS</h2>
+                <div class="w-20 h-1 bg-secondary mx-auto mb-6"></div>
+                <p class="max-w-2xl mx-auto text-secondary/80">What our clients say about working with us and experiencing our architectural designs.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-secondary/10 p-8 relative hover-lift">
+                    <div class="text-4xl absolute -top-6 left-8 text-secondary/20">
+                        <i class="fa fa-quote-left"></i>
+                    </div>
+                    <p class="text-secondary/80 mb-8 relative z-10">
+                        "ArcMod transformed our vision into reality with their innovative approach to design. The attention to detail and commitment to functionality while maintaining aesthetic appeal was impressive throughout the entire process."
+                    </p>
+                    <div class="flex items-center">
+                        <img src="https://picsum.photos/id/1005/100/100" alt="Client portrait" class="w-12 h-12 rounded-full grayscale mr-4">
+                        <div>
+                            <h4 class="font-semibold">Sarah Johnson</h4>
+                            <p class="text-secondary/60 text-sm">CEO, Innovation Tech</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="bg-secondary/10 p-8 relative hover-lift">
+                    <div class="text-4xl absolute -top-6 left-8 text-secondary/20">
+                        <i class="fa fa-quote-left"></i>
+                    </div>
+                    <p class="text-secondary/80 mb-8 relative z-10">
+                        "Working with ArcMod was a seamless experience from start to finish. Their team understood our needs and delivered a commercial space that has not only impressed our clients but also improved our workflow significantly."
+                    </p>
+                    <div class="flex items-center">
+                        <img src="https://picsum.photos/id/1012/100/100" alt="Client portrait" class="w-12 h-12 rounded-full grayscale mr-4">
+                        <div>
+                            <h4 class="font-semibold">Michael Chen</h4>
+                            <p class="text-secondary/60 text-sm">Founder, Axis Studios</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="bg-secondary/10 p-8 relative hover-lift">
+                    <div class="text-4xl absolute -top-6 left-8 text-secondary/20">
+                        <i class="fa fa-quote-left"></i>
+                    </div>
+                    <p class="text-secondary/80 mb-8 relative z-10">
+                        "The Cube Residences project has exceeded all our expectations. The innovative use of space and sustainable features have made our community not just a place to live, but a model for future urban development."
+                    </p>
+                    <div class="flex items-center">
+                        <img src="https://picsum.photos/id/1027/100/100" alt="Client portrait" class="w-12 h-12 rounded-full grayscale mr-4">
+                        <div>
+                            <h4 class="font-semibold">David Wilson</h4>
+                            <p class="text-secondary/60 text-sm">Resident, The Cube</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-secondary">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <div>
+                    <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-6 tracking-wider text-bauhaus">GET IN TOUCH</h2>
+                    <div class="w-20 h-1 bg-primary mb-8"></div>
+                    <p class="mb-10 text-accent leading-relaxed">
+                        Ready to transform your space? Contact us to discuss your project needs and how we can help bring your vision to life. Our team of experts is ready to provide innovative architectural solutions tailored to your specific requirements.
+                    </p>
+
+                    <div class="space-y-6 mb-10">
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mr-4 flex-shrink-0">
+                                <i class="fa fa-map-marker text-primary"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm uppercase tracking-wider text-accent mb-1">Office Location</h4>
+                                <p class="font-medium">123 Design Avenue, Bauhaus District<br>New York, NY 10001</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mr-4 flex-shrink-0">
+                                <i class="fa fa-envelope text-primary"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm uppercase tracking-wider text-accent mb-1">Email Us</h4>
+                                <p class="font-medium">info@arcmod.com<br>projects@arcmod.com</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mr-4 flex-shrink-0">
+                                <i class="fa fa-phone text-primary"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm uppercase tracking-wider text-accent mb-1">Call Us</h4>
+                                <p class="font-medium">+1 (212) 555-0123<br>+1 (212) 555-0124</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-secondary transition-colors">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-secondary transition-colors">
+                            <i class="fa fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-secondary transition-colors">
+                            <i class="fa fa-pinterest-p"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-secondary transition-colors">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <form id="contact-form" class="bg-neutral/20 p-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label for="name" class="block text-sm uppercase tracking-wider text-accent mb-2">Your Name</label>
+                                <input type="text" id="name" name="name" class="w-full px-4 py-3 border border-primary/20 focus:border-primary focus:outline-none" required>
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm uppercase tracking-wider text-accent mb-2">Email Address</label>
+                                <input type="email" id="email" name="email" class="w-full px-4 py-3 border border-primary/20 focus:border-primary focus:outline-none" required>
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <label for="subject" class="block text-sm uppercase tracking-wider text-accent mb-2">Subject</label>
+                            <input type="text" id="subject" name="subject" class="w-full px-4 py-3 border border-primary/20 focus:border-primary focus:outline-none" required>
+                        </div>
+                        <div class="mb-6">
+                            <label for="message" class="block text-sm uppercase tracking-wider text-accent mb-2">Your Message</label>
+                            <textarea id="message" name="message" rows="5" class="w-full px-4 py-3 border border-primary/20 focus:border-primary focus:outline-none" required></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-3 bg-primary text-secondary hover:bg-accent transition-colors text-sm uppercase tracking-widest">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-secondary py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h3 class="text-2xl font-bold tracking-wider text-bauhaus mb-6">ARCMOD</h3>
+                    <p class="text-secondary/70 mb-6">
+                        Creating spaces that inspire, function, and endure through innovative architectural design.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-secondary/70 hover:text-secondary transition-colors">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-secondary/70 hover:text-secondary transition-colors">
+                            <i class="fa fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-secondary/70 hover:text-secondary transition-colors">
+                            <i class="fa fa-pinterest-p"></i>
+                        </a>
+                        <a href="#" class="text-secondary/70 hover:text-secondary transition-colors">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#projects" class="text-secondary/70 hover:text-secondary transition-colors">Projects</a></li>
+                        <li><a href="#about" class="text-secondary/70 hover:text-secondary transition-colors">About Us</a></li>
+                        <li><a href="#services" class="text-secondary/70 hover:text-secondary transition-colors">Services</a></li>
+                        <li><a href="#contact" class="text-secondary/70 hover:text-secondary transition-colors">Contact</a></li>
+                        <li><a href="#" class="text-secondary/70 hover:text-secondary transition-colors">Careers</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Services</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-secondary/70 hover:text-secondary transition-colors">Architectural Design</a></li>
+                        <li><a href="#" class="text-secondary/70 hover:text-secondary transition-colors">Interior Design</a></li>
+                        <li><a href="#" class="text-secondary/70 hover:text-secondary transition-colors">Urban Planning</a></li>
+                        <li><a href="#" class="text-secondary/70 hover:text-secondary transition-colors">Landscape Architecture</a></li>
+                        <li><a href="#" class="text-secondary/70 hover:text-secondary transition-colors">Sustainability Consulting</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Newsletter</h4>
+                    <p class="text-secondary/70 mb-4">Subscribe to our newsletter for the latest updates and insights.</p>
+                    <form class="flex">
+                        <input type="email" placeholder="Your email address" class="flex-grow px-4 py-2 bg-secondary/10 border border-secondary/20 focus:outline-none focus:border-secondary text-secondary">
+                        <button type="submit" class="bg-secondary text-primary px-4 hover:bg-neutral transition-colors">
+                            <i class="fa fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-secondary/20 text-center text-secondary/50 text-sm">
+                <p>&copy; 2025 ArcMod Architecture. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Play sound effects
+        const clickSound = document.getElementById('clickSound');
+        const scrollSound = document.getElementById('scrollSound');
+
+        // Play click sound on navigation links
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('click', () => {
+                if (clickSound) {
+                    clickSound.currentTime = 0;
+                    clickSound.play().catch(e => console.log('Audio play failed:', e));
+                }
+            });
+        });
+
+        // Play scroll sound on scroll
+        window.addEventListener('scroll', () => {
+            if (scrollSound && !scrollSound.paused) return;
+
+            if (window.scrollY > 50) {
+                scrollSound.currentTime = 0;
+                scrollSound.play().catch(e => console.log('Audio play failed:', e));
+            }
+        });
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('bg-secondary', 'shadow-md', 'py-4');
+                navbar.classList.remove('py-6');
+            } else {
+                navbar.classList.remove('bg-secondary', 'shadow-md', 'py-4');
+                navbar.classList.add('py-6');
+            }
+        });
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuToggle.addEventListener('click', () => {
+            if (mobileMenu.classList.contains('opacity-0')) {
+                mobileMenu.classList.remove('opacity-0', '-translate-y-full', 'pointer-events-none');
+                mobileMenu.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+                menuToggle.innerHTML = '<i class="fa fa-times"></i>';
+            } else {
+                mobileMenu.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
+                mobileMenu.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+                menuToggle.innerHTML = '<i class="fa fa-bars"></i>';
+            }
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
+                mobileMenu.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+                menuToggle.innerHTML = '<i class="fa fa-bars"></i>';
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Project filtering
+        const filterButtons = document.querySelectorAll('.project-filter');
+        const projectItems = document.querySelectorAll('.project-item');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('bg-primary', 'text-secondary'));
+                filterButtons.forEach(btn => btn.classList.add('text-primary'));
+
+                // Add active class to clicked button
+                button.classList.add('bg-primary', 'text-secondary');
+                button.classList.remove('text-primary');
+
+                const filter = button.getAttribute('data-filter');
+
+                projectItems.forEach(item => {
+                    if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Contact form submission
+        const contactForm = document.getElementById('contact-form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                // Here you would normally send the form data to a server
+                // For demo purposes, we'll just show a success message
+                const formData = new FormData(contactForm);
+                const formValues = Object.fromEntries(formData.entries());
+
+                console.log('Form submitted:', formValues);
+
+                // Show success message
+                contactForm.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="text-4xl mb-4 text-primary">
+                            <i class="fa fa-check-circle"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Message Sent Successfully</h3>
+                        <p class="text-accent">Thank you for contacting us. We'll get back to you soon.</p>
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
