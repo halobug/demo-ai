@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UrbanFuel - 地下涂鸦快闪店</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'urban-green': '#39FF14',
+            'urban-gray': '#3D3D3D',
+            'urban-black': '#121212',
+            'urban-white': '#F5F5F5'
+          },
+          fontFamily: {
+            'bangers': ['Bangers', 'cursive'],
+            'inter': ['Inter', 'sans-serif'],
+          },
+          animation: {
+            'spray': 'spray 1.5s ease-out forwards',
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            spray: {
+              '0%': { opacity: '0', transform: 'scale(0.5)' },
+              '50%': { opacity: '0.8', transform: 'scale(1.1)' },
+              '100%': { opacity: '1', transform: 'scale(1)' },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-20px)' },
+            }
+          }
+        },
+      }
+    }
+  </script>
+
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .text-shadow {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+      .text-shadow-lg {
+        text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
+      }
+      .graffiti-font {
+        font-family: 'Bangers', cursive;
+        letter-spacing: 2px;
+      }
+      .nav-drag {
+        cursor: grab;
+      }
+      .nav-drag:active {
+        cursor: grabbing;
+      }
+      .spray-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 9999;
+      }
+      .scroll-indicator {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        animation: bounce 2s infinite;
+      }
+      .product-card-hover {
+        transition: all 0.3s ease;
+      }
+      .product-card-hover:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+      }
+      .hero-gradient {
+        background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
+      }
+      .footer-gradient {
+        background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 100%);
+      }
+    }
+  </style>
+</head>
+<body class="bg-urban-black text-urban-white font-inter overflow-x-hidden">
+  <!-- 喷漆Canvas -->
+  <canvas id="sprayCanvas" class="spray-canvas"></canvas>
+
+  <!-- 导航栏 -->
+  <nav id="mainNav" class="fixed w-full z-50 transition-all duration-300">
+    <div id="navContainer" class="nav-drag mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+      <a href="#" class="graffiti-font text-urban-green text-3xl sm:text-4xl tracking-wider text-shadow-lg">URBANFUEL</a>
+
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="#collection" class="text-white hover:text-urban-green transition-colors duration-300 graffiti-font text-xl">系列</a>
+        <a href="#products" class="text-white hover:text-urban-green transition-colors duration-300 graffiti-font text-xl">产品</a>
+        <a href="#events" class="text-white hover:text-urban-green transition-colors duration-300 graffiti-font text-xl">活动</a>
+        <a href="#about" class="text-white hover:text-urban-green transition-colors duration-300 graffiti-font text-xl">关于我们</a>
+      </div>
+
+      <div class="flex items-center space-x-4">
+        <button class="text-white hover:text-urban-green transition-colors duration-300">
+          <i class="fa fa-search text-xl"></i>
+        </button>
+        <button class="text-white hover:text-urban-green transition-colors duration-300">
+          <i class="fa fa-shopping-bag text-xl"></i>
+        </button>
+        <button class="md:hidden text-white hover:text-urban-green transition-colors duration-300">
+          <i class="fa fa-bars text-xl"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 移动端菜单 -->
+  <div id="mobileMenu" class="fixed inset-0 bg-urban-black bg-opacity-95 z-50 transform translate-x-full transition-transform duration-300 md:hidden">
+    <div class="flex justify-end p-6">
+      <button id="closeMenu" class="text-white hover:text-urban-green transition-colors duration-300">
+        <i class="fa fa-times text-2xl"></i>
+      </button>
+    </div>
+    <div class="flex flex-col items-center justify-center h-full space-y-8">
+      <a href="#collection" class="text-white hover:text-urban-green transition-colors duration-300 graffiti-font text-3xl">系列</a>
+      <a href="#products" class="text-white hover:text-urban-green transition-colors duration-300 graffiti-font text-3xl">产品</a>
+      <a href="#events" class="text-white hover:text-urban-green transition-colors duration-300 graffiti-font text-3xl">活动</a>
+      <a href="#about" class="text-white hover:text-urban-green transition-colors duration-300 graffiti-font text-3xl">关于我们</a>
+    </div>
+  </div>
+
+  <!-- 英雄区域 -->
+  <section class="relative h-screen flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <video autoplay muted loop class="absolute min-w-full min-h-full object-cover">
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-night-neon-illuminated-urban-street-4702-large.mp4" type="video/mp4">
+        <!-- 备用视频链接 -->
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-people-walking-on-a-city-sidewalk-4718-large.mp4" type="video/mp4">
+      </video>
+      <div class="absolute inset-0 hero-gradient"></div>
+    </div>
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+      <h1 class="graffiti-font text-[clamp(3rem,10vw,6rem)] text-urban-green mb-6 text-shadow-lg animate-spray">
+        URBANFUEL
+      </h1>
+      <p class="text-[clamp(1rem,3vw,1.5rem)] max-w-3xl mx-auto mb-10 text-shadow opacity-0" id="heroSubtitle">
+        地下涂鸦快闪店 · 突破城市边界
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4 opacity-0" id="heroButtons">
+        <a href="#products" class="bg-urban-green text-urban-black px-8 py-3 rounded-full text-lg font-bold hover:bg-opacity-80 transition-all duration-300 transform hover:scale-105 graffiti-font">
+          立即探索
+        </a>
+        <a href="#events" class="bg-transparent border-2 border-urban-green text-urban-green px-8 py-3 rounded-full text-lg font-bold hover:bg-urban-green hover:text-urban-black transition-all duration-300 transform hover:scale-105 graffiti-font">
+          快闪活动
+        </a>
+      </div>
+    </div>
+
+    <div class="scroll-indicator text-white animate-bounce">
+      <i class="fa fa-angle-down text-3xl"></i>
+    </div>
+  </section>
+
+  <!-- 系列介绍 -->
+  <section id="collection" class="py-20 bg-urban-gray relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute w-64 h-64 rounded-full bg-urban-green blur-3xl top-1/4 left-1/4"></div>
+      <div class="absolute w-96 h-96 rounded-full bg-urban-green blur-3xl bottom-1/4 right-1/4"></div>
+    </div>
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="text-center mb-16">
+        <h2 class="graffiti-font text-[clamp(2rem,5vw,3.5rem)] text-urban-green mb-4 text-shadow-lg">2025春夏系列</h2>
+        <p class="text-xl max-w-2xl mx-auto">融合街头文化与艺术表达，我们的新系列打破传统界限，释放你的城市能量。</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="group relative overflow-hidden rounded-lg shadow-xl product-card-hover">
+          <img src="https://picsum.photos/seed/urban1/600/800" alt="街头涂鸦风格T恤" class="w-full h-96 object-cover transition-transform duration-700 group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-urban-black via-transparent to-transparent opacity-70"></div>
+          <div class="absolute bottom-0 left-0 p-6">
+            <h3 class="graffiti-font text-2xl text-urban-green mb-2">涂鸦风暴</h3>
+            <p class="text-white mb-4">以城市涂鸦艺术为灵感的限量系列</p>
+            <a href="#" class="inline-block bg-urban-green text-urban-black px-6 py-2 rounded-full text-sm font-bold hover:bg-opacity-80 transition-all duration-300">
+              查看系列
+            </a>
+          </div>
+        </div>
+
+        <div class="group relative overflow-hidden rounded-lg shadow-xl product-card-hover">
+          <img src="https://picsum.photos/seed/urban2/600/800" alt="城市夜景印花卫衣" class="w-full h-96 object-cover transition-transform duration-700 group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-urban-black via-transparent to-transparent opacity-70"></div>
+          <div class="absolute bottom-0 left-0 p-6">
+            <h3 class="graffiti-font text-2xl text-urban-green mb-2">霓虹都市</h3>
+            <p class="text-white mb-4">城市夜景与霓虹灯光交织的视觉盛宴</p>
+            <a href="#" class="inline-block bg-urban-green text-urban-black px-6 py-2 rounded-full text-sm font-bold hover:bg-opacity-80 transition-all duration-300">
+              查看系列
+            </a>
+          </div>
+        </div>
+
+        <div class="group relative overflow-hidden rounded-lg shadow-xl product-card-hover">
+          <img src="https://picsum.photos/seed/urban3/600/800" alt="解构主义工装裤" class="w-full h-96 object-cover transition-transform duration-700 group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-urban-black via-transparent to-transparent opacity-70"></div>
+          <div class="absolute bottom-0 left-0 p-6">
+            <h3 class="graffiti-font text-2xl text-urban-green mb-2">未来工装</h3>
+            <p class="text-white mb-4">解构主义设计与功能性的完美结合</p>
+            <a href="#" class="inline-block bg-urban-green text-urban-black px-6 py-2 rounded-full text-sm font-bold hover:bg-opacity-80 transition-all duration-300">
+              查看系列
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 产品展示 -->
+  <section id="products" class="py-20 bg-urban-black relative">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="graffiti-font text-[clamp(2rem,5vw,3.5rem)] text-urban-green mb-4 text-shadow-lg">热门单品</h2>
+        <p class="text-xl max-w-2xl mx-auto">精选本季最受欢迎的街头服饰，展现你的独特风格</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- 产品卡片1 -->
+        <div class="bg-urban-gray rounded-lg overflow-hidden shadow-lg group product-card-hover">
+          <div class="relative overflow-hidden">
+            <img src="https://picsum.photos/seed/product1/600/600" alt="涂鸦印花连帽卫衣" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+            <div class="absolute top-4 right-4 bg-urban-green text-urban-black px-3 py-1 rounded-full text-sm font-bold">
+              新品
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2">涂鸦风暴连帽卫衣</h3>
+            <div class="flex justify-between items-center">
+              <span class="text-urban-green font-bold text-xl">¥699</span>
+              <button class="bg-urban-green text-urban-black p-2 rounded-full hover:bg-opacity-80 transition-all duration-300">
+                <i class="fa fa-shopping-cart"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 产品卡片2 -->
+        <div class="bg-urban-gray rounded-lg overflow-hidden shadow-lg group product-card-hover">
+          <div class="relative overflow-hidden">
+            <img src="https://picsum.photos/seed/product2/600/600" alt="城市地图印花T恤" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2">城市地图印花T恤</h3>
+            <div class="flex justify-between items-center">
+              <span class="text-urban-green font-bold text-xl">¥399</span>
+              <button class="bg-urban-green text-urban-black p-2 rounded-full hover:bg-opacity-80 transition-all duration-300">
+                <i class="fa fa-shopping-cart"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 产品卡片3 -->
+        <div class="bg-urban-gray rounded-lg overflow-hidden shadow-lg group product-card-hover">
+          <div class="relative overflow-hidden">
+            <img src="https://picsum.photos/seed/product3/600/600" alt="解构主义工装裤" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+            <div class="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+              热销
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2">未来工装解构裤</h3>
+            <div class="flex justify-between items-center">
+              <span class="text-urban-green font-bold text-xl">¥799</span>
+              <button class="bg-urban-green text-urban-black p-2 rounded-full hover:bg-opacity-80 transition-all duration-300">
+                <i class="fa fa-shopping-cart"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 产品卡片4 -->
+        <div class="bg-urban-gray rounded-lg overflow-hidden shadow-lg group product-card-hover">
+          <div class="relative overflow-hidden">
+            <img src="https://picsum.photos/seed/product4/600/600" alt="霓虹反光运动夹克" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2">霓虹反光运动夹克</h3>
+            <div class="flex justify-between items-center">
+              <span class="text-urban-green font-bold text-xl">¥1299</span>
+              <button class="bg-urban-green text-urban-black p-2 rounded-full hover:bg-opacity-80 transition-all duration-300">
+                <i class="fa fa-shopping-cart"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-12">
+        <a href="#" class="inline-block border-2 border-urban-green text-urban-green px-8 py-3 rounded-full text-lg font-bold hover:bg-urban-green hover:text-urban-black transition-all duration-300 graffiti-font">
+          查看全部产品
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 品牌故事 -->
+  <section id="about" class="py-20 bg-urban-gray relative overflow-hidden">
+    <div class="absolute inset-0 opacity-5">
+      <div class="absolute w-96 h-96 rounded-full bg-urban-green blur-3xl top-1/3 left-1/3"></div>
+      <div class="absolute w-64 h-64 rounded-full bg-urban-green blur-3xl bottom-1/3 right-1/3"></div>
+    </div>
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="flex flex-col lg:flex-row items-center gap-12">
+        <div class="w-full lg:w-1/2">
+          <h2 class="graffiti-font text-[clamp(2rem,5vw,3.5rem)] text-urban-green mb-6 text-shadow-lg">品牌故事</h2>
+          <p class="text-lg mb-6 leading-relaxed">
+            UrbanFuel 诞生于城市的街头角落，我们相信服装不仅是穿着，更是表达自我的方式。
+          </p>
+          <p class="text-lg mb-6 leading-relaxed">
+            我们的设计灵感来自城市涂鸦、音乐和亚文化，每一件单品都是对传统的挑战和对个性的致敬。
+          </p>
+          <p class="text-lg mb-8 leading-relaxed">
+            2025年，我们将以"地下涂鸦快闪店"的形式，在全球各大城市展开限时活动，将街头文化推向新的高度。
+          </p>
+          <a href="#" class="inline-block bg-urban-green text-urban-black px-8 py-3 rounded-full text-lg font-bold hover:bg-opacity-80 transition-all duration-300 graffiti-font">
+            了解更多
+          </a>
+        </div>
+
+        <div class="w-full lg:w-1/2 grid grid-cols-2 gap-4">
+          <div class="space-y-4">
+            <img src="https://picsum.photos/seed/brand1/500/600" alt="品牌活动照片" class="w-full h-48 object-cover rounded-lg shadow-lg transform translate-y-8">
+            <img src="https://picsum.photos/seed/brand2/500/600" alt="设计师工作照" class="w-full h-64 object-cover rounded-lg shadow-lg">
+          </div>
+          <div class="space-y-4">
+            <img src="https://picsum.photos/seed/brand3/500/600" alt="产品设计手稿" class="w-full h-64 object-cover rounded-lg shadow-lg">
+            <img src="https://picsum.photos/seed/brand4/500/600" alt="街头涂鸦艺术" class="w-full h-48 object-cover rounded-lg shadow-lg transform translate-y-8">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 快闪活动 -->
+  <section id="events" class="py-20 bg-urban-black relative">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="graffiti-font text-[clamp(2rem,5vw,3.5rem)] text-urban-green mb-4 text-shadow-lg">地下涂鸦快闪店</h2>
+        <p class="text-xl max-w-2xl mx-auto">体验限时街头艺术，参与互动涂鸦，抢先获取限量单品</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div class="bg-urban-gray rounded-lg overflow-hidden shadow-xl">
+          <img src="https://picsum.photos/seed/event1/800/400" alt="上海快闪店活动现场" class="w-full h-64 object-cover">
+          <div class="p-8">
+            <div class="flex items-center mb-4">
+              <div class="bg-urban-green text-urban-black px-4 py-2 rounded-full mr-4">
+                <span class="font-bold">6.20-6.25</span>
+              </div>
+              <h3 class="text-2xl font-bold">上海 · 静安</h3>
+            </div>
+            <p class="text-lg mb-6">
+              位于静安商圈的地下空间，我们将打造沉浸式涂鸦艺术空间，现场更有知名街头艺术家驻场创作。
+            </p>
+            <div class="flex justify-between items-center">
+              <span class="text-urban-green font-bold text-xl">免费入场</span>
+              <a href="#" class="bg-urban-green text-urban-black px-6 py-2 rounded-full text-sm font-bold hover:bg-opacity-80 transition-all duration-300">
+                预约参观
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-urban-gray rounded-lg overflow-hidden shadow-xl">
+          <img src="https://picsum.photos/seed/event2/800/400" alt="北京快闪店活动现场" class="w-full h-64 object-cover">
+          <div class="p-8">
+            <div class="flex items-center mb-4">
+              <div class="bg-urban-green text-urban-black px-4 py-2 rounded-full mr-4">
+                <span class="font-bold">7.10-7.15</span>
+              </div>
+              <h3 class="text-2xl font-bold">北京 · 798</h3>
+            </div>
+            <p class="text-lg mb-6">
+              在798艺术区的废弃工厂中，我们将带来一场融合音乐、艺术和时尚的跨界盛宴，限量单品首发。
+            </p>
+            <div class="flex justify-between items-center">
+              <span class="text-urban-green font-bold text-xl">免费入场</span>
+              <a href="#" class="bg-urban-green text-urban-black px-6 py-2 rounded-full text-sm font-bold hover:bg-opacity-80 transition-all duration-300">
+                预约参观
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-16 text-center">
+        <h3 class="text-2xl font-bold mb-6">全球快闪店日程</h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-urban-gray rounded-lg overflow-hidden">
+            <thead>
+              <tr class="bg-urban-green text-urban-black">
+                <th class="py-4 px-6 text-left">城市</th>
+                <th class="py-4 px-6 text-left">日期</th>
+                <th class="py-4 px-6 text-left">地点</th>
+                <th class="py-4 px-6 text-left">活动内容</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-urban-black/30">
+                <td class="py-4 px-6">广州</td>
+                <td class="py-4 px-6">8.5-8.10</td>
+                <td class="py-4 px-6">永庆坊</td>
+                <td class="py-4 px-6">涂鸦工作坊、新品发布</td>
+              </tr>
+              <tr class="border-b border-urban-black/30">
+                <td class="py-4 px-6">成都</td>
+                <td class="py-4 px-6">8.20-8.25</td>
+                <td class="py-4 px-6">东郊记忆</td>
+                <td class="py-4 px-6">滑板表演、现场涂鸦</td>
+              </tr>
+              <tr>
+                <td class="py-4 px-6">深圳</td>
+                <td class="py-4 px-6">9.5-9.10</td>
+                <td class="py-4 px-6">华侨城创意园</td>
+                <td class="py-4 px-6">音乐派对、艺术家签售</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 订阅区域 -->
+  <section class="py-20 bg-urban-green relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute w-96 h-96 rounded-full bg-urban-black blur-3xl top-1/3 left-1/3"></div>
+      <div class="absolute w-64 h-64 rounded-full bg-urban-black blur-3xl bottom-1/3 right-1/3"></div>
+    </div>
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="graffiti-font text-[clamp(2rem,5vw,3.5rem)] text-urban-black mb-6 text-shadow">
+          加入我们的街头文化社区
+        </h2>
+        <p class="text-urban-black text-xl mb-8">
+          订阅我们的通讯，获取最新产品信息、快闪店活动预告和独家优惠
+        </p>
+
+        <form class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto mb-8">
+          <input type="email" placeholder="输入你的邮箱地址" class="flex-grow px-6 py-4 rounded-full text-urban-black bg-white focus:outline-none focus:ring-2 focus:ring-urban-black">
+          <button type="submit" class="bg-urban-black text-urban-green px-8 py-4 rounded-full text-lg font-bold hover:bg-opacity-80 transition-all duration-300 graffiti-font whitespace-nowrap">
+            立即订阅
+          </button>
+        </form>
+
+        <p class="text-urban-black text-sm">
+          我们尊重你的隐私，绝不会向第三方分享你的信息
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="bg-urban-black py-16 relative">
+    <div class="absolute inset-0 footer-gradient pointer-events-none"></div>
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        <div>
+          <h3 class="graffiti-font text-2xl text-urban-green mb-6">URBANFUEL</h3>
+          <p class="text-gray-400 mb-6">
+            释放你的城市能量，突破传统界限，定义属于你的街头风格。
+          </p>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-urban-green transition-colors duration-300">
+              <i class="fa fa-instagram text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-urban-green transition-colors duration-300">
+              <i class="fa fa-twitter text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-urban-green transition-colors duration-300">
+              <i class="fa fa-youtube-play text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-urban-green transition-colors duration-300">
+              <i class="fa fa-weibo text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-urban-green transition-colors duration-300">
+              <i class="fa fa-wechat text-xl"></i>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-lg font-bold text-white mb-6">购物</h4>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-gray-400 hover:text-urban-green transition-colors duration-300">新品上市</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-urban-green transition-colors duration-300">热门单品</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-urban-green transition-colors duration-300">全部系列</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-urban-green transition-colors duration-300">限量合作</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-urban-green transition-colors duration-300">尺码指南</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-lg font-bold text-white mb-6">关于我们</h4>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-gray-400 hover:text-urban-green transition-colors duration-300">品牌故事</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-urban-green transition-colors duration-300">快闪店活动</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-urban-green transition-colors duration-300">艺术家合作</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-urban-green transition-colors duration-300">可持续发展</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-urban-green transition-colors duration-300">加入我们</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-lg font-bold text-white mb-6">客户服务</h4>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-gray-400 hover:text-urban-green transition-colors duration-300">联系我们</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-urban-green transition-colors duration-300">配送信息</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-urban-green transition-colors duration-300">退换政策</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-urban-green transition-colors duration-300">常见问题</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-urban-green transition-colors duration-300">隐私政策</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+        <p class="text-gray-500 text-sm mb-4 md:mb-0">
+          &copy; 2025 UrbanFuel. 保留所有权利。
+        </p>
+        <div class="flex space-x-6">
+          <a href="#" class="text-gray-500 hover:text-urban-green text-sm transition-colors duration-300">使用条款</a>
+          <a href="#" class="text-gray-500 hover:text-urban-green text-sm transition-colors duration-300">隐私政策</a>
+          <a href="#" class="text-gray-500 hover:text-urban-green text-sm transition-colors duration-300">Cookie政策</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 返回顶部按钮 -->
+  <button id="backToTop" class="fixed bottom-8 right-8 bg-urban-green text-urban-black p-3 rounded-full shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-opacity-80">
+    <i class="fa fa-arrow-up"></i>
+  </button>
+
+  <script>
+    // 导航栏拖拽效果
+    const navContainer = document.getElementById('navContainer');
+    let isDragging = false;
+    let startX;
+    let scrollLeft;
+
+    navContainer.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      navContainer.classList.add('cursor-grabbing');
+      startX = e.pageX - navContainer.offsetLeft;
+      scrollLeft = navContainer.scrollLeft;
+    });
+
+    navContainer.addEventListener('mouseleave', () => {
+      isDragging = false;
+      navContainer.classList.remove('cursor-grabbing');
+    });
+
+    navContainer.addEventListener('mouseup', () => {
+      isDragging = false;
+      navContainer.classList.remove('cursor-grabbing');
+    });
+
+    navContainer.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      const x = e.pageX - navContainer.offsetLeft;
+      const walk = (x - startX) * 2;
+      navContainer.scrollLeft = scrollLeft - walk;
+    });
+
+    // 滚动时导航栏样式变化
+    const mainNav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        mainNav.classList.add('bg-urban-black/90', 'backdrop-blur-md', 'shadow-lg');
+        mainNav.classList.remove('py-4');
+        mainNav.classList.add('py-2');
+      } else {
+        mainNav.classList.remove('bg-urban-black/90', 'backdrop-blur-md', 'shadow-lg');
+        mainNav.classList.remove('py-2');
+        mainNav.classList.add('py-4');
+      }
+    });
+
+    // 英雄区域动画
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        document.getElementById('heroSubtitle').classList.add('animate-spray', 'opacity-100');
+        setTimeout(() => {
+          document.getElementById('heroButtons').classList.add('animate-spray', 'opacity-100');
+        }, 500);
+      }, 1000);
+    });
+
+    // 移动端菜单
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuButton = document.querySelector('.fa-bars').parentElement;
+    const closeMenuButton = document.getElementById('closeMenu');
+
+    menuButton.addEventListener('click', () => {
+      mobileMenu.classList.remove('translate-x-full');
+    });
+
+    closeMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.add('translate-x-full');
+    });
+
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        // 如果是移动端菜单，点击后关闭
+        if (!mobileMenu.classList.contains('translate-x-full')) {
+          mobileMenu.classList.add('translate-x-full');
+        }
+
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+
+    // 返回顶部按钮
+    const backToTopButton = document.getElementById('backToTop');
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTopButton.classList.remove('opacity-0', 'invisible');
+        backToTopButton.classList.add('opacity-100', 'visible');
+      } else {
+        backToTopButton.classList.add('opacity-0', 'invisible');
+        backToTopButton.classList.remove('opacity-100', 'visible');
+      }
+    });
+
+    backToTopButton.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // 喷漆效果
+    const canvas = document.getElementById('sprayCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // 喷漆粒子效果
+    let sprayParticles = [];
+
+    function createSpray(x, y) {
+      for (let i = 0; i < 50; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const distance = Math.random() * 50;
+        const size = Math.random() * 10 + 2;
+        const opacity = Math.random() * 0.8 + 0.2;
+
+        sprayParticles.push({
+          x: x,
+          y: y,
+          targetX: x + Math.cos(angle) * distance,
+          targetY: y + Math.sin(angle) * distance,
+          size: size,
+          opacity: opacity,
+          currentOpacity: opacity,
+          progress: 0,
+          color: `rgba(57, 255, 20, ${opacity})`
+        });
+      }
+    }
+
+    function updateSpray() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = 0; i < sprayParticles.length; i++) {
+        const p = sprayParticles[i];
+
+        p.progress += 0.05;
+
+        if (p.progress >= 1) {
+          sprayParticles.splice(i, 1);
+          i--;
+          continue;
+        }
+
+        const easeProgress = easeOutQuad(p.progress);
+
+        const currentX = p.x + (p.targetX - p.x) * easeProgress;
+        const currentY = p.y + (p.targetY - p.y) * easeProgress;
+
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(currentX, currentY, p.size * (1 - easeProgress), 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      requestAnimationFrame(updateSpray);
+    }
+
+    function easeOutQuad(t) {
+      return t * (2 - t);
+    }
+
+    updateSpray();
+
+    // 滚动时创建喷漆效果
+    let lastScrollY = 0;
+    let sprayCooldown = 0;
+
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      const scrollDiff = Math.abs(scrollY - lastScrollY);
+
+      if (scrollDiff > 50 && sprayCooldown <= 0) {
+        const x = Math.random() * window.innerWidth;
+        const y = Math.random() * window.innerHeight;
+        createSpray(x, y);
+        sprayCooldown = 30;
+      }
+
+      if (sprayCooldown > 0) {
+        sprayCooldown--;
+      }
+
+      lastScrollY = scrollY;
+    });
+
+    // 鼠标移动时创建喷漆效果
+    let lastMouseX = 0;
+    let lastMouseY = 0;
+    let mouseCooldown = 0;
+
+    window.addEventListener('mousemove', (e) => {
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+      const mouseDiff = Math.sqrt(
+        Math.pow(mouseX - lastMouseX, 2) + Math.pow(mouseY - lastMouseY, 2)
+      );
+
+      if (mouseDiff > 20 && mouseCooldown <= 0) {
+        createSpray(mouseX, mouseY);
+        mouseCooldown = 10;
+      }
+
+      if (mouseCooldown > 0) {
+        mouseCooldown--;
+      }
+
+      lastMouseX = mouseX;
+      lastMouseY = mouseY;
+    });
+
+    // 触摸设备支持
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        createSpray(touch.clientX, touch.clientY);
+      }
+    }, { passive: true });
+  </script>
+</body>
+</html>
