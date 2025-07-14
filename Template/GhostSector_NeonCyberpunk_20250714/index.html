@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GhostSector | Cyberpunk Game Studio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#7E22CE', // Neon purple
+            secondary: '#06B6D4', // Neon cyan
+            accent: '#EC4899', // Neon pink
+            dark: '#0F172A', // Dark blue/black
+            darker: '#020617', // Nearly black
+            neon: {
+              purple: '#7E22CE',
+              cyan: '#06B6D4',
+              pink: '#EC4899',
+              green: '#10B981',
+              yellow: '#F59E0B'
+            }
+          },
+          fontFamily: {
+            orbitron: ['Orbitron', 'sans-serif'],
+            rajdhani: ['Rajdhani', 'sans-serif']
+          },
+          animation: {
+            'glitch': 'glitch 2s infinite',
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 6s ease-in-out infinite',
+            'scan': 'scan 3s linear infinite'
+          },
+          keyframes: {
+            glitch: {
+              '0%, 100%': { transform: 'translate(0)' },
+              '20%': { transform: 'translate(-5px, 5px)' },
+              '40%': { transform: 'translate(-5px, -5px)' },
+              '60%': { transform: 'translate(5px, 5px)' },
+              '80%': { transform: 'translate(5px, -5px)' }
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-20px)' }
+            },
+            scan: {
+              '0%': { backgroundPosition: '0% -100%' },
+              '100%': { backgroundPosition: '0% 100%' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .text-shadow-neon {
+        text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor;
+      }
+      .border-glow {
+        box-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+      }
+      .neon-border {
+        position: relative;
+      }
+      .neon-border::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border: 1px solid transparent;
+        border-radius: inherit;
+        background: linear-gradient(90deg, theme('colors.neon.purple'), theme('colors.neon.cyan'), theme('colors.neon.pink'));
+        background-size: 200% 200%;
+        animation: border-pulse 3s ease infinite;
+        z-index: -1;
+      }
+      @keyframes border-pulse {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+      .glitch-effect {
+        position: relative;
+      }
+      .glitch-effect::before, .glitch-effect::after {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .glitch-effect::before {
+        left: 2px;
+        text-shadow: -1px 0 theme('colors.neon.cyan');
+        animation: glitch-anim 2s infinite linear alternate-reverse;
+        clip: rect(44px, 450px, 56px, 0);
+      }
+      .glitch-effect::after {
+        left: -2px;
+        text-shadow: -1px 0 theme('colors.neon.pink');
+        animation: glitch-anim2 3s infinite linear alternate-reverse;
+        clip: rect(44px, 450px, 56px, 0);
+        opacity: 0.7;
+      }
+      @keyframes glitch-anim {
+        0% { clip: rect(61px, 9999px, 55px, 0); }
+        20% { clip: rect(23px, 9999px, 33px, 0); }
+        40% { clip: rect(91px, 9999px, 99px, 0); }
+        60% { clip: rect(71px, 9999px, 82px, 0); }
+        80% { clip: rect(81px, 9999px, 95px, 0); }
+        100% { clip: rect(20px, 9999px, 38px, 0); }
+      }
+      @keyframes glitch-anim2 {
+        0% { clip: rect(51px, 9999px, 65px, 0); }
+        20% { clip: rect(13px, 9999px, 23px, 0); }
+        40% { clip: rect(81px, 9999px, 99px, 0); }
+        60% { clip: rect(61px, 9999px, 72px, 0); }
+        80% { clip: rect(71px, 9999px, 85px, 0); }
+        100% { clip: rect(10px, 9999px, 28px, 0); }
+      }
+      .grid-bg {
+        background-image: linear-gradient(rgba(126, 34, 206, 0.1) 1px, transparent 1px),
+                          linear-gradient(90deg, rgba(126, 34, 206, 0.1) 1px, transparent 1px);
+        background-size: 20px 20px;
+      }
+      .grid-scan {
+        position: relative;
+        overflow: hidden;
+      }
+      .grid-scan::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, theme('colors.neon.cyan'), transparent);
+        animation: scan 3s linear infinite;
+      }
+      .cyber-button {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+      .cyber-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.3), transparent);
+        transition: all 0.6s ease;
+      }
+      .cyber-button:hover::before {
+        left: 100%;
+      }
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+      .card-hover:hover {
+        transform: translateY(-10px);
+      }
+    }
+  </style>
+</head>
+<body class="bg-darker text-white font-rajdhani overflow-x-hidden grid-bg">
+  <!-- Navigation -->
+  <nav id="navbar" class="fixed w-full z-50 transition-all duration-300">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <a href="#" class="text-2xl md:text-3xl font-orbitron font-bold text-white flex items-center">
+        <span class="text-neon-purple text-shadow-neon glitch-effect" data-text="GhostSector">GhostSector</span>
+      </a>
+
+      <!-- Mobile menu button -->
+      <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+        <i class="fa fa-bars text-xl"></i>
+      </button>
+
+      <!-- Desktop menu -->
+      <div class="hidden md:flex space-x-8">
+        <a href="#home" class="text-white hover:text-neon-cyan transition-colors duration-300 font-medium">HOME</a>
+        <a href="#games" class="text-white hover:text-neon-cyan transition-colors duration-300 font-medium">GAMES</a>
+        <a href="#about" class="text-white hover:text-neon-cyan transition-colors duration-300 font-medium">ABOUT</a>
+        <a href="#team" class="text-white hover:text-neon-cyan transition-colors duration-300 font-medium">TEAM</a>
+        <a href="#contact" class="text-white hover:text-neon-cyan transition-colors duration-300 font-medium">CONTACT</a>
+      </div>
+
+      <!-- Social links -->
+      <div class="hidden md:flex space-x-4">
+        <a href="#" class="text-white hover:text-neon-pink transition-colors duration-300">
+          <i class="fa fa-twitter"></i>
+        </a>
+        <a href="#" class="text-white hover:text-neon-pink transition-colors duration-300">
+          <i class="fa fa-instagram"></i>
+        </a>
+        <a href="#" class="text-white hover:text-neon-pink transition-colors duration-300">
+          <i class="fa fa-discord"></i>
+        </a>
+        <a href="#" class="text-white hover:text-neon-pink transition-colors duration-300">
+          <i class="fa fa-youtube-play"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-dark/95 backdrop-blur-md">
+      <div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
+        <a href="#home" class="text-white hover:text-neon-cyan transition-colors duration-300 py-2">HOME</a>
+        <a href="#games" class="text-white hover:text-neon-cyan transition-colors duration-300 py-2">GAMES</a>
+        <a href="#about" class="text-white hover:text-neon-cyan transition-colors duration-300 py-2">ABOUT</a>
+        <a href="#team" class="text-white hover:text-neon-cyan transition-colors duration-300 py-2">TEAM</a>
+        <a href="#contact" class="text-white hover:text-neon-cyan transition-colors duration-300 py-2">CONTACT</a>
+        <div class="flex space-x-4 pt-4">
+          <a href="#" class="text-white hover:text-neon-pink transition-colors duration-300">
+            <i class="fa fa-twitter"></i>
+          </a>
+          <a href="#" class="text-white hover:text-neon-pink transition-colors duration-300">
+            <i class="fa fa-instagram"></i>
+          </a>
+          <a href="#" class="text-white hover:text-neon-pink transition-colors duration-300">
+            <i class="fa fa-discord"></i>
+          </a>
+          <a href="#" class="text-white hover:text-neon-pink transition-colors duration-300">
+            <i class="fa fa-youtube-play"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="home" class="min-h-screen flex items-center relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-darker via-dark to-darker z-0"></div>
+
+    <!-- Animated background elements -->
+    <div class="absolute inset-0 z-0">
+      <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-neon-purple/20 rounded-full filter blur-3xl animate-pulse-slow"></div>
+      <div class="absolute bottom-1/3 right-1/3 w-96 h-96 bg-neon-cyan/20 rounded-full filter blur-3xl animate-pulse-slow" style="animation-delay: 2s;"></div>
+      <div class="absolute top-1/2 right-1/4 w-80 h-80 bg-neon-pink/20 rounded-full filter blur-3xl animate-pulse-slow" style="animation-delay: 4s;"></div>
+    </div>
+
+    <!-- Grid overlay -->
+    <div class="absolute inset-0 opacity-30 z-0"></div>
+
+    <div class="container mx-auto px-4 pt-20 pb-16 z-10">
+      <div class="flex flex-col md:flex-row items-center">
+        <div class="md:w-1/2 mb-10 md:mb-0">
+          <h1 class="text-[clamp(2.5rem,8vw,5rem)] font-orbitron font-bold leading-tight mb-6">
+            <span class="block text-white">PUSHING THE BOUNDARIES</span>
+            <span class="block text-neon-purple text-shadow-neon glitch-effect" data-text="OF CYBERPUNK">OF CYBERPUNK</span>
+            <span class="block text-white">GAMING</span>
+          </h1>
+          <p class="text-[clamp(1rem,3vw,1.25rem)] text-gray-300 mb-8 max-w-xl">
+            We are <span class="text-neon-cyan font-bold">GhostSector</span>, a game studio crafting immersive cyberpunk experiences that blend cutting-edge technology with dark, dystopian storytelling.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <a href="#games" class="cyber-button bg-neon-purple hover:bg-neon-purple/80 text-white font-bold py-3 px-8 rounded-sm border border-neon-purple border-glow transition-all duration-300 transform hover:scale-105">
+              EXPLORE GAMES
+            </a>
+            <a href="#contact" class="cyber-button bg-transparent hover:bg-neon-cyan/20 text-neon-cyan font-bold py-3 px-8 rounded-sm border border-neon-cyan border-glow transition-all duration-300 transform hover:scale-105">
+              JOIN OUR TEAM
+            </a>
+          </div>
+        </div>
+        <div class="md:w-1/2 relative">
+          <div class="relative w-full aspect-square max-w-md mx-auto">
+            <div class="absolute inset-0 bg-gradient-to-br from-neon-purple/20 to-neon-cyan/20 rounded-lg transform rotate-6"></div>
+            <div class="absolute inset-0 bg-gradient-to-tr from-neon-pink/20 to-neon-cyan/20 rounded-lg transform -rotate-3"></div>
+            <div class="relative z-10 rounded-lg overflow-hidden shadow-2xl shadow-neon-purple/20 animate-float">
+              <img src="https://picsum.photos/id/1/600/600" alt="Cyberpunk game concept art" class="w-full h-full object-cover">
+              <div class="absolute inset-0 bg-gradient-to-t from-darker via-dark/50 to-transparent"></div>
+              <div class="absolute bottom-0 left-0 p-6">
+                <span class="text-neon-pink text-shadow-neon text-sm font-bold uppercase tracking-wider">COMING SOON</span>
+                <h3 class="text-2xl font-orbitron font-bold mt-2">Neon Uprising</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-center z-10">
+      <p class="text-gray-400 mb-2 text-sm">SCROLL DOWN</p>
+      <div class="w-8 h-12 border-2 border-gray-400 rounded-full mx-auto flex justify-center">
+        <div class="w-1 h-2 bg-neon-cyan rounded-full mt-2 animate-bounce"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Games Section -->
+  <section id="games" class="py-24 bg-dark relative">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.5rem,5vw,3rem)] font-orbitron font-bold mb-4">
+          <span class="text-white">OUR</span>
+          <span class="text-neon-cyan text-shadow-neon">GAMES</span>
+        </h2>
+        <p class="text-gray-300 max-w-2xl mx-auto">Dive into our dark, immersive worlds where technology and humanity collide in spectacular ways.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Game Card 1 -->
+        <div class="card-hover bg-darker rounded-lg overflow-hidden relative group">
+          <div class="h-64 overflow-hidden">
+            <img src="https://picsum.photos/id/237/600/400" alt="Neon Uprising game screenshot" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+          </div>
+          <div class="p-6 relative z-10">
+            <div class="flex justify-between items-start mb-4">
+              <h3 class="text-xl font-orbitron font-bold text-white">Neon Uprising</h3>
+              <span class="bg-neon-pink/20 text-neon-pink text-xs font-bold px-3 py-1 rounded-full">COMING SOON</span>
+            </div>
+            <p class="text-gray-400 mb-6">Fight for control of New Tokyo in this open-world RPG where every choice determines your fate in a city torn between corporate tyranny and rebel forces.</p>
+            <div class="flex justify-between items-center">
+              <div class="flex space-x-2">
+                <span class="bg-neon-purple/20 text-neon-purple text-xs px-2 py-1 rounded">RPG</span>
+                <span class="bg-neon-cyan/20 text-neon-cyan text-xs px-2 py-1 rounded">OPEN WORLD</span>
+              </div>
+              <a href="#" class="text-neon-cyan hover:text-neon-pink transition-colors duration-300">
+                LEARN MORE <i class="fa fa-arrow-right ml-1"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Game Card 2 -->
+        <div class="card-hover bg-darker rounded-lg overflow-hidden relative group">
+          <div class="h-64 overflow-hidden">
+            <img src="https://picsum.photos/id/111/600/400" alt="Synthwave Racers game screenshot" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+          </div>
+          <div class="p-6 relative z-10">
+            <div class="flex justify-between items-start mb-4">
+              <h3 class="text-xl font-orbitron font-bold text-white">Synthwave Racers</h3>
+              <span class="bg-neon-green/20 text-neon-green text-xs font-bold px-3 py-1 rounded-full">OUT NOW</span>
+            </div>
+            <p class="text-gray-400 mb-6">Race through neon-lit streets at breakneck speeds in this futuristic racing game with deep customization and high-stakes illegal races.</p>
+            <div class="flex justify-between items-center">
+              <div class="flex space-x-2">
+                <span class="bg-neon-pink/20 text-neon-pink text-xs px-2 py-1 rounded">RACING</span>
+                <span class="bg-neon-purple/20 text-neon-purple text-xs px-2 py-1 rounded">MULTIPLAYER</span>
+              </div>
+              <a href="#" class="text-neon-cyan hover:text-neon-pink transition-colors duration-300">
+                BUY NOW <i class="fa fa-arrow-right ml-1"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Game Card 3 -->
+        <div class="card-hover bg-darker rounded-lg overflow-hidden relative group">
+          <div class="h-64 overflow-hidden">
+            <img src="https://picsum.photos/id/106/600/400" alt="Cybernetica game screenshot" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+          </div>
+          <div class="p-6 relative z-10">
+            <div class="flex justify-between items-start mb-4">
+              <h3 class="text-xl font-orbitron font-bold text-white">Cybernetica</h3>
+              <span class="bg-neon-yellow/20 text-neon-yellow text-xs font-bold px-3 py-1 rounded-full">BETA</span>
+            </div>
+            <p class="text-gray-400 mb-6">A tactical RPG set in a cyberpunk world where you lead a team of elite hackers and mercenaries on dangerous missions into corporate strongholds.</p>
+            <div class="flex justify-between items-center">
+              <div class="flex space-x-2">
+                <span class="bg-neon-cyan/20 text-neon-cyan text-xs px-2 py-1 rounded">TACTICAL</span>
+                <span class="bg-neon-purple/20 text-neon-purple text-xs px-2 py-1 rounded">RPG</span>
+              </div>
+              <a href="#" class="text-neon-cyan hover:text-neon-pink transition-colors duration-300">
+                JOIN BETA <i class="fa fa-arrow-right ml-1"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-16">
+        <a href="#" class="inline-block cyber-button bg-transparent hover:bg-neon-purple/20 text-neon-purple font-bold py-3 px-8 rounded-sm border border-neon-purple border-glow transition-all duration-300 transform hover:scale-105">
+          VIEW ALL GAMES <i class="fa fa-gamepad ml-2"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="py-24 bg-darker relative">
+    <div class="absolute inset-0 overflow-hidden z-0">
+      <div class="absolute top-0 left-0 w-full h-full grid-bg opacity-20"></div>
+      <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-neon-purple/5 to-transparent"></div>
+    </div>
+
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="flex flex-col md:flex-row items-center">
+        <div class="md:w-1/2 mb-12 md:mb-0">
+          <h2 class="text-[clamp(1.5rem,5vw,3rem)] font-orbitron font-bold mb-6">
+            <span class="text-white">ABOUT</span>
+            <span class="text-neon-pink text-shadow-neon">GHOSTSECTOR</span>
+          </h2>
+          <p class="text-gray-300 mb-6">Founded in 2020, GhostSector is an independent game studio dedicated to pushing the boundaries of the cyberpunk genre. Our team consists of passionate developers, artists, and storytellers who share a love for dark, immersive worlds and cutting-edge gameplay.</p>
+          <p class="text-gray-300 mb-8">We believe that games should be more than just entertainment—they should be experiences that challenge players and leave a lasting impression. That's why we focus on creating deep narratives, innovative gameplay mechanics, and stunning visuals that transport players to worlds they won't soon forget.</p>
+
+          <div class="grid grid-cols-2 gap-6 mb-8">
+            <div class="bg-dark/50 p-4 rounded-lg border border-neon-purple/20">
+              <h4 class="text-neon-purple text-xl font-bold mb-2">12+</h4>
+              <p class="text-gray-400">GAMES RELEASED</p>
+            </div>
+            <div class="bg-dark/50 p-4 rounded-lg border border-neon-cyan/20">
+              <h4 class="text-neon-cyan text-xl font-bold mb-2">45+</h4>
+              <p class="text-gray-400">TEAM MEMBERS</p>
+            </div>
+            <div class="bg-dark/50 p-4 rounded-lg border border-neon-pink/20">
+              <h4 class="text-neon-pink text-xl font-bold mb-2">15+</h4>
+              <p class="text-gray-400">AWARDS WON</p>
+            </div>
+            <div class="bg-dark/50 p-4 rounded-lg border border-neon-green/20">
+              <h4 class="text-neon-green text-xl font-bold mb-2">2M+</h4>
+              <p class="text-gray-400">GAME COPIES SOLD</p>
+            </div>
+          </div>
+
+          <a href="#team" class="cyber-button bg-neon-cyan hover:bg-neon-cyan/80 text-white font-bold py-3 px-8 rounded-sm border border-neon-cyan border-glow transition-all duration-300 transform hover:scale-105">
+            MEET OUR TEAM
+          </a>
+        </div>
+
+        <div class="md:w-1/2 pl-0 md:pl-12">
+          <div class="relative">
+            <div class="absolute -top-6 -left-6 w-64 h-64 bg-neon-purple/10 rounded-full filter blur-3xl"></div>
+            <div class="absolute -bottom-6 -right-6 w-64 h-64 bg-neon-cyan/10 rounded-full filter blur-3xl"></div>
+
+            <div class="relative grid grid-cols-2 gap-4">
+              <div class="space-y-4">
+                <div class="rounded-lg overflow-hidden shadow-lg shadow-neon-purple/20 transform translate-y-8">
+                  <img src="https://picsum.photos/id/160/400/300" alt="Game development team" class="w-full h-auto">
+                </div>
+                <div class="rounded-lg overflow-hidden shadow-lg shadow-neon-cyan/20">
+                  <img src="https://picsum.photos/id/180/400/300" alt="Game art concept" class="w-full h-auto">
+                </div>
+              </div>
+              <div class="space-y-4">
+                <div class="rounded-lg overflow-hidden shadow-lg shadow-neon-pink/20">
+                  <img src="https://picsum.photos/id/200/400/300" alt="Game design process" class="w-full h-auto">
+                </div>
+                <div class="rounded-lg overflow-hidden shadow-lg shadow-neon-green/20 transform translate-y-8">
+                  <img src="https://picsum.photos/id/210/400/300" alt="Gameplay screenshot" class="w-full h-auto">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Section -->
+  <section id="team" class="py-24 bg-dark relative">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.5rem,5vw,3rem)] font-orbitron font-bold mb-4">
+          <span class="text-white">THE</span>
+          <span class="text-neon-cyan text-shadow-neon">TEAM</span>
+        </h2>
+        <p class="text-gray-300 max-w-2xl mx-auto">Meet the talented individuals who bring our cyberpunk visions to life.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Team Member 1 -->
+        <div class="card-hover bg-darker rounded-lg overflow-hidden relative group">
+          <div class="relative h-80 overflow-hidden">
+            <img src="https://picsum.photos/id/1012/400/500" alt="Sarah Johnson - Creative Director" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+            <div class="absolute inset-0 bg-gradient-to-t from-darker via-dark/50 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 w-full p-6">
+              <h3 class="text-xl font-orbitron font-bold text-white">Sarah Johnson</h3>
+              <p class="text-neon-pink">Creative Director</p>
+            </div>
+          </div>
+          <div class="p-6">
+            <p class="text-gray-400 mb-4">Former concept artist with 10+ years of experience in world-building for AAA titles.</p>
+            <div class="flex space-x-3">
+              <a href="#" class="text-gray-400 hover:text-neon-purple transition-colors duration-300">
+                <i class="fa fa-twitter"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-neon-purple transition-colors duration-300">
+                <i class="fa fa-linkedin"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-neon-purple transition-colors duration-300">
+                <i class="fa fa-instagram"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team Member 2 -->
+        <div class="card-hover bg-darker rounded-lg overflow-hidden relative group">
+          <div class="relative h-80 overflow-hidden">
+            <img src="https://picsum.photos/id/1025/400/500" alt="Alex Chen - Lead Programmer" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+            <div class="absolute inset-0 bg-gradient-to-t from-darker via-dark/50 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 w-full p-6">
+              <h3 class="text-xl font-orbitron font-bold text-white">Alex Chen</h3>
+              <p class="text-neon-cyan">Lead Programmer</p>
+            </div>
+          </div>
+          <div class="p-6">
+            <p class="text-gray-400 mb-4">Gameplay engineer who pioneered several innovative mechanics in previous titles.</p>
+            <div class="flex space-x-3">
+              <a href="#" class="text-gray-400 hover:text-neon-cyan transition-colors duration-300">
+                <i class="fa fa-twitter"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-neon-cyan transition-colors duration-300">
+                <i class="fa fa-github"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-neon-cyan transition-colors duration-300">
+                <i class="fa fa-linkedin"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team Member 3 -->
+        <div class="card-hover bg-darker rounded-lg overflow-hidden relative group">
+          <div class="relative h-80 overflow-hidden">
+            <img src="https://picsum.photos/id/1074/400/500" alt="Marcus Rivera - Narrative Designer" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+            <div class="absolute inset-0 bg-gradient-to-t from-darker via-dark/50 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 w-full p-6">
+              <h3 class="text-xl font-orbitron font-bold text-white">Marcus Rivera</h3>
+              <p class="text-neon-pink">Narrative Designer</p>
+            </div>
+          </div>
+          <div class="p-6">
+            <p class="text-gray-400 mb-4">Award-winning writer whose cyberpunk novels inspired our studio's founding.</p>
+            <div class="flex space-x-3">
+              <a href="#" class="text-gray-400 hover:text-neon-pink transition-colors duration-300">
+                <i class="fa fa-twitter"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-neon-pink transition-colors duration-300">
+                <i class="fa fa-medium"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-neon-pink transition-colors duration-300">
+                <i class="fa fa-goodreads"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team Member 4 -->
+        <div class="card-hover bg-darker rounded-lg overflow-hidden relative group">
+          <div class="relative h-80 overflow-hidden">
+            <img src="https://picsum.photos/id/1062/400/500" alt="Aisha Patel - Audio Director" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+            <div class="absolute inset-0 bg-gradient-to-t from-darker via-dark/50 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 w-full p-6">
+              <h3 class="text-xl font-orbitron font-bold text-white">Aisha Patel</h3>
+              <p class="text-neon-green">Audio Director</p>
+            </div>
+          </div>
+          <div class="p-6">
+            <p class="text-gray-400 mb-4">Sound designer and composer known for creating immersive audio landscapes.</p>
+            <div class="flex space-x-3">
+              <a href="#" class="text-gray-400 hover:text-neon-green transition-colors duration-300">
+                <i class="fa fa-twitter"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-neon-green transition-colors duration-300">
+                <i class="fa fa-soundcloud"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-neon-green transition-colors duration-300">
+                <i class="fa fa-spotify"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-16">
+        <a href="#" class="inline-block cyber-button bg-transparent hover:bg-neon-pink/20 text-neon-pink font-bold py-3 px-8 rounded-sm border border-neon-pink border-glow transition-all duration-300 transform hover:scale-105">
+          JOIN OUR STUDIO <i class="fa fa-user-plus ml-2"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="py-16 bg-darker relative">
+    <div class="absolute inset-0 overflow-hidden z-0">
+      <div class="absolute top-0 left-0 w-full h-full grid-bg opacity-10"></div>
+    </div>
+
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div class="text-center p-6 bg-dark/30 rounded-lg border border-neon-purple/20">
+          <div class="text-neon-purple text-4xl font-orbitron font-bold mb-2" id="counter1">0</div>
+          <p class="text-gray-400 uppercase tracking-wider text-sm">GAMES RELEASED</p>
+        </div>
+        <div class="text-center p-6 bg-dark/30 rounded-lg border border-neon-cyan/20">
+          <div class="text-neon-cyan text-4xl font-orbitron font-bold mb-2" id="counter2">0</div>
+          <p class="text-gray-400 uppercase tracking-wider text-sm">DOWNLOADS</p>
+        </div>
+        <div class="text-center p-6 bg-dark/30 rounded-lg border border-neon-pink/20">
+          <div class="text-neon-pink text-4xl font-orbitron font-bold mb-2" id="counter3">0</div>
+          <p class="text-gray-400 uppercase tracking-wider text-sm">AWARDS</p>
+        </div>
+        <div class="text-center p-6 bg-dark/30 rounded-lg border border-neon-green/20">
+          <div class="text-neon-green text-4xl font-orbitron font-bold mb-2" id="counter4">0</div>
+          <p class="text-gray-400 uppercase tracking-wider text-sm">FOLLOWERS</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="py-24 bg-dark relative">
+    <div class="absolute inset-0 overflow-hidden z-0">
+      <div class="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-neon-purple/10 to-neon-cyan/10 opacity-50"></div>
+    </div>
+
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.5rem,5vw,3rem)] font-orbitron font-bold mb-4">
+          <span class="text-white">GET IN</span>
+          <span class="text-neon-pink text-shadow-neon">TOUCH</span>
+        </h2>
+        <p class="text-gray-300 max-w-2xl mx-auto">Have a question, suggestion, or want to join our team? Reach out to us!</p>
+      </div>
+
+      <div class="flex flex-col lg:flex-row gap-12">
+        <div class="lg:w-1/2">
+          <div class="bg-darker p-8 rounded-lg shadow-xl">
+            <h3 class="text-2xl font-orbitron font-bold mb-6 text-white">SEND US A MESSAGE</h3>
+
+            <form id="contact-form" class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="name" class="block text-gray-400 mb-2">Name</label>
+                  <input type="text" id="name" name="name" class="w-full bg-dark border border-gray-700 rounded-sm px-4 py-3 text-white focus:outline-none focus:border-neon-purple transition-colors duration-300" placeholder="Your name">
+                </div>
+                <div>
+                  <label for="email" class="block text-gray-400 mb-2">Email</label>
+                  <input type="email" id="email" name="email" class="w-full bg-dark border border-gray-700 rounded-sm px-4 py-3 text-white focus:outline-none focus:border-neon-purple transition-colors duration-300" placeholder="Your email">
+                </div>
+              </div>
+
+              <div>
+                <label for="subject" class="block text-gray-400 mb-2">Subject</label>
+                <input type="text" id="subject" name="subject" class="w-full bg-dark border border-gray-700 rounded-sm px-4 py-3 text-white focus:outline-none focus:border-neon-purple transition-colors duration-300" placeholder="Subject">
+              </div>
+
+              <div>
+                <label for="message" class="block text-gray-400 mb-2">Message</label>
+                <textarea id="message" name="message" rows="5" class="w-full bg-dark border border-gray-700 rounded-sm px-4 py-3 text-white focus:outline-none focus:border-neon-purple transition-colors duration-300" placeholder="Your message"></textarea>
+              </div>
+
+              <button type="submit" class="w-full cyber-button bg-neon-purple hover:bg-neon-purple/80 text-white font-bold py-3 px-8 rounded-sm border border-neon-purple border-glow transition-all duration-300 transform hover:scale-105">
+                SEND MESSAGE
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <div class="lg:w-1/2">
+          <div class="bg-darker p-8 rounded-lg shadow-xl h-full">
+            <h3 class="text-2xl font-orbitron font-bold mb-6 text-white">CONTACT INFORMATION</h3>
+
+            <div class="space-y-6">
+              <div class="flex items-start">
+                <div class="bg-neon-purple/20 p-3 rounded-sm mr-4">
+                  <i class="fa fa-map-marker text-neon-purple text-xl"></i>
+                </div>
+                <div>
+                  <h4 class="text-white font-bold mb-1">LOCATION</h4>
+                  <p class="text-gray-400">Neo-Tokyo Office<br>123 Cyber Boulevard, District 9<br>Night City, NC 90210</p>
+                </div>
+              </div>
+
+              <div class="flex items-start">
+                <div class="bg-neon-cyan/20 p-3 rounded-sm mr-4">
+                  <i class="fa fa-envelope text-neon-cyan text-xl"></i>
+                </div>
+                <div>
+                  <h4 class="text-white font-bold mb-1">EMAIL</h4>
+                  <p class="text-gray-400">info@ghostsector.com<br>jobs@ghostsector.com</p>
+                </div>
+              </div>
+
+              <div class="flex items-start">
+                <div class="bg-neon-pink/20 p-3 rounded-sm mr-4">
+                  <i class="fa fa-phone text-neon-pink text-xl"></i>
+                </div>
+                <div>
+                  <h4 class="text-white font-bold mb-1">PHONE</h4>
+                  <p class="text-gray-400">+1 (555) 123-4567<br>+1 (555) 987-6543</p>
+                </div>
+              </div>
+
+              <div class="flex items-start">
+                <div class="bg-neon-green/20 p-3 rounded-sm mr-4">
+                  <i class="fa fa-clock-o text-neon-green text-xl"></i>
+                </div>
+                <div>
+                  <h4 class="text-white font-bold mb-1">WORKING HOURS</h4>
+                  <p class="text-gray-400">Monday - Friday: 9AM - 6PM<br>Saturday: 10AM - 4PM<br>Sunday: Closed</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-10">
+              <h4 class="text-white font-bold mb-4">FOLLOW US</h4>
+              <div class="flex space-x-4">
+                <a href="#" class="w-10 h-10 flex items-center justify-center bg-dark rounded-full border border-neon-purple/30 text-neon-purple hover:bg-neon-purple/20 transition-colors duration-300">
+                  <i class="fa fa-twitter"></i>
+                </a>
+                <a href="#" class="w-10 h-10 flex items-center justify-center bg-dark rounded-full border border-neon-cyan/30 text-neon-cyan hover:bg-neon-cyan/20 transition-colors duration-300">
+                  <i class="fa fa-instagram"></i>
+                </a>
+                <a href="#" class="w-10 h-10 flex items-center justify-center bg-dark rounded-full border border-neon-pink/30 text-neon-pink hover:bg-neon-pink/20 transition-colors duration-300">
+                  <i class="fa fa-discord"></i>
+                </a>
+                <a href="#" class="w-10 h-10 flex items-center justify-center bg-dark rounded-full border border-neon-green/30 text-neon-green hover:bg-neon-green/20 transition-colors duration-300">
+                  <i class="fa fa-youtube-play"></i>
+                </a>
+                <a href="#" class="w-10 h-10 flex items-center justify-center bg-dark rounded-full border border-neon-yellow/30 text-neon-yellow hover:bg-neon-yellow/20 transition-colors duration-300">
+                  <i class="fa fa-twitch"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter Section -->
+  <section class="py-16 bg-darker relative">
+    <div class="absolute inset-0 overflow-hidden z-0">
+      <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-neon-purple/20 to-neon-cyan/20 opacity-20"></div>
+    </div>
+
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="text-[clamp(1.5rem,5vw,2.5rem)] font-orbitron font-bold mb-4 text-white">
+          JOIN THE <span class="text-neon-pink text-shadow-neon">GHOSTSECTOR</span> COMMUNITY
+        </h2>
+        <p class="text-gray-300 mb-8">Subscribe to our newsletter to receive updates on new games, events, and exclusive content.</p>
+
+        <form class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
+          <input type="email" placeholder="Your email address" class="flex-1 bg-dark border border-gray-700 rounded-sm px-4 py-3 text-white focus:outline-none focus:border-neon-purple transition-colors duration-300">
+          <button type="submit" class="cyber-button bg-neon-purple hover:bg-neon-purple/80 text-white font-bold py-3 px-8 rounded-sm border border-neon-purple border-glow transition-all duration-300 whitespace-nowrap">
+            SUBSCRIBE NOW
+          </button>
+        </form>
+
+        <p class="text-gray-400 text-sm mt-4">By subscribing, you agree to our Privacy Policy and consent to receive updates from our company.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-darker border-t border-gray-800 py-12">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div>
+          <a href="#" class="text-2xl font-orbitron font-bold text-white flex items-center mb-6">
+            <span class="text-neon-purple text-shadow-neon">GhostSector</span>
+          </a>
+          <p class="text-gray-400 mb-6">Creating immersive cyberpunk gaming experiences that push the boundaries of technology and storytelling.</p>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-neon-purple transition-colors duration-300">
+              <i class="fa fa-twitter"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-neon-pink transition-colors duration-300">
+              <i class="fa fa-instagram"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-neon-cyan transition-colors duration-300">
+              <i class="fa fa-discord"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-neon-green transition-colors duration-300">
+              <i class="fa fa-youtube-play"></i>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-white font-bold text-lg mb-6">Quick Links</h4>
+          <ul class="space-y-3">
+            <li><a href="#home" class="text-gray-400 hover:text-neon-cyan transition-colors duration-300">Home</a></li>
+            <li><a href="#games" class="text-gray-400 hover:text-neon-cyan transition-colors duration-300">Games</a></li>
+            <li><a href="#about" class="text-gray-400 hover:text-neon-cyan transition-colors duration-300">About</a></li>
+            <li><a href="#team" class="text-gray-400 hover:text-neon-cyan transition-colors duration-300">Team</a></li>
+            <li><a href="#contact" class="text-gray-400 hover:text-neon-cyan transition-colors duration-300">Contact</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-white font-bold text-lg mb-6">Support</h4>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-gray-400 hover:text-neon-cyan transition-colors duration-300">FAQ</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-neon-cyan transition-colors duration-300">Privacy Policy</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-neon-cyan transition-colors duration-300">Terms of Service</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-neon-cyan transition-colors duration-300">Careers</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-neon-cyan transition-colors duration-300">Press Kit</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-white font-bold text-lg mb-6">Our Games</h4>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-gray-400 hover:text-neon-cyan transition-colors duration-300">Neon Uprising</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-neon-cyan transition-colors duration-300">Synthwave Racers</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-neon-cyan transition-colors duration-300">Cybernetica</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-neon-cyan transition-colors duration-300">Neural Nexus</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-neon-cyan transition-colors duration-300">Cyberpunk 2077 (Mod Support)</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pt-8 border-t border-gray-800 text-center text-gray-500 text-sm">
+        <p>&copy; 2025 GhostSector Studios. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to top button -->
+  <button id="back-to-top" class="fixed bottom-8 right-8 bg-neon-purple/80 hover:bg-neon-purple text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg transform transition-all duration-300 opacity-0 translate-y-10">
+    <i class="fa fa-arrow-up"></i>
+  </button>
+
+  <script>
+    // Mobile menu toggle
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 100) {
+        navbar.classList.add('bg-dark/90', 'backdrop-blur-md', 'shadow-lg');
+      } else {
+        navbar.classList.remove('bg-dark/90', 'backdrop-blur-md', 'shadow-lg');
+      }
+    });
+
+    // Back to top button
+    const backToTopButton = document.getElementById('back-to-top');
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 500) {
+        backToTopButton.classList.remove('opacity-0', 'translate-y-10');
+        backToTopButton.classList.add('opacity-100', 'translate-y-0');
+      } else {
+        backToTopButton.classList.add('opacity-0', 'translate-y-10');
+        backToTopButton.classList.remove('opacity-100', 'translate-y-0');
+      }
+    });
+
+    backToTopButton.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({
+            behavior: 'smooth'
+          });
+
+          // Close mobile menu if open
+          if (!mobileMenu.classList.contains('hidden')) {
+            mobileMenu.classList.add('hidden');
+          }
+        }
+      });
+    });
+
+    // Contact form submission
+    const contactForm = document.getElementById('contact-form');
+
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      // Simulate form submission
+      const submitButton = contactForm.querySelector('button[type="submit"]');
+      const originalText = submitButton.innerHTML;
+
+      submitButton.disabled = true;
+      submitButton.innerHTML = '<i class="fa fa-spinner fa-spin mr-2"></i> SENDING...';
+
+      setTimeout(() => {
+        // Show success message
+        alert('Thank you for your message! We will get back to you soon.');
+        contactForm.reset();
+
+        // Reset button
+        submitButton.disabled = false;
+        submitButton.innerHTML = originalText;
+      }, 1500);
+    });
+
+    // Counter animation
+    function animateCounter(element, target, duration) {
+      let start = 0;
+      const increment = target / (duration / 16);
+
+      const timer = setInterval(() => {
+        start += increment;
+        if (start >= target) {
+          element.textContent = target.toLocaleString();
+          clearInterval(timer);
+        } else {
+          element.textContent = Math.floor(start).toLocaleString();
+        }
+      }, 16);
+    }
+
+    // Intersection Observer for counter animation
+    const counters = document.querySelectorAll('[id^="counter"]');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const counterId = entry.target.id;
+          let targetValue;
+
+          switch(counterId) {
+            case 'counter1':
+              targetValue = 12;
+              break;
+            case 'counter2':
+              targetValue = 5000000;
+              break;
+            case 'counter3':
+              targetValue = 25;
+              break;
+            case 'counter4':
+              targetValue = 1200000;
+              break;
+          }
+
+          animateCounter(entry.target, targetValue, 2000);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    counters.forEach(counter => {
+      observer.observe(counter);
+    });
+  </script>
+</body>
+</html>
