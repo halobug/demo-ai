@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarkPic - Markdown 可视化截图工具</title>
+    <meta name="keywords" content="Markdown, HTML, 可视化, 截图, 工具">
+    <meta name="description" content="将 Markdown 内容实时预览为 HTML 并生成高清图片，适合笔记、技术文档、海报分享等多场景应用。">
+    <script src="https://github.halobug.cn/demo-ai/Template/MarkPic_Markdown_Screenshot_Tool_20250717/theme.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked@4.0.0/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/lib/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/github.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#b766cc',
+                        secondary: '#7B61FF',
+                        neutral: {
+                            100: '#F5F7FA',
+                            200: '#E5E6EB',
+                            300: '#C9CDD4',
+                            400: '#86909C',
+                            500: '#4E5969',
+                            600: '#272E3B',
+                            700: '#1D2129',
+                        }
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'card': '0 4px 20px rgba(0, 0, 0, 0.08)',
+                        'hover': '0 8px 30px rgba(0, 0, 0, 0.12)',
+                    }
+                },
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .scrollbar-hide {
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .editor-focus {
+                @apply ring-2 ring-primary/30;
+            }
+            .theme-transition {
+                @apply transition-all duration-300 ease-in-out;
+            }
+        }
+        html, body {
+            scroll-behavior: smooth;
+        }
+        #htmlContainer pre {
+            white-space: pre-wrap;
+            word-break: break-all;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body class="font-inter bg-neutral-100 text-neutral-700 min-h-screen flex flex-col">
+    <!-- 顶部导航 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="rounded-full bg-primary/10 p-2 flex items-center justify-center">
+                    <i class="fa fa-markdown text-xl text-primary"></i>
+                </span>
+                <span class="text-xl font-bold text-neutral-700 tracking-wide select-none">MarkPic</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <button id="copyBtn" class="px-3 py-1.5 text-sm bg-neutral-100 hover:bg-neutral-200 rounded transition flex items-center gap-1 theme-transition">
+                    <i class="fa fa-clipboard"></i> 复制HTML
+                </button>
+                <button id="clearBtn" class="px-3 py-1.5 text-sm bg-neutral-100 hover:bg-neutral-200 rounded transition flex items-center gap-1 theme-transition">
+                    <i class="fa fa-trash"></i> 清空
+                </button>
+                <button id="themeToggle" class="p-1.5 bg-neutral-100 hover:bg-neutral-200 rounded theme-transition">
+                    <i class="fa fa-moon-o"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 主体内容 -->
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- 编辑器 -->
+            <section class="lg:w-1/2 flex flex-col">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-semibold">Markdown 编辑器</h2>
+                    <div class="flex gap-2">
+                        <button id="exampleBtn" class="px-2 py-1 text-xs bg-primary/10 hover:bg-primary/20 text-primary rounded transition theme-transition">示例</button>
+                        <button id="helpBtn" class="px-2 py-1 text-xs bg-neutral-100 hover:bg-neutral-200 rounded transition theme-transition">
+                            <i class="fa fa-question-circle"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-card flex flex-col">
+                    <div class="flex border-b border-neutral-200">
+                        <button class="editor-tab active px-4 py-2 text-sm font-medium text-primary border-b-2 border-primary bg-white rounded-tl-xl theme-transition" data-tab="editor">
+                            编辑
+                        </button>
+                        <button class="editor-tab px-4 py-2 text-sm font-medium text-neutral-500 hover:text-neutral-700 bg-white theme-transition" data-tab="preview">
+                            预览
+                        </button>
+                    </div>
+                    <div id="editorContainer" class="p-4">
+                        <textarea id="markdownEditor" class="w-full h-[440px] p-4 border-0 focus:ring-0 resize-none scrollbar-hide font-mono text-sm bg-neutral-100 rounded-lg focus:bg-white editor-focus transition" placeholder="在此输入 Markdown 内容..."></textarea>
+                    </div>
+                    <div id="previewContainer" class="p-4 hidden">
+                        <div id="livePreview" class="prose max-w-none"></div>
+                        <div class="flex justify-end mt-4">
+                            <button id="exportPngBtn" class="px-3 py-1.5 text-sm bg-primary text-white rounded hover:bg-secondary transition flex items-center gap-2 theme-transition">
+                                <i class="fa fa-picture-o"></i> 导出PNG图片
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- 输出 -->
+            <section class="lg:w-1/2 flex flex-col">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-semibold">HTML 预览</h2>
+                    <div class="relative w-48">
+                        <select id="themeSelector" class="appearance-none bg-white border border-neutral-200 rounded py-1.5 pl-3 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 w-full theme-transition">
+                            <option value="default">默认风格</option>
+                            <option value="github">GitHub 文档风格</option>
+                            <option value="dark">暗黑模式</option>
+                            <option value="art-deco">装饰艺术风</option>
+                            <option value="children-fairy">童话插画风</option>
+                            <option value="japanese-magazine">日系杂志风</option>
+                            <option value="cyberpunk">赛博朋克风</option>
+                            <option value="alibaba-orange">阿里系风格</option>
+                            <option value="bytedance">字节系风格</option>
+                            <option value="xiaohongshu-purple">小红书风格</option>
+                            <option value="coil-notebook">线圈笔记风</option>
+                            <option value="apple-notes">苹果备忘录风</option>
+                            <option value="social-media">社交媒体风</option>
+                            <option value="modern-minimal">现代极简</option>
+                            <option value="fresh-natural">清新自然</option>
+                            <option value="glassmorphism">玻璃拟态风</option>
+                            <option value="warm-soft">温柔暖色调</option>
+                            <option value="minimal-gray">高级灰简约</option>
+                            <option value="dream-gradient">梦幻渐变</option>
+                            <option value="notebook">手写笔记风</option>
+                            <option value="vintage-typewriter">复古打字机</option>
+                            <option value="watercolor-art">水彩画风格</option>
+                            <option value="business-brief">商务简洁风</option>
+                            <option value="minimal-black-white">极简黑白</option>
+                            <option value="tech-blog">科技博客风</option>
+                            <option value="pop-art">波普艺术风</option>
+                            <option value="paper">纸张质感</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-2 flex items-center text-neutral-400">
+                            <i class="fa fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-card flex flex-col">
+                    <div class="flex border-b border-neutral-200">
+                        <button class="output-tab active px-4 py-2 text-sm font-medium text-primary border-b-2 border-primary bg-white rounded-tl-xl theme-transition" data-tab="html">
+                            HTML
+                        </button>
+                        <button class="output-tab px-4 py-2 text-sm font-medium text-neutral-500 hover:text-neutral-700 bg-white theme-transition" data-tab="rendered">
+                            渲染效果
+                        </button>
+                    </div>
+                    <div id="htmlContainer" class="p-4">
+                        <pre class="m-0"><code id="htmlOutput" class="language-html p-0 text-sm font-mono"></code></pre>
+                    </div>
+                    <div id="renderedContainer" class="p-4 hidden">
+                        <div id="renderedOutput" class="prose max-w-none"></div>
+                        <div class="flex justify-end mt-4">
+                            <button id="exportPngBtnOutput" class="px-3 py-1.5 text-sm bg-primary text-white rounded hover:bg-secondary transition flex items-center gap-2 theme-transition">
+                                <i class="fa fa-picture-o"></i> 导出PNG图片
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- 帮助面板 -->
+    <div id="helpModal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-5 border-b border-neutral-200 flex justify-between items-center">
+                <h3 class="text-lg font-semibold">Markdown 语法帮助</h3>
+                <button id="closeHelpBtn" class="text-neutral-400 hover:text-neutral-600">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="p-5">
+                <div class="space-y-5">
+                    <div>
+                        <h4 class="font-medium mb-2">标题</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-3 bg-neutral-100 rounded-md text-sm font-mono">
+                                # 一级标题<br> ## 二级标题<br> ### 三级标题
+                            </div>
+                            <div class="p-3 border border-neutral-200 rounded-md">
+                                <h1>一级标题</h1>
+                                <h2>二级标题</h2>
+                                <h3>三级标题</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-medium mb-2">文本格式</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-3 bg-neutral-100 rounded-md text-sm font-mono">
+                                **粗体文本**<br> *斜体文本*
+                                <br> ~~删除线文本~~
+                                <br> ^高亮文本^
+                                <br> [链接文本](https://www.example.com)
+                                <br> ![替代文本](image.jpg)
+                            </div>
+                            <div class="p-3 border border-neutral-200 rounded-md">
+                                <p><strong>粗体文本</strong></p>
+                                <p><em>斜体文本</em></p>
+                                <p><del>删除线文本</del></p>
+                                <p><mark>高亮文本</mark></p>
+                                <p><a href="https://www.example.com">链接文本</a></p>
+                                <p><img src="https://picsum.photos/400/200" alt="示例图片" class="max-w-full rounded"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-medium mb-2">列表</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-3 bg-neutral-100 rounded-md text-sm font-mono">
+                                无序列表:<br> - 项目1<br> - 项目2<br> - 项目3<br>
+                                <br> 有序列表:
+                                <br> 1. 第一点<br> 2. 第二点<br> 3. 第三点
+                            </div>
+                            <div class="p-3 border border-neutral-200 rounded-md">
+                                <p>无序列表:</p>
+                                <ul>
+                                    <li>项目1</li>
+                                    <li>项目2</li>
+                                    <li>项目3</li>
+                                </ul>
+                                <p>有序列表:</p>
+                                <ol>
+                                    <li>第一点</li>
+                                    <li>第二点</li>
+                                    <li>第三点</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-medium mb-2">代码块</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-3 bg-neutral-100 rounded-md text-sm font-mono">
+                                行内代码: `console.log('Hello World');`<br>
+                                <br> 代码块:
+                                <br> ```javascript
+                                <br> function greet(name) {<br> &nbsp;&nbsp;return `Hello, ${name}!`;<br> }
+                                <br> ```
+                            </div>
+                            <div class="p-3 border border-neutral-200 rounded-md">
+                                <p>行内代码: <code>console.log('Hello World');</code></p>
+                                <p>代码块:</p>
+                                <pre><code class="language-javascript">function greet(name) {
+    return `Hello, ${name}!`;
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-medium mb-2">引用和表格</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-3 bg-neutral-100 rounded-md text-sm font-mono">
+                                引用:<br> > 这是一段引用文本<br>
+                                <br> 表格:
+                                <br> | 表头1 | 表头2 |<br> |-------|-------|
+                                <br> | 单元格1 | 单元格2 |<br> | 单元格3 | 单元格4 |
+                            </div>
+                            <div class="p-3 border border-neutral-200 rounded-md">
+                                <blockquote>这是一段引用文本</blockquote>
+                                <table class="min-w-full border">
+                                    <thead>
+                                        <tr>
+                                            <th class="border p-2">表头1</th>
+                                            <th class="border p-2">表头2</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="border p-2">单元格1</td>
+                                            <td class="border p-2">单元格2</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border p-2">单元格3</td>
+                                            <td class="border p-2">单元格4</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="bg-white border-t border-neutral-200 py-4 mt-8">
+        <div class="container mx-auto px-4 text-center text-sm text-neutral-500">
+            <p>© 2025 MarkPic • Markdown 可视化截图工具</p>
+        </div>
+    </footer>
+</body>
+</html>
+ <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM 元素
+            const markdownEditor = document.getElementById('markdownEditor');
+            const htmlOutput = document.getElementById('htmlOutput');
+            const renderedOutput = document.getElementById('renderedOutput');
+            const livePreview = document.getElementById('livePreview');
+            const copyBtn = document.getElementById('copyBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const themeToggle = document.getElementById('themeToggle');
+            const themeSelector = document.getElementById('themeSelector');
+            const exampleBtn = document.getElementById('exampleBtn');
+            const helpBtn = document.getElementById('helpBtn');
+            const closeHelpBtn = document.getElementById('closeHelpBtn');
+            const helpModal = document.getElementById('helpModal');
+            const editorTabs = document.querySelectorAll('.editor-tab');
+            const outputTabs = document.querySelectorAll('.output-tab');
+            const editorContainer = document.getElementById('editorContainer');
+            const previewContainer = document.getElementById('previewContainer');
+            const htmlContainer = document.getElementById('htmlContainer');
+            const renderedContainer = document.getElementById('renderedContainer');
+
+            const exportPngBtn = document.getElementById('exportPngBtn');
+            const exportPngBtnOutput = document.getElementById('exportPngBtnOutput');
+            // 创建样式元素用于主题
+            const themeStyle = document.createElement('style');
+            themeStyle.id = 'theme-style';
+            document.head.appendChild(themeStyle);
+
+            function updateTheme(theme) {
+                themeStyle.textContent = themes[theme];
+                localStorage.setItem('markdown-theme', theme);
+            }
+
+            const savedTheme = localStorage.getItem('markdown-theme');
+            if (savedTheme && themes[savedTheme]) {
+                themeSelector.value = savedTheme;
+                updateTheme(savedTheme);
+            } else {
+                updateTheme('default');
+            }
+
+            function renderMarkdown() {
+                const markdown = markdownEditor.value;
+                const html = marked.parse(markdown);
+                htmlOutput.textContent = html;
+                if (typeof hljs !== 'undefined') {
+                    hljs.highlightElement(htmlOutput);
+                }
+                renderedOutput.innerHTML = html;
+                livePreview.innerHTML = html;
+            }
+
+            // 复制 HTML 到剪贴板
+            copyBtn.addEventListener('click', () => {
+                const textArea = document.createElement('textarea');
+                textArea.value = htmlOutput.textContent;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+
+                // 显示复制成功提示
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fa fa-check mr-1.5"></i><span>已复制</span>';
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                }, 2000);
+            });
+
+            // 清空编辑器
+            clearBtn.addEventListener('click', () => {
+                if (confirm('确定要清空所有内容吗？')) {
+                    markdownEditor.value = '';
+                    renderMarkdown();
+                }
+            });
+
+            // 切换暗黑模式
+            themeToggle.addEventListener('click', () => {
+                if (themeSelector.value === 'dark') {
+                    themeSelector.value = localStorage.getItem('last-light-theme') || 'default';
+                } else {
+                    localStorage.setItem('last-light-theme', themeSelector.value);
+                    themeSelector.value = 'dark';
+                }
+                updateTheme(themeSelector.value);
+            });
+
+            // 主题选择器变更
+            themeSelector.addEventListener('change', () => {
+                updateTheme(themeSelector.value);
+            });
+
+            // 加载示例内容
+            exampleBtn.addEventListener('click', () => {
+                markdownEditor.value = `# Markdown 示例
+
+这是一个 **粗体文本** 和 *斜体文本* 的示例。
+
+## 列表
+
+### 无序列表
+- 项目1
+- 项目2
+- 项目3
+
+### 有序列表
+1. 第一点
+2. 第二点
+3. 第三点
+
+## 引用
+
+> 这是一段引用文本，可以用来引用他人的话或重要的内容。
+
+## 代码
+
+行内代码: \`const greeting = "Hello, world!";\`
+
+代码块:
+
+\`\`\`javascript
+function greet(name) {
+    return \`Hello, \${name}!\`;
+}
+
+// 调用函数
+greet("Markdown");
+\`\`\`
+
+## 表格
+
+| 名称       | 年龄 | 职业   |
+|------------|------|--------|
+| 张三       | 28   | 工程师 |
+| 李四       | 32   | 设计师 |
+| 王五       | 45   | 产品经理 |
+
+## 图片
+
+![示例图片](https://picsum.photos/800/400)
+
+## 高亮
+
+这是一段 ^高亮文本^，使用特殊语法标记。
+
+## 链接
+https://www.baidu.com)
+
+## 分隔线
+
+---
+
+## 二级标题
+
+这是二级标题下的内容。
+
+### 三级标题
+
+这是三级标题下的内容。
+`;
+                renderMarkdown();
+            });
+
+            // 帮助按钮
+            helpBtn.addEventListener('click', () => {
+                helpModal.style.display = 'flex';
+            });
+
+            // 关闭帮助面板
+            closeHelpBtn.addEventListener('click', () => {
+                helpModal.style.display = 'none';
+            });
+
+            // 点击帮助面板外部关闭
+            helpModal.addEventListener('click', (e) => {
+                if (e.target === helpModal) {
+                    helpModal.style.display = 'none';
+                }
+            });
+
+            // 编辑器标签切换
+            editorTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    editorTabs.forEach(t => {
+                        t.classList.remove('active', 'text-primary', 'border-b-2', 'border-primary');
+                        t.classList.add('text-neutral-500');
+                    });
+                    tab.classList.add('active', 'text-primary', 'border-b-2', 'border-primary');
+                    tab.classList.remove('text-neutral-500');
+
+                    const tabId = tab.getAttribute('data-tab');
+                    if (tabId === 'editor') {
+                        editorContainer.classList.remove('hidden');
+                        previewContainer.classList.add('hidden');
+                    } else {
+                        editorContainer.classList.add('hidden');
+                        previewContainer.classList.remove('hidden');
+                        renderMarkdown(); // 确保预览更新
+                    }
+                });
+            });
+
+            // 输出标签切换
+            outputTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    outputTabs.forEach(t => {
+                        t.classList.remove('active', 'text-primary', 'border-b-2', 'border-primary');
+                        t.classList.add('text-neutral-500');
+                    });
+                    tab.classList.add('active', 'text-primary', 'border-b-2', 'border-primary');
+                    tab.classList.remove('text-neutral-500');
+
+                    const tabId = tab.getAttribute('data-tab');
+                    if (tabId === 'html') {
+                        htmlContainer.classList.remove('hidden');
+                        renderedContainer.classList.add('hidden');
+                    } else {
+                        htmlContainer.classList.add('hidden');
+                        renderedContainer.classList.remove('hidden');
+                        renderMarkdown(); // 确保渲染更新
+                    }
+                });
+            });
+
+            // 编辑器内容变化时实时渲染
+            markdownEditor.addEventListener('input', renderMarkdown);
+
+            // 页面加载时初始化渲染
+            renderMarkdown();
+
+            // 为编辑器添加焦点样式
+            markdownEditor.addEventListener('focus', () => {
+                document.querySelector('#editorContainer > textarea').classList.add('editor-focus');
+            });
+
+            markdownEditor.addEventListener('blur', () => {
+                document.querySelector('#editorContainer > textarea').classList.remove('editor-focus');
+            });
+
+            // 导出PNG图片函数
+            function exportPreviewToPng(targetDom, fileName = 'markdown-preview.png') {
+                // 复制样式
+                html2canvas(targetDom, {
+                    useCORS: true,
+                    backgroundColor: null,
+                    scale: 2
+                }).then(canvas => {
+                    // 创建下载链接
+                    const link = document.createElement('a');
+                    link.href = canvas.toDataURL('image/png');
+                    link.download = fileName;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                });
+            }
+            if (exportPngBtn) {
+                exportPngBtn.addEventListener('click', () => {
+                    exportPreviewToPng(livePreview, 'markdown-preview.png');
+                });
+            }
+            if (exportPngBtnOutput) {
+                exportPngBtnOutput.addEventListener('click', () => {
+                    exportPreviewToPng(renderedOutput, 'markdown-preview.png');
+                });
+            }
+        });
+    </script>
